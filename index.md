@@ -7,7 +7,7 @@ This is the webpage of our Senior Design Project
 * Rumeysa Özaydın
 * Hasan Yıldırım
 * Efe Eroğlu
-* Kamik Gök
+* Kamil Gök
 
 ### Supervisor
 [Prof. Uğur Doğrusöz](http://www.cs.bilkent.edu.tr/~ugur/)
