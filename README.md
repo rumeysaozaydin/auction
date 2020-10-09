@@ -1,21 +1,18 @@
-## Auction
+## Auction App
+This is the webpage of our Senior Design Project
 
-You can use the [editor on GitHub](https://github.com/rumeysaozaydin/acik-artirma/edit/main/README.md) to maintain and preview the content for your website in Markdown files.
+### Project Members
 
-Whenever you commit to this repository, GitHub Pages will run [Jekyll](https://jekyllrb.com/) to rebuild the pages in your site, from the content in your Markdown files.
+* Ahmet Serdar Gürbüz
+* Rumeysa Özaydın
+* Hasan Yıldırım
+* Efe Eroğlu
+* Kamik Gök
 
-### Markdown
+### Supervisor
+[Prof. Uğur Doğrusöz](http://www.cs.bilkent.edu.tr/~ugur/)
 
-Markdown is a lightweight and easy-to-use syntax for styling your writing. It includes conventions for
 
-```markdown
-Syntax highlighted code block
-
-# Header 1
-## Header 2
-### Header 3
-
--lelelelelele
 
 **Bold** and _Italic_ and `Code` text
 
