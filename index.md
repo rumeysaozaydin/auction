@@ -11,3 +11,6 @@ This is the webpage of our Senior Design Project in which we aim to develop an e
 
 ### Supervisor
 [Prof. Uğur Doğrusöz](http://www.cs.bilkent.edu.tr/~ugur/)
+
+### Reports
+[Specification Report](https://docs.google.com/document/d/1YoQXzy-Gt_ROsbO0NZZI1s0n9pK0u9XLd0rIJvjTBzk/edit?usp=sharing)
