@@ -16,7 +16,10 @@ function AuctionCard(props) {
             <View style={styles.secondLineContainer}>
                 <Text style={styles.highestBid}>Highest Bid: {props.lastBid}</Text>
                 <TouchableOpacity 
-                    style={styles.buttonContainer} 
+                    style={styles.buttonContainer}
+                    onPress={() => {
+                        props.navigator.navigate("Auction Page");
+                    }}
                     >
                     <Text style={styles.buttonText}>Bid It !</Text>
                 </TouchableOpacity>
@@ -37,6 +40,7 @@ const styles = StyleSheet.create({
         borderColor:'gray',
         borderWidth:1,
         borderRadius: 50,
+        marginBottom: 15,
     },
     image: {
         margin: 10,

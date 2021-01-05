@@ -14,9 +14,9 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="AuctionPage"> 
-        <Stack.Screen name="AuctionList" component={AuctionList} />
-        <Stack.Screen name="AuctionPage" component={AuctionPage} />
+      <Stack.Navigator initialRouteName="Auction List"> 
+        <Stack.Screen name="Auction List" component={AuctionList} />
+        <Stack.Screen name="Auction Page" component={AuctionPage} />
       </Stack.Navigator>
     </NavigationContainer>
   );
