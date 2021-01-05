@@ -1,9 +1,37 @@
-import React from 'react';
+import React, { useState, useReducer } from 'react';
 import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
 function AuctionPage({ route }) {
+
+    const [newBid, setNewBid] = useState("0");
+
+    const [properties, setProperties] = useState({
+        bids: route.params.bids,
+        lastBid: route.params.lastBid
+    });
+
+    function addNewBid(newBid){
+        let newBidList = properties.bids.concat([properties.lastBid.substring(1)]);
+        let newLastBid = "$" + newBid;
+        let result = {
+            bids: newBidList,
+            lastBid: newLastBid
+        }
+        setProperties(result);
+    }
+
+    let bidViews = properties.bids.map((bid, index) => {
+        return (
+            <Text
+                key={index}
+                style={styles.bids}>
+                ${bid}
+            </Text>
+        );
+    }).reverse();
+
     return (
         <KeyboardAwareScrollView  style={styles.main}>
             <ScrollView contentContainerStyle={styles.scroll} >
@@ -22,17 +50,17 @@ function AuctionPage({ route }) {
                         <Text style={styles.sellerButtonText}>Jane Doe</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.highestBid}>Highest Bid:  {route.params.lastBid}</Text>
-                {/* <Text style={styles.bids}>Recent Bids:</Text>
-                <Text style={styles.bids}>$245</Text>
-                <Text style={styles.bids}>$225</Text>
-                <Text style={styles.bids}>$212</Text>
-                <Text style={styles.bids}>$190</Text>
-                <Text style={styles.bids}>$180</Text> */}
+                <Text style={styles.highestBid}>Highest Bid:  {properties.lastBid}</Text>
+                <Text style={styles.bids}>Recent Bids:</Text>
+                {bidViews}
                 <Text style={styles.bids}>Entry Price: {route.params.entryPrice}</Text>
                 <View style={styles.biddingContainer}>
                     <TouchableOpacity 
-                        style={styles.buttonContainer} 
+                        style={styles.buttonContainer}
+                        onPress={() => {
+                            route.params.addNewBid(route.params.name, newBid);
+                            addNewBid(newBid);
+                        }}
                         >
                         <Text style={styles.buttonText}>Bid It !</Text>
                     </TouchableOpacity>
@@ -41,6 +69,7 @@ function AuctionPage({ route }) {
                         style={styles.bidInput}
                         placeholder={"Enter Your Bid"}
                         textAlign="center"
+                        onChangeText={text => setNewBid(text)}
                     />
                 </View>
                 <Text style={styles.timeLeft}>Time Left:</Text>

@@ -2,6 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 function AuctionCard(props) {
+    
     return (
         <View style = {styles.card}>
             <Image style={styles.image} source={{
@@ -18,8 +19,11 @@ function AuctionCard(props) {
                 <TouchableOpacity 
                     style={styles.buttonContainer}
                     onPress={() => {
-                        props.navigator.navigate("Auction Page", {uri: props.uri, name: props.name, entryPrice: props.entryPrice, lastBid: props.lastBid, auctionDeadline: props.auctionDeadline});
-
+                        props.navigator.navigate("Auction Page", 
+                                                {uri: props.uri, name: props.name, 
+                                                entryPrice: props.entryPrice, bids: props.bids, 
+                                                lastBid: props.lastBid, auctionDeadline: props.auctionDeadline,
+                                                addNewBid: props.addNewBid});
                     }}
                     >
                     <Text style={styles.buttonText}>Bid It !</Text>
