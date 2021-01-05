@@ -3,17 +3,17 @@ import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInpu
 import CountDown from 'react-native-countdown-component';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 
-function AuctionPage(props) {
+function AuctionPage({ route }) {
     return (
         <KeyboardAwareScrollView  style={styles.main}>
             <ScrollView contentContainerStyle={styles.scroll} >
-                <Text style={styles.header}>Keyboard - Yamaha PSR</Text>
+                <Text style={styles.header}>{route.params.name}</Text>
                 <Image
                     style={styles.image}
                     source={{
                         width:"85%",
                         height: Dimensions.get("screen").height * 0.2,
-                        uri:"https://static.keymusic.com/products/265499/XL/yamaha-psr-e463.jpg"
+                        uri: route.params.uri
                     }}
                 />
                 <View style={styles.sellerLine}>
@@ -22,14 +22,14 @@ function AuctionPage(props) {
                         <Text style={styles.sellerButtonText}>Jane Doe</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.highestBid}>Highest Bid:   $260</Text>
-                <Text style={styles.bids}>Recent Bids:</Text>
+                <Text style={styles.highestBid}>Highest Bid:  {route.params.lastBid}</Text>
+                {/* <Text style={styles.bids}>Recent Bids:</Text>
                 <Text style={styles.bids}>$245</Text>
                 <Text style={styles.bids}>$225</Text>
                 <Text style={styles.bids}>$212</Text>
                 <Text style={styles.bids}>$190</Text>
-                <Text style={styles.bids}>$180</Text>
-                <Text style={styles.bids}>Entry Price: $170</Text>
+                <Text style={styles.bids}>$180</Text> */}
+                <Text style={styles.bids}>Entry Price: {route.params.entryPrice}</Text>
                 <View style={styles.biddingContainer}>
                     <TouchableOpacity 
                         style={styles.buttonContainer} 

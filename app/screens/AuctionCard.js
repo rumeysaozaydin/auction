@@ -18,7 +18,8 @@ function AuctionCard(props) {
                 <TouchableOpacity 
                     style={styles.buttonContainer}
                     onPress={() => {
-                        props.navigator.navigate("Auction Page");
+                        props.navigator.navigate("Auction Page", {uri: props.uri, name: props.name, entryPrice: props.entryPrice, lastBid: props.lastBid, auctionDeadline: props.auctionDeadline});
+
                     }}
                     >
                     <Text style={styles.buttonText}>Bid It !</Text>
