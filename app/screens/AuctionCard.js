@@ -7,7 +7,7 @@ function AuctionCard(props) {
         <View style = {styles.card}>
             <Image style={styles.image} source={{
                 width:"80%",
-                height:"50%",
+                height:110,
                 uri:props.uri}}/>
             <Text style={styles.headerStyle}>{props.name}</Text>
             <View style={styles.firstLineContainer}>
@@ -29,7 +29,9 @@ function AuctionCard(props) {
                     <Text style={styles.buttonText}>Bid It !</Text>
                 </TouchableOpacity>
             </View>
-            
+            <TouchableOpacity style={styles.button2Container}>
+                <Text style={styles.buttonText}>{props.isFavourite ? "Remove from Favourites": "Add to Favourites"}</Text>
+            </TouchableOpacity>
         </View>
         
     );
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
     firstLineContainer:{
         flexDirection: "row", 
         width: "100%", 
-        margin: 5, 
+        margin: 4, 
         justifyContent:"space-between",
 
     }
@@ -94,7 +96,15 @@ const styles = StyleSheet.create({
         color: "white",
         fontWeight: 'bold',
         fontSize: 15
-    }
+    },
+    button2Container:{
+        backgroundColor: "#e329d3",
+        width: "80%", 
+        borderRadius: 10,
+        alignItems: "center",
+        margin: 6,
+        padding: 2
+    },
 })
 
 export default AuctionCard;

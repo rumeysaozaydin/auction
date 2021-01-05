@@ -32,6 +32,7 @@ function FavoritesList({navigation}) {
   let auctionCards = auctionList.map((auction, index) => {
     return (
       <AuctionCard
+        isFavourite={true}
         key = {index}
         uri={auction.uri} 
         name={auction.name} 
