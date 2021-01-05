@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, Button, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 function AuctionCard(props) {
     return (
@@ -9,14 +9,15 @@ function AuctionCard(props) {
                 height:"50%",
                 uri:props.uri}}/>
             <Text style={styles.headerStyle}>{props.name}</Text>
-            <View style={{flexDirection: "row", width: "100%", margin: 5}}>
+            <View style={styles.firstLineContainer}>
                 <Text style={styles.entryPrice}>Entry Price: {props.entryPrice}</Text>
                 <Text style={styles.deadline}>Auction Deadline: {props.auctionDeadline}</Text>
-                <Text></Text>
             </View> 
-            <View style={{flexDirection: "row", width: "100%", }}>
+            <View style={styles.secondLineContainer}>
                 <Text style={styles.highestBid}>Highest Bid: {props.lastBid}</Text>
-                <TouchableOpacity style={styles.buttonContainer}>
+                <TouchableOpacity 
+                    style={styles.buttonContainer} 
+                    >
                     <Text style={styles.buttonText}>Bid It !</Text>
                 </TouchableOpacity>
             </View>
@@ -46,26 +47,35 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         color: "#046601"
     },
+    firstLineContainer:{
+        flexDirection: "row", 
+        width: "100%", 
+        margin: 5, 
+        justifyContent:"space-between",
+
+    }
+    ,
     entryPrice:{
-        position: "absolute",
-        left: 10,
+        marginLeft: 10,
         fontSize: 15
     },
     deadline:{
-        position: "absolute",
-        right: 10,
+        marginRight: 10,
         fontSize: 15
     },
+    secondLineContainer:{
+        flexDirection: "row", 
+        width: "100%",
+        justifyContent:"space-between"
+    },
     highestBid:{
-        position: "absolute",
-        left: 10,
+        marginLeft: 10,
         fontWeight:"bold",
         fontSize: 18
     },
     buttonContainer:{
-        position: "absolute",
-        right: 15,
         backgroundColor: "#118a27",
+        marginRight: 15,
         padding: 5,
         width: "30%", 
         borderRadius: 5,
