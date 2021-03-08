@@ -34,17 +34,10 @@ public class User extends BaseModel {
     @Column(name = "contactInfo")
     private String contactInfo;
 
-
-
     @Column(name = "image")
     private String image;
 
 
-    @Column(name = "bannedBy")
-    private String bannedBy;
 
-
-    @Column(name = "cv")
-    private String cv;
 
 }
