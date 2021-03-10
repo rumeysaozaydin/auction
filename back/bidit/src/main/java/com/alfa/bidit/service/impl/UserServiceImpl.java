@@ -25,7 +25,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        Optional<User> optionalStudent = userRepository.findUserByEmail(user.getEmail());
+        Optional<User> optionalStudent = userRepository.findByEmail(user.getEmail());
 
         if(optionalStudent.isPresent()) throw new UserAlreadyExistsException("with email: " + user.getEmail());
 

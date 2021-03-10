@@ -18,7 +18,7 @@ public class User extends BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "email",unique = true, length = 100,nullable = false)
+    @Column(name = "email",unique = true, length = 100, nullable = false)
     private String email;
 
     @Column(name = "password", length = 100, nullable = false)
