@@ -1,6 +1,7 @@
 package com.alfa.bidit.controller;
 
 import com.alfa.bidit.model.User;
+import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.service.impl.UserServiceImpl;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,11 +16,11 @@ import java.util.List;
 @RequestMapping("/api/v1/users")
 public class UserController {
 
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     @Autowired
-    public UserController(UserServiceImpl userServiceImpl){
-        this.userService=userServiceImpl;
+    public UserController(UserService userService){
+        this.userService=userService;
     }
 
     @GetMapping("/all")
