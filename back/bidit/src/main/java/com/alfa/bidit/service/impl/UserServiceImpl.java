@@ -2,14 +2,12 @@ package com.alfa.bidit.service.impl;
 
 
 import com.alfa.bidit.exception.UserAlreadyExistsException;
-import com.alfa.bidit.exception.UserNotExistsException;
+import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
 import com.alfa.bidit.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -36,7 +34,7 @@ public class UserServiceImpl implements UserService {
     public User getById(Long id) {
         Optional<User> optionalStudent = userRepository.findById(id);
 
-        if(optionalStudent.isEmpty()) throw new UserNotExistsException("with id: " + id);
+        if(optionalStudent.isEmpty()) throw new UserNotExistException("with id: " + id);
 
         return optionalStudent.get();
     }
