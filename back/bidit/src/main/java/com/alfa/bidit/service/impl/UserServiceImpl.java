@@ -6,6 +6,7 @@ import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
 import com.alfa.bidit.service.UserService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,9 +18,13 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
+   // private final ModelMapper modelMapper; // yeni
+
+    @Autowired // modelmapper tarafı ek
+    public UserServiceImpl(UserRepository userRepository/*,ModelMapper modelMapper*/) {
+
         this.userRepository = userRepository;
+       // this.modelMapper=modelMapper;
     }
 
     public Long register(User user) {
@@ -27,7 +32,11 @@ public class UserServiceImpl implements UserService {
 
         if(optionalStudent.isPresent()) throw new UserAlreadyExistsException("with email: " + user.getEmail());
 
-        userRepository.save(user);
+     //   User u = modelMapper.map(user, User.class);
+        userRepository.save(user); //yerine alt satır ve modelmapper için üst geldi
+    //    userRepository.save(u);
+       // user.setId(u.getId());
+
         return user.getId();
     }
 
