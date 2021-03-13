@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
         if(optionalStudent.isPresent()) throw new UserAlreadyExistsException("with email: " + user.getEmail());
 
-        if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
+     //   if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
 
      //   User u = modelMapper.map(user, User.class);
         userRepository.save(user); //yerine alt satır ve modelmapper için üst geldi
