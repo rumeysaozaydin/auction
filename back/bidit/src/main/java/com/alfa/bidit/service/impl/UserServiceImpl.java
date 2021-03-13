@@ -2,6 +2,7 @@ package com.alfa.bidit.service.impl;
 
 
 import com.alfa.bidit.exception.UserAlreadyExistsException;
+import com.alfa.bidit.exception.UserEmptyAreaException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
@@ -31,6 +32,8 @@ public class UserServiceImpl implements UserService {
         Optional<User> optionalStudent = userRepository.findByEmail(user.getEmail());
 
         if(optionalStudent.isPresent()) throw new UserAlreadyExistsException("with email: " + user.getEmail());
+
+        if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
 
      //   User u = modelMapper.map(user, User.class);
         userRepository.save(user); //yerine alt satır ve modelmapper için üst geldi
