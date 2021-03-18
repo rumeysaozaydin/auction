@@ -1,11 +1,9 @@
 package com.alfa.bidit.exception;
 
-public class UserAlreadyExistsException extends RuntimeException{
-    public UserAlreadyExistsException(){
-        super("User does already exist.");
-    }
+import com.alfa.bidit.model.User;
 
-    public UserAlreadyExistsException(String withParams){
-        super("User " + withParams + " does already exist.");
+public class UserAlreadyExistsException extends RuntimeException{
+    public UserAlreadyExistsException(User user){
+        super(user.toString());
     }
 }

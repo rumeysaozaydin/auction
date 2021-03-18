@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        Optional<User> optionalStudent = userRepository.findByEmail(user.getEmail());
+        Optional<User> optionalStudent = userRepository.findUserByEmail(user.getEmail());
 
-        if(optionalStudent.isPresent()) throw new UserAlreadyExistsException("with email: " + user.getEmail());
+        if(optionalStudent.isPresent()) throw new UserAlreadyExistsException(user);
 
      //   if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
 
@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public User getById(Long id) {
-        Optional<User> optionalStudent = userRepository.findById(id);
+        Optional<User> optionalStudent = userRepository.findUserById(id);
 
         if(optionalStudent.isEmpty()) throw new UserNotExistException("with id: " + id);
 

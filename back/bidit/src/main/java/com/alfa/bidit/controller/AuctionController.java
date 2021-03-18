@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(ApiPaths.AuctionController.auction)
-@Api(value = ApiPaths.AuctionController.auction)
+@RequestMapping(ApiPaths.AuctionControllerPath.auction)
+@Api(value = ApiPaths.AuctionControllerPath.auction)
 public class AuctionController {
     private final AuctionService auctionService;
 
