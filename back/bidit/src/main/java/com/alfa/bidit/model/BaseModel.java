@@ -2,16 +2,13 @@ package com.alfa.bidit.model;
 
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
+// TODO make this @Entity and move the private key "id" field here.
 
 public abstract class BaseModel implements Serializable{
-
 
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
