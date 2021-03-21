@@ -46,6 +46,7 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public List<Favorite> getAllByUserID(Long userID) {
+
         Optional<List<Favorite>> favorites = favoriteRepository.findFavoritesByUserID(userID);
 
         if(favorites.isEmpty()) return List.of();
