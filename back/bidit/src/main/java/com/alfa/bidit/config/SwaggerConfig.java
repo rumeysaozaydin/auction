@@ -31,7 +31,7 @@ public class SwaggerConfig {
                 .select().paths(PathSelectors.any())
                 .apis(RequestHandlerSelectors.basePackage("com.alfa"))
                 .build()
-                .pathMapping("/api/v1/")
+                .pathMapping("/")
                 .useDefaultResponseMessages(false)
                 .directModelSubstitute(LocalDate.class, String.class)
                 .genericModelSubstitutes(ResponseEntity.class);
