@@ -7,11 +7,11 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import 'react-native-gesture-handler';
 
-import AuctionList from "./AuctionList";
-import AuctionPage from "./AuctionPage";
-import FavoritesList from "./FavoritesList";
-import Upload from "./Upload";
-import Profile from "./Profile";
+import HomeScreen from "./HomeScreen";
+import AuctionScreen from "./AuctionScreen";
+import FavoritesScreen from "./FavoritesScreen";
+import UploadScreen from "./UploadScreen";
+import ProfileScreen from "./ProfileScreen";
 //import MainTabScreen from "./app/screens/MainTabScreen";
 
 
@@ -22,15 +22,15 @@ const Tab = createMaterialBottomTabNavigator();
 export default function MainTabScreen() {
     return(
     <Tab.Navigator
-      initialRouteName="Auction List"
+      initialRouteName="Home"
       activeColor="#e91e63"
       style={{ backgroundColor: 'tomato' }}
     >
       <Tab.Screen
-        name="Auction List"
-        component={AuctionList}
+        name="Home"
+        component={HomeScreen}
         options={{
-          tabBarLabel: 'Auctions',
+          tabBarLabel: 'Home',
           tabBarIcon: ({ color }) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
@@ -38,7 +38,7 @@ export default function MainTabScreen() {
       />
       <Tab.Screen
         name="Add Item"
-        component={Upload}
+        component={UploadScreen}
         options={{
           tabBarLabel: 'Upload',
           tabBarIcon: ({ color }) => (
@@ -47,8 +47,8 @@ export default function MainTabScreen() {
         }}
       />
       <Tab.Screen
-        name="Favorites List"
-        component={FavoritesList}
+        name="Favorites"
+        component={FavoritesScreen}
         options={{
           tabBarLabel: 'Favorites',
           tabBarIcon: ({ color }) => (
@@ -58,7 +58,7 @@ export default function MainTabScreen() {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color }) => (

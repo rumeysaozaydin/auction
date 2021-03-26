@@ -6,11 +6,8 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 
 import 'react-native-gesture-handler';
 
-import AuctionList from "./app/screens/AuctionList";
-import AuctionPage from "./app/screens/AuctionPage";
-import FavoritesList from "./app/screens/FavoritesList";
+import AuctionScreen from "./app/screens/AuctionScreen";
 import MainTabScreen from "./app/screens/MainTabScreen";
-
 
 
 const Stack = createStackNavigator();
@@ -21,9 +18,8 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Auction List"> 
-        <Stack.Screen name="Auction List" component={MainTabScreen} />
-        <Stack.Screen name="Auction Page" component={AuctionPage} />
-        <Stack.Screen name="Favorites List" component={FavoritesList} />
+        <Stack.Screen name="BIDIT" component={MainTabScreen} />
+        <Stack.Screen name="AuctionScreen" component={AuctionScreen} />
       </Stack.Navigator>
     </NavigationContainer>
 
