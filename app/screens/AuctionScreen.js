@@ -182,10 +182,12 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const AuctionScreen = () => {
+const AuctionScreen = ({navigation}) => {
     return <Text> Auction Info </Text>;
 };
 
 const styles = StyleSheet.create({});
 
 export default AuctionScreen;
+
+

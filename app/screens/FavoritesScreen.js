@@ -94,13 +94,13 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import AuctionCard from "../components/AuctionCard";
 
-const FavoritesScreen = () => {
+const FavoritesScreen = ({navigation}) => {
     return (
         <View>
-            <AuctionCard/>
-            <AuctionCard/>
-            <AuctionCard/>
-            <AuctionCard/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
         </View>
     );
 };

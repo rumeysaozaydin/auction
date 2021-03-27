@@ -110,11 +110,19 @@
 // export default AuctionCard;
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 
-const AuctionCard = () => {
-    return <Text> Auction Details</Text>;
-};
+const AuctionCard = ({navigation}) => {
+    return (
+        <View>
+            <Text>Auction#</Text>
+            <Button title="Auction" 
+            onPress={() => {navigation.navigate("Auction");}}
+            />
+        </View>
+    
+    );
+}
 
 const styles = StyleSheet.create({});
 

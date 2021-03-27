@@ -114,16 +114,16 @@
 
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Button } from 'react-native';
 import AuctionCard from "../components/AuctionCard";
 
-const HomeScreen = () => {
+const HomeScreen = ({navigation}) => {
     return (
         <View>
-            <AuctionCard/>
-            <AuctionCard/>
-            <AuctionCard/>
-            <AuctionCard/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
+            <AuctionCard navigation={navigation}/>
         </View>
     );
 };
