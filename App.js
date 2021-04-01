@@ -32,7 +32,7 @@ const HomeStackScreen = () => (
 
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator>
-    < ProfileStack.Screen name="Profile" component={ProfileScreen}/>
+    <ProfileStack.Screen name="Profile" component={ProfileScreen}/>
   </ProfileStack.Navigator>
 )
 
@@ -45,14 +45,24 @@ const UploadStackScreen = () => (
 const FavoritesStackScreen = () => (
   <FavoritesStack.Navigator>
     <FavoritesStack.Screen name="Favorites" component={FavoritesScreen}/>
-    < ProfileStack.Screen name="Auction" component={AuctionScreen}/>
+    <FavoritesStack.Screen name="Auction" component={AuctionScreen}/>
   </FavoritesStack.Navigator>
 )
 
+
+
 export default function App() {
+
+  const [userToken, setUserToken] = React.useState(null);
+
+  let updateToken = (token) => {
+    setUserToken(token);
+    console.log(token);
+  }
 
   return (
     <NavigationContainer>
+    {userToken ? (
       <Tabs.Navigator>
         <Tabs.Screen 
         name="Home" 
@@ -66,7 +76,7 @@ export default function App() {
         }}
         />
         <Tabs.Screen 
-        name="Upload" 
+        name="Upload"
         component={UploadStackScreen}
         options={{
           tabBarLabel: 'Upload',
@@ -98,13 +108,22 @@ export default function App() {
           ),
         }}
         />
-      </Tabs.Navigator>
-      {/* <AuthStack.Navigator>
-        <AuthStack.Screen name="SignIn" component={SignInScreen} options={{title: 'Sign In' }}/>
-        <AuthStack.Screen name="SignUp" component={SignUpScreen} options={{title: 'Sign Up' }}/>
-      </AuthStack.Navigator> */}
+      </Tabs.Navigator>) : 
+      
+      (<AuthStack.Navigator>
+        <AuthStack.Screen 
+          name="SignIn" 
+          component={SignInScreen} 
+          options={{title: 'Sign In' }}
+          initialParams={{"updateToken": updateToken}}
+          />
+        <AuthStack.Screen 
+          name="SignUp" 
+          component={SignUpScreen} 
+          options={{title: 'Sign Up' }}
+          />
+      </AuthStack.Navigator>)}
     </NavigationContainer>
-
   );
 }
 
