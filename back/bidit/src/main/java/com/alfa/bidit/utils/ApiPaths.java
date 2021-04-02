@@ -15,6 +15,9 @@ public class ApiPaths {
     public static final class AuctionControllerPath{
         public static final String auction = BASE_PATH + V1_PATH + "/auctions";
     }
+    public static final class ImageControllerPath{
+        public static final String image = BASE_PATH + V1_PATH + "/images";
+    }
 
     public static final class FavoriteControllerPath{
         public static final String favorite = BASE_PATH + V1_PATH + "/favorites";
