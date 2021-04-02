@@ -1,0 +1,37 @@
+[
+
+  {
+    "_class": "com.alfa.bidit.model.User",
+    "email" : "firstEmail1",
+    "firstname" : "firstiName1",
+    "lastname" : "lastiname1",
+    "contactNumber" : "contactoNumberto1",
+    "imagePath" : "imagePathi1",
+    "password": "passwordi11"
+  },
+  {
+    "_class": "com.alfa.bidit.model.User",
+    "email" : "firstEmail2",
+    "firstname" : "firstiName2",
+    "lastname" : "lastiname2",
+    "contactNumber" : "conta2ctoNumberto1",
+    "imagePath" : "imagePath2i1",
+    "password": "passwordi112"
+  },{
+  "_class": "com.alfa.bidit.model.User",
+  "email" : "firstEmail32",
+  "firstname" : "firstiName32",
+  "lastname" : "lastiname32",
+  "contactNumber" : "conta2ctoNumber3to1",
+  "imagePath" : "imagePat3h2i1",
+  "password": "passwordi1312"
+},{
+  "_class": "com.alfa.bidit.model.User",
+  "email" : "firstEmail42",
+  "firstname" : "firstiName42",
+  "lastname" : "lastiname42",
+  "contactNumber" : "conta2ctoNumbert4o1",
+  "imagePath" : "imagePath24i1",
+  "password": "passwordi1142"
+}
+]
