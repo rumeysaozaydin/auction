@@ -19,4 +19,6 @@ public interface AuctionService{
 
     List<Auction> getBySellerId(Long sellerID);
 
+    Boolean existsById(Long auctionID);
+
 }

@@ -48,4 +48,9 @@ public class AuctionServiceImpl implements AuctionService {
         return auctions.orElse(List.of());
     }
 
+    @Override
+    public Boolean existsById(Long auctionID) {
+        return auctionRepository.existsAuctionById(auctionID);
+    }
+
 }
