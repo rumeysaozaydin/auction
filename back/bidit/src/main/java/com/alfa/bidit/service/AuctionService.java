@@ -21,4 +21,5 @@ public interface AuctionService{
 
     Boolean existsById(Long auctionID);
 
+    void endAuctionById(Long id);
 }
