@@ -25,6 +25,6 @@ public class Bid extends BaseModel {
     private Long auctionID;
 
     @Column(name = "price", nullable = false) // DO NOT hesitate to change if you have a better naming idea.
-    private Long price;
+    private Double price;
 
 }

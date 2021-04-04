@@ -27,7 +27,8 @@ public class AuctionManagerServiceImpl implements AuctionManagerService {
     public AuctionManagerServiceImpl(@Lazy AuctionService auctionService, AuctionExpirationRecordRepository auctionExpirationRecordRepository) {
         this.auctionService = auctionService;
         this.auctionExpirationRecordRepository = auctionExpirationRecordRepository;
-        this.periodicAuctionExpirationJob();
+        // TODO I guess we do not have to call this explicitly.
+        //this.periodicAuctionExpirationJob();
     }
 
     @Scheduled(fixedRate = 5*1000) // in ms

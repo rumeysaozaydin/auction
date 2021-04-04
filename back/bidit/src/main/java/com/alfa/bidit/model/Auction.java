@@ -36,10 +36,10 @@ public class Auction extends BaseModel {
     private Long sellerID;
 
     @Column(name = "initial_price", nullable = false)
-    private Long initialPrice;
+    private Double initialPrice;
 
     @Column(name = "highest_bid")
-    private String highestBid;
+    private Double highestBid;
 
     @Column(name = "status")
     private AuctionStatus status;
