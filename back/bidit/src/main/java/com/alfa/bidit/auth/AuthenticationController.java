@@ -9,9 +9,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Instant;
+import java.util.Date;
+
 @CrossOrigin
 @RestController
-public class HelloResource {
+public class AuthenticationController {
 
     @Autowired
     private AuthenticationManager authenticationManager;
@@ -20,12 +23,12 @@ public class HelloResource {
     @Autowired
     private BiditUserDetailsService userDetailsService;
 
-    @RequestMapping(value = "/api/v1/hello", method = RequestMethod.GET)
+    @RequestMapping(value = "/api/v1/authenticationTest", method = RequestMethod.GET)
     public String hello(@RequestHeader("Authorization") String token){
 
         String name = jwtTokenUtil.extractUsername(token.substring(7));
 
-        return "Hello world" + name ;
+        return "Hello " + name ;
     }
 
     @RequestMapping(value = "/api/v1/authenticate", method = RequestMethod.POST)
@@ -38,27 +41,29 @@ public class HelloResource {
                 .loadUserByUsername(authenticationRequest.getUsername());
 
         final String jwt = jwtTokenUtil.generateToken(userDetails);
-
+        Date now = Date.from(Instant.now());
+        System.out.println("[INFO] " + now + " USER IS AUTHENTICATED");
         return ResponseEntity.ok(new JwtResponse(jwt));
     }
 
     @RequestMapping(value = "/api/v1/register", method = RequestMethod.POST)
-    public ResponseEntity<?> saveUser(@RequestBody UserDto user) throws Exception {
-        UserDao userDao = userDetailsService.save(user);
-        if(userDao == null){
-            System.out.println("inside if");
+    public ResponseEntity<?> saveUser(@RequestBody UserCredentialsDto user) throws Exception {
+        UserCredentials userCredentials = userDetailsService.save(user);
+        if(userCredentials == null){
             return (ResponseEntity<?>) ResponseEntity.notFound();
         }
-        return ResponseEntity.ok(userDao);
+        Date now = Date.from(Instant.now());
+        System.out.println("[INFO] " + now + " USER CREDENTIALS ARE REGISTERED");
+        return ResponseEntity.ok(userCredentials);
     }
 
     private void authenticate(String username, String password) throws Exception {
         try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("izin mi bilmiyom, USER_DISABLED", e);
+            throw new Exception("SORRY, USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("sifre yanlis,INVALID_CREDENTIALS", e);
+            throw new Exception("SORRY,INVALID_CREDENTIALS", e);
         }
     }
 

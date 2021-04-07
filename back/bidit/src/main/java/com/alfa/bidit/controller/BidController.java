@@ -21,12 +21,12 @@ public class BidController {
     }
 
     @GetMapping("/bids")
-    public ResponseEntity<Boolean> getAllBids(@PathVariable("auction_id") Long auctionID){
+    public ResponseEntity<Boolean> getAllBids(@PathVariable("auction_id") Long auctionID, @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(true);
     }
 
     @PostMapping("/bid")
-    public ResponseEntity<Boolean> bid(@PathVariable("auction_id") Long auctionID, @RequestBody Bid bid){
+    public ResponseEntity<Boolean> bid(@PathVariable("auction_id") Long auctionID, @RequestBody Bid bid, @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(true);
     }
 

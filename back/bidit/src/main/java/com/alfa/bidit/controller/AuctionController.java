@@ -29,14 +29,14 @@ public class AuctionController {
     }
 
     @PostMapping
-    public ResponseEntity<Auction> create(@RequestBody Auction auction){
+    public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
         Auction newAuction = auctionService.create(auction);
         return ResponseEntity.ok(newAuction);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Auction> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<Auction> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token) {
         try {
             Auction auction = auctionService.getById(id);
             return ResponseEntity.ok(auction);
@@ -47,7 +47,7 @@ public class AuctionController {
     }
 
     @GetMapping("/seller/{seller_id}")
-    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID){
+    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID, @RequestHeader("Authorization") String token){
         try {
             List<Auction> auctions = auctionService.getBySellerId(sellerID);
             return ResponseEntity.ok(auctions);

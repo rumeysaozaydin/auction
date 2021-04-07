@@ -14,27 +14,27 @@ import java.util.ArrayList;
 public class BiditUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private MyUserRepository userDao;//change naming later
+    private UserCredentialsRepository userCredentialsRepository;//change naming later
 
     @Autowired
     private PasswordEncoder bcryptEncoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserDao user = userDao.findByUsername(username);
+        UserCredentials user = userCredentialsRepository.findByUsername(username);
         if(user == null){
             throw new UsernameNotFoundException("Malesef,User not found with username: " + username);
         }
         return new User(user.getUsername(), user.getPassword(), new ArrayList<>());
     }
 
-    public UserDao save(UserDto user){
-        if(userDao.findByUsername(user.getUsername()) != null){
+    public UserCredentials save(UserCredentialsDto user){
+        if(userCredentialsRepository.findByUsername(user.getUsername()) != null){
             return null;
         }
-        UserDao newUser = new UserDao();
+        UserCredentials newUser = new UserCredentials();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(bcryptEncoder.encode(user.getPassword()));
-        return userDao.save(newUser);
+        return userCredentialsRepository.save(newUser);
     }
 }

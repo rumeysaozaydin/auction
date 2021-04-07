@@ -28,7 +28,7 @@ public class FavoriteController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> add(@RequestBody Favorite favorite){
+    public ResponseEntity<Long> add(@RequestBody Favorite favorite, @RequestHeader("Authorization") String token){
         System.out.println("[ADD FAVORITE REQUEST]:  " + favorite);
         try {
             Long id = favoriteService.add(favorite);
@@ -42,14 +42,14 @@ public class FavoriteController {
     }
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<Favorite>> getAllFavoritesByUserId(@PathVariable("user_id") Long userID){
+    public ResponseEntity<List<Favorite>> getAllFavoritesByUserId(@PathVariable("user_id") Long userID, @RequestHeader("Authorization") String token){
         System.out.println("[GET ALL FAVORITES BY USER REQUEST]:  ");
         List<Favorite> favorites = favoriteService.getAllByUserID(userID);
         return ResponseEntity.ok(favorites);
     }
 
     @DeleteMapping("/{favorite_id}")
-    public ResponseEntity<Long> deleteById(@PathVariable("favorite_id") Long id){
+    public ResponseEntity<Long> deleteById(@PathVariable("favorite_id") Long id, @RequestHeader("Authorization") String token){
         System.out.println("[DELETE FAVORITE BY ID REQUEST]:  " + id);
         Long rows_affected = favoriteService.deleteById(id);
 
@@ -59,7 +59,7 @@ public class FavoriteController {
     }
 
     @DeleteMapping("/{user_id}/{auction_id}")
-    public ResponseEntity<Long> deleteByUserIDAndAuctionID(@PathVariable("user_id") Long userID, @PathVariable("auction_id") Long auctionID){
+    public ResponseEntity<Long> deleteByUserIDAndAuctionID(@PathVariable("user_id") Long userID, @PathVariable("auction_id") Long auctionID, @RequestHeader("Authorization") String token){
         System.out.println("[DELETE FAVORITE BY USER AND AUCTION REQUEST]:  " + userID + " " + auctionID);
         Long rows_affected = favoriteService.deleteByUserIDAndAuctionID(userID, auctionID);
 
