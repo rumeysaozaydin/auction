@@ -1,18 +1,19 @@
 package com.alfa.bidit.auth;
 
+import com.alfa.bidit.model.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
-public class UserCredentials {
+public class UserCredentials extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column
+    @Column(name = "username", length = 100)
     private String username;
-    @Column
+    @Column(name = "password", length = 100)
     @JsonIgnore
     private String password;
 
