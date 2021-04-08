@@ -30,7 +30,7 @@ public class UserController {
 
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
-    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<User>> getAll(){
         System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
