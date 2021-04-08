@@ -2,11 +2,17 @@ package com.alfa.bidit.auth;
 
 import com.alfa.bidit.model.BaseModel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Table(name = "user")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class UserCredentials extends BaseModel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
