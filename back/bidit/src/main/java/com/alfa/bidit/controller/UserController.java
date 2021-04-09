@@ -30,14 +30,14 @@ public class UserController {
 
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
-    public ResponseEntity<List<User>> getAll(){
+    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token){
         System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") Long id){
+    public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         System.out.println("[GET USER REQUEST]:  " + id);
         try {
             User user = userService.getById(id);
@@ -49,7 +49,7 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> register(@RequestBody User user){
+    public ResponseEntity<Long> register(@RequestBody User user, @RequestHeader("Authorization") String token){
         // TODO email validation needed.
         System.out.println("[USER REGISTER REQUEST]:  " + user);
         try {
