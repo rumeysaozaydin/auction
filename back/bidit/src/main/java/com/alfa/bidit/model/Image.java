@@ -22,7 +22,7 @@ public class Image {
 
     @Column(name = "name", nullable = false)
     String name;
-    @Column(name = "location", nullable = false)
+    @Column(name = "location")
     String location;
 
 }
