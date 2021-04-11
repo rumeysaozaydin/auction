@@ -48,6 +48,7 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(myUserDetailsService).passwordEncoder(passwordEncoder());
+
     }
 
     @Bean
@@ -58,13 +59,27 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception{
+
+        // 1
+        /*
         http.csrf().disable()
                 .authorizeRequests().antMatchers(AUTH_WHITELIST).permitAll()
                 .anyRequest().authenticated().and().exceptionHandling()
                 .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+
                 .and().sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+
+
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+
+         */
+
+        // 2
+        http.csrf().disable().authorizeRequests().anyRequest().permitAll();
+
+        // TEST YAPARKEN 2 AÇIK KALSIN. TEST BİTTİKTEN SONRA YUKARIDAKİNİ AÇIP TOKEN ALIP SON TESTLERİ YAPIP
+        // ÖYLE PUSHLAMAK UYGUNDUR.
     }
 
     @Bean
