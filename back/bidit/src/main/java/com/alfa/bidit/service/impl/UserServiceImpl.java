@@ -46,7 +46,10 @@ public class UserServiceImpl implements UserService {
     public User getById(Long id) {
         Optional<User> optionalStudent = userRepository.findUserById(id);
 
-        if(optionalStudent.isEmpty()) throw new UserNotExistException("with id: " + id);
+
+     //   if(optionalStudent.isEmpty()) throw new UserNotExistException("with id: " + id);
+
+      if(optionalStudent.isEmpty()) throw new IllegalArgumentException("User not Found");
 
         return optionalStudent.get();
     }

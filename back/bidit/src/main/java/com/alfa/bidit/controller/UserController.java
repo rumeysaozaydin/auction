@@ -7,6 +7,8 @@ import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.ApiPaths;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.List;
 @RestController
 @RequestMapping(ApiPaths.UserControllerPath.control)
 @Api(value = ApiPaths.UserControllerPath.control)
+
 public class UserController {
 
     private final UserService userService;
@@ -44,8 +47,14 @@ public class UserController {
             return ResponseEntity.ok(user);
         }
         catch (UserNotExistException ex){
+
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @RequestMapping("/")
+    public @ResponseBody String greeting() {
+        return "Guzel Bir Test Olsun";
     }
 
     @PostMapping
