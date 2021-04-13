@@ -6,8 +6,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { ScreenContainer } from 'react-native-screens';
+import {Heading} from '../components/Heading';
 
-const HomeScreen = ({navigation}) => {
+const FavoritesScreen = ({navigation}) => {
 
     const auctionList = [
         {
@@ -53,28 +55,32 @@ const HomeScreen = ({navigation}) => {
   });
 
   return (
+    <ScreenContainer style={styles.container}>
+      <Heading style={styles.title}>Favorites</Heading>
       <ScrollView style={styles.scroll}>
         <View style={styles.cardsWrapper}>
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: '#333',
-          }}>
-          Favorites
-        </Text>
+        
         <View style={{alignItems:"center"}}>
           {auctionCards}
         </View>
       </View>
         
       </ScrollView>
-      );
+    </ScreenContainer>
+    );
 };
 
 
 const styles = StyleSheet.create({
+    title: {
+      marginBottom: 20,
+    },
+    container: {
+      flex: 1,
+      padding: 16,
+      paddingTop: 30,
+      alignItems: 'center',
+    },
     main: {
       paddingTop: Platform.OS==="android" ? StatusBar.currentHeight : 0,
       alignItems: "center",
@@ -97,6 +103,24 @@ const styles = StyleSheet.create({
       width: "100%",
     },
     wrapper: {},
+    cardsWrapper: {
+      marginTop: 20,
+      width: '90%',
+      alignSelf: 'center',
+  },
+  card: {
+      height: 100,
+      marginVertical: 10,
+      flexDirection: 'row',
+      shadowColor: '#999',
+      shadowOffset: {width: 0, height: 1},
+      shadowOpacity: 0.8,
+      shadowRadius: 2,
+      elevation: 5,
+  },
+  cardImgWrapper: {
+      flex: 1,
+  },
 });
 
-export default HomeScreen;
+export default FavoritesScreen;
