@@ -36,11 +36,23 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         System.out.println("[GET USER REQUEST]:  " + id);
         try {
             User user = userService.getById(id);
+            return ResponseEntity.ok(user);
+        }
+        catch (UserNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getByEmail(@PathVariable("email") String email, @RequestHeader("Authorization") String token){
+        System.out.println("[GET USER REQUEST]:  " + email);
+        try {
+            User user = userService.getByEmail(email);
             return ResponseEntity.ok(user);
         }
         catch (UserNotExistException ex){

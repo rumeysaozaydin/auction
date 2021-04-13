@@ -51,6 +51,14 @@ public class UserServiceImpl implements UserService {
         return optionalStudent.get();
     }
 
+    public User getByEmail(String email) {
+        Optional<User> optionalStudent = userRepository.findUserByEmail(email);
+
+        if(optionalStudent.isEmpty()) throw new UserNotExistException("with email: " + email);
+
+        return optionalStudent.get();
+    }
+
     public List<User> getAll() {
         return userRepository.findAll();
     }
