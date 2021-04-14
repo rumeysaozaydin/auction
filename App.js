@@ -16,7 +16,10 @@ import UploadScreen from "./app/screens/UploadScreen";
 import ProfileScreen from "./app/screens/ProfileScreen";
 import AuctionScreen from "./app/screens/AuctionScreen";
 import {AuthContext} from "./app/context/AuthContext";
-import {createAction} from "./app/utils/CreateAction"
+import {createAction} from "./app/utils/CreateAction";
+import {BASE_URL} from './app/config/index';
+
+import {useGet} from './app/hooks/useGet';
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -119,9 +122,9 @@ const AuthStackScreen = () => (
   </AuthStack.Navigator>
 )
 
-const RootStackScreen = ({userToken}) => (
+const RootStackScreen = ({state}) => (
   <RootStack.Navigator headerMode="none">
-    {userToken ? (
+    {state.user ? (
       <RootStack.Screen name="App" component={TabsScreen}></RootStack.Screen>
     ) : (
       <RootStack.Screen name="Auth" component={AuthStackScreen}></RootStack.Screen>
@@ -139,35 +142,107 @@ export default function App() {
             ...state,
             user: {...action.payload},
           };
+        case 'REMOVE_USER':
+          return {
+            ...state,
+            user: undefined,
+          };
+        case 'SET_LOADING':
+          return {
+            ...state,
+            loading: action.payload,
+          };
         default:
           return state;
       }
     },
     {
       user: undefined,
+      loading: true,
     },
   );
   const [userToken, setUserToken] = React.useState(null);
 
-
-  const auth = React.useMemo(() => {
-    return {
-      signIn: (username,password) => {
-        const user = {
-          email: 'rumeysaoz@hotmail.com',
-          token: 'data.jwt',
-        };
-        dispatch(createAction('SET_USER', user));
-        setUserToken("asdf");
+  const [userId, setUserId] = React.useState(null);
+ 
+  const auth = React.useMemo(
+    
+    () => ({
+      signIn: async (username, password) => {
+        axios.post(`${BASE_URL}/authenticate`, {
+          username: username,
+          password: password,
+        })
+        .then( ({data}) => {
+            axios.get(`${BASE_URL}/users/email/${username}`, {
+            headers: {
+              Authorization: `bearer ${data.token}`,
+            }})
+            .then (res => {
+            console.log("HERE")
+            
+            const user = {
+                username: res.data.email,
+                id: res.data.id,
+                token: data.token,
+            };
+            console.log(user.token)
+            dispatch(createAction('SET_USER', user));
+            })
+        })
+        .catch(function (error) {
+            console.log("sfsfnsd")
+            console.log(error.message);
+        });
       },
-      signUp: (username, password) => {
-        setUserToken("asdf");
+      signOut: async () => {
+        dispatch(createAction('REMOVE_USER'));
       },
-      signOut: () => {
-        setUserToken(null);
+      signUp: async (username, password) => {
+        axios.post(`${BASE_URL}/register`, {
+          username: username,
+          password: password,
+        })
+        .then( () => {
+            axios.post(`${BASE_URL}/authenticate`, {
+              username: username,
+              password: password,
+            })
+            .then ( ({data} ) => {   
+              console.log(data.token);  
+              var postData = {
+                contactNumber: '1232423432342',
+                firstname: 'alissds',
+                imagePath: 'string',
+                lastname: 'alisfsdfs',
+                email: username,
+                password: password
+              };     
+              axios.post(`${BASE_URL}/users`, postData, {
+                headers: {
+                  Authorization: `bearer ${data.token}`,
+                },
+              }).then (() => {
+                console.log("4")
+              })
+              .catch(function (error) {
+                console.log("3")
+                console.log(error.message);
+              });
+            })
+            .catch(function (error) {
+              console.log("2")
+              console.log(error.message);
+            });
+        })
+        .catch(function (error) {
+            console.log("1")
+            console.log(error.message);
+        });
       }
-    };
-  }, []);
+    }),
+    [],
+  );
 
   console.log(state.user);
 
@@ -179,7 +254,7 @@ export default function App() {
   return (
     <AuthContext.Provider value={ {auth , user: state.user} }>
     <NavigationContainer>
-    <RootStackScreen userToken={userToken}></RootStackScreen>
+    <RootStackScreen state={state}></RootStackScreen>
     </NavigationContainer>
     </AuthContext.Provider>
   );

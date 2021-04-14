@@ -58,8 +58,13 @@ const SignUpScreen = (props) => {
                 title={'Sign Up'}
                 style={styles.loginButton}
                 onPress={async () => {
-                    await signUp();
-                }}
+                    try {
+                      await signUp(username, password);
+                    } catch (e) {
+                        console.log('fdnjfkkmkfldm')
+                        console.log(e)
+                    }
+                  }}
             />
             <TextButton
                 title={'You Already Have an Account? Sign In' }
