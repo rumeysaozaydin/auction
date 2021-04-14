@@ -11,7 +11,7 @@ export function useGet(endpoint, initialValue = []) {
     axios
       .get(`${BASE_URL}${endpoint}`, {
         headers: {
-          Authorization: `bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhIiwiZXhwIjoxNjE4NDMwMzAzLCJpYXQiOjE2MTgzOTQzMDN9.wuOrwm3O-cZSZDjG8yVGnMK1vPabpyabKUifsgW3KQU`,
+          Authorization: `bearer ${token}`,
         },
       })
       .then(({data}) => {
