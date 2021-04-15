@@ -33,7 +33,7 @@ public class User extends BaseModel {
     @Column(name = "contact_number")
     private String contactNumber;
 
-    @Column(name = "image_path")
-    private String imagePath;
+    @Column(name = "image_id")
+    private Long imageID;
 
 }

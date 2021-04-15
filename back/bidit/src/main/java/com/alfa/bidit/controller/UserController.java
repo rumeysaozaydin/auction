@@ -8,10 +8,13 @@ import com.alfa.bidit.utils.ApiPaths;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -73,4 +76,14 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/id/{id}/image")
+    public ResponseEntity<Long> uploadProfilePhoto(@RequestParam MultipartFile multipartImage, @PathVariable Long id) throws Exception {
+        Long imageId = userService.uploadProfilePhoto(id, multipartImage);
+        return ResponseEntity.ok(imageId);
+    }
+
+    @GetMapping(value = "/id/{id}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    Resource downloadImage(@PathVariable Long id) {
+        return userService.getProfilePhoto(id);
+    }
 }
