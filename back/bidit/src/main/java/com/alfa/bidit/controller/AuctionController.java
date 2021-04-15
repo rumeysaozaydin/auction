@@ -58,8 +58,14 @@ public class AuctionController {
         }
     }
 
+    @GetMapping("/list")
+    public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token, @RequestBody List<Long> idList){
+        System.out.println("[GET AUCTIONS BY LIST REQUEST]:  ");
+        List<Auction> auctions = auctionService.getAllByIdIn(idList);
+        return ResponseEntity.ok(auctions);
+    }
+
     @GetMapping("/all")
-    // @ApiOperation(value = "Get All Users",response = User.class)
     public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token){
         System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
         List<Auction> auctions = auctionService.getAll();
