@@ -8,11 +8,18 @@ import {
 } from 'react-native-paper';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext} from '../context/AuthContext';
 
 //import Share from 'react-native-share';
 
 
 function ProfileScreen() {
+
+    const {
+      auth: {signOut},
+      user,
+    } = React.useContext(AuthContext);
+
     return (
         <SafeAreaView style={styles.container}>
 
@@ -77,10 +84,20 @@ function ProfileScreen() {
             <Text style={styles.menuItemText}>Support</Text>
           </View>
         </TouchableRipple>
-        <TouchableRipple onPress={() => {}}>
+        <TouchableRipple onPress={
+           async () => {
+            try {
+              console.log("herhehr")
+              await signOut();
+            } catch (e) {
+                //console.log('signOut')
+                console.log(e)
+            }
+          }
+        }>
           <View style={styles.menuItem}>
             <Icon name="settings-outline" color="#FF6347" size={25}/>
-            <Text style={styles.menuItemText}>Settings</Text>
+            <Text style={styles.menuItemText}>Sign Out</Text>
           </View>
         </TouchableRipple>
       </View>

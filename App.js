@@ -197,6 +197,7 @@ export default function App() {
         });
       },
       signOut: async () => {
+        console.log("sign Out")
         dispatch(createAction('REMOVE_USER'));
       },
       signUp: async (username, password) => {

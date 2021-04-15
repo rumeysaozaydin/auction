@@ -51,12 +51,12 @@ const HomeScreen = ({navigation}) => {
         <AuctionCard
             isFavourite={false}
             key = {index}
-            uri={auction.uri} 
-            name={auction.title} 
-            entryPrice={auction.initialPrice}
-            bids={auction.bids}
-            lastBid={auction.highestBid} 
-            auctionDeadline={auction.expirationTime}
+            //uri={auction.uri} 
+            title={auction.title} 
+            initialPrice={auction.initialPrice}
+            //bids={auction.bids}
+            highestBid={auction.highestBid} 
+            expirationTime={auction.expirationTime}
             navigation={navigation}
             id={auction.id}
         />
@@ -73,7 +73,7 @@ const HomeScreen = ({navigation}) => {
     <ScreenContainer style={styles.container}>
       <ScrollView style={styles.scroll}>
     
-      <Text>{user.email}</Text>
+      <Text>{user.username}</Text>
 
         <View style={styles.sliderContainer}>
         <Swiper

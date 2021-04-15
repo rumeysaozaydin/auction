@@ -184,36 +184,35 @@ import React from 'react';
 import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 import CountDown from 'react-native-countdown-component';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
+import {useGet} from '../hooks/useGet';
 
-const AuctionScreen = () => {
-
-    const data = {
-        uri: "https://moderndiplomacy.eu/wp-content/uploads/2019/01/rolex-oyster.jpg",
-        name:"Rolex Watch",
-        entryPrice:"$690",
-        bids: [720, 723, 760, 815],
-        lastBid:"$845",
-        auctionDeadline:"12.01.2021"}
+const AuctionScreen = ({route,navigation}) => {
+    const { productId } = route.params;
+     
+    console.log("PRODUCT ID" , productId);
+    const data = useGet(`/auctions/${productId}`);
+    const sellerId = data.sellerID;
+    const seller = useGet(`/users/id/${sellerId}`); 
     return (
         <KeyboardAwareScrollView  style={styles.main}>
             <ScrollView contentContainerStyle={styles.scroll} >
-                <Text style={styles.header}>{data.name}</Text>
-                <Image
+                <Text style={styles.header}>{data.title}</Text>
+                {/* <Image
                     style={styles.image}
                     source={{
                         width:"85%",
                         height: Dimensions.get("screen").height * 0.2,
                         uri: data.uri
                     }}
-                />
+                /> */}
                 <View style={styles.sellerLine}>
                     <Text style={styles.sellerText}>Seller: </Text>
                     <TouchableOpacity style={styles.sellerButton}>
-                        <Text style={styles.sellerButtonText}>Jane Doe</Text>
+                        <Text style={styles.sellerButtonText}>{seller.email}</Text>
                     </TouchableOpacity>
                 </View>
-                <Text style={styles.highestBid}>Highest Bid:  {data.lastBid}</Text>
-                <Text style={styles.bids}>Entry Price: {data.entryPrice}</Text>
+                <Text style={styles.highestBid}>Highest Bid:  {data.highestBid}</Text>
+                <Text style={styles.bids}>Entry Price: {data.initialPrice}</Text>
                 <View style={styles.biddingContainer}>
                     {/* <TouchableOpacity 
                         style={styles.buttonContainer}

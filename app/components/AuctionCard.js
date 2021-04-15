@@ -1,10 +1,11 @@
 import React from 'react';
 import { StyleSheet, Text, View, Button, Image } from 'react-native';
 import { IconButton, Colors } from 'react-native-paper';
+import {useGet} from '../hooks/useGet';
 
-const AuctionCard = ({navigation, uri, name, lastBid, id}) => {
+const AuctionCard = ({navigation, uri, title, highestBid, id}) => {
+  
     return (
-
         <View style={styles.card}>
             <View style={styles.cardImgWrapper}>
                 <Image
@@ -14,9 +15,9 @@ const AuctionCard = ({navigation, uri, name, lastBid, id}) => {
                 />
             </View>
             <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>{name}</Text>
+                <Text style={styles.cardTitle}>{title}</Text>
                 <Text style={styles.cardDetails}>
-                Current Price : {lastBid}
+                Current Price : {highestBid}
                 </Text>
                 <IconButton style={styles.cardButton} icon={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_135596.png' }} title="BidIt" 
                 onPress={() => {navigation.navigate("Auction" , { productId: id});}}

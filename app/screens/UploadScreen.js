@@ -1,180 +1,113 @@
-// import React from 'react';
-// import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-// import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-
-
-// function Upload({ route }) {
-//     return (
-//         <KeyboardAwareScrollView  style={styles.main}>
-//             <ScrollView contentContainerStyle={styles.scroll} >
-                
-//                 <View style={styles.biddingContainer}>
-//                     {/* <TouchableOpacity 
-//                         style={styles.buttonContainer} 
-//                         >
-//                         <Text style={styles.buttonText}>Bid It !</Text>
-//                     </TouchableOpacity> */}
-                    
-//                     <TextInput
-//                         style={styles.bidInput}
-//                         placeholder={"Enter Name"}
-//                         textAlign="center"
-//                     />
-                    
-//                 </View>
-//                 <View style={styles.biddingContainer}>
-//                     {/* <TouchableOpacity 
-//                         style={styles.buttonContainer} 
-//                         >
-//                         <Text style={styles.buttonText}>Bid It !</Text>
-//                     </TouchableOpacity> */}
-                    
-                   
-//                     <TextInput
-//                         style={styles.bidInput}
-//                         placeholder={"Description"}
-//                         textAlign="center"
-//                     />
-                    
-//                 </View>
-//                 <View style={styles.biddingContainer}>
-//                     {/* <TouchableOpacity 
-//                         style={styles.buttonContainer} 
-//                         >
-//                         <Text style={styles.buttonText}>Bid It !</Text>
-//                     </TouchableOpacity> */}
-                    
-//                     <TextInput
-//                         style={styles.bidInput}
-//                         placeholder={"Category"}
-//                         textAlign="center"
-//                     />
-                    
-//                 </View>
-//                 <View style={styles.biddingContainer}>
-//                     {/* <TouchableOpacity 
-//                         style={styles.buttonContainer} 
-//                         >
-//                         <Text style={styles.buttonText}>Bid It !</Text>
-//                     </TouchableOpacity> */}
-                    
-//                     <TouchableOpacity 
-//                         style={styles.buttonContainer} 
-//                         >
-//                         <Text style={styles.buttonText}>Upload Image</Text>
-//                     </TouchableOpacity>
-                    
-//                 </View>
-//             </ScrollView>
-//         </KeyboardAwareScrollView>
-//     );
-// }
-
-// const styles = StyleSheet.create({
-//     main: {
-//       backgroundColor: "#ffeae8",
-//       flex: 1,
-     
-//     },
-//     scroll:{
-//       alignItems: "center",
-//       width: "100%",
-//       flex: 1
-//     },
-//     header:{
-//         fontSize: 30,
-//         fontWeight: "700",
-//         padding: 20
-//     },
-//     image: {
-//         alignItems: "center",
-//     },
-//     sellerLine:{
-//         flexDirection: "row",
-//         marginTop: 10,
-//         width: "85%",
-//         alignItems: "center",
-
-//     },
-//     sellerText:{
-//         fontSize: 20,
-//         color: "#0b04c9",
-//         fontWeight: "bold",
-//     },
-//     sellerButton:{
-//         backgroundColor: "#f7f7f7",
-//         borderWidth: 1,
-//         marginLeft: 10,
-//         padding: 5,
-//         borderRadius: 15,
-//         alignItems: "center"
-//     },
-//     sellerButtonText:{
-//         fontSize: 20,
-//         margin: 5,
-//         fontWeight: "bold",
-//         color:"#0091b3"
-//     },
-//     highestBid:{
-//         color: "#b30000",
-//         alignSelf: "flex-start",
-//         width: "85%",
-//         marginLeft:"7.5%",
-//         marginTop:10,
-//         fontSize: 30,
-//         fontWeight: "bold",
-//     },
-//     bids:{
-//         color:"#4a4a4a",
-//         alignSelf: "flex-start",
-//         width: "85%",
-//         marginLeft:"7.5%",
-//         marginTop:8,
-//         fontSize: 16,
-//         fontWeight: "bold",
-//     },
-//     timeLeft: {
-//         color:"#0b04c9",
-//         marginTop:8,
-//         fontSize: 20,
-//     },
-//     buttonContainer:{
-//         backgroundColor: "#118a27",
-//         padding: 12,
-//         width: "50%", 
-//         borderRadius: 5,
-//         alignItems: "center"
-//     },
-//     buttonText:{
-//         color: "white",
-//         fontWeight: 'bold',
-//         fontSize: 20
-//     },
-//     biddingContainer:{
-//         flexDirection: "row", 
-//         width: "85%",
-//         marginTop: 15,
-//         marginBottom: 15
-//     },
-//     bidInput:{
-//         backgroundColor: "white",
-//         width: "70%",
-//         borderColor: 'gray', 
-//         borderWidth: 1,
-//         borderRadius: 5
-//     }
-// });
-
-// export default Upload;
-
 
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+import {usePost} from '../hooks/usePost';
+import {AuthContext} from '../context/AuthContext';
+import { ScreenContainer } from 'react-native-screens';
+import {FilledButton} from '../components/FilledButton';
+import {Input} from '../components/Input';
+import {TextButton} from '../components/TextButton';
+import {Heading} from '../components/Heading';
+import {BASE_URL} from '../config/index';
+import axios from 'axios';
 
 const UploadScreen = () => {
-    return <Text> Upload </Text>;
+    const {
+        user
+    } = React.useContext(AuthContext);
+
+    const id = user.id;
+
+    const [title, setTitle] = React.useState("jacket");
+    const [description, setDescription] = React.useState("nice jacker");
+    const [initialPrice, setInitialPrice] = React.useState("2123123");
+    const [startingTime, setStartingTime] = React.useState("2021-04-15T19:14:15.971Z");
+    const [expirationTime, setExpirationTime] = React.useState('2021-07-15T19:14:15.971Z');
+
+    return (
+        <ScreenContainer style={styles.container}>
+            <Heading style={styles.title}>Upload</Heading>
+            <Input
+                style={styles.input}
+                placeholder={'Title'}
+                value={title}
+                onChangeText={setTitle}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'Description'}
+                value={description}
+                onChangeText={setDescription}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'InitialPrice'}
+                value={initialPrice}
+                onChangeText={setInitialPrice}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'startingTime'}
+                value={startingTime}
+                onChangeText={setStartingTime}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'expirationTime'}
+                value={expirationTime}
+                onChangeText={setExpirationTime}
+            />
+            <FilledButton
+                title={'Upload Auction'}
+                style={styles.loginButton}
+                onPress={async () => {
+                    var endpoint = '/auctions';
+                    const newAuc =
+                    {
+                        "description": description,
+                        "expirationTime": expirationTime,
+                        "initialPrice": initialPrice,
+                        "sellerID": id,
+                        "startingTime": startingTime,
+                        "status": "ACTIVE",
+                        "title": title
+                    }
+                    axios
+                    .post(`${BASE_URL}${endpoint}`, newAuc, {
+                        headers: {
+                        Authorization: `bearer ${user.token}`
+                        },
+                    })
+                    .then(({data}) => {
+                        console.log("INSIDE USEPOST THEN")
+                    })
+                    .catch(function (error) {
+                        console.log("INSIDE USEPOST CATCH")
+                        console.log(error.message);
+                    });
+                    console.log("Upload Product")
+                }}
+            />
+        </ScreenContainer>
+    );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 16,
+        paddingTop: 50,
+        alignItems: 'center',
+    },
+    title: {
+        marginBottom: 20,
+    },
+    input: {
+        marginVertical: 8,
+    },
+    loginButton: {
+        marginVertical: 32,
+    },
+});
 
 export default UploadScreen;
