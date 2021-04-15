@@ -3,6 +3,7 @@ package com.alfa.bidit.controller;
 import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
+import com.alfa.bidit.model.User;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.impl.UserServiceImpl;
 import com.alfa.bidit.utils.ApiPaths;
@@ -55,5 +56,13 @@ public class AuctionController {
         catch (UserNotExistException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @GetMapping("/all")
+    // @ApiOperation(value = "Get All Users",response = User.class)
+    public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token){
+        System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
+        List<Auction> auctions = auctionService.getAll();
+        return ResponseEntity.ok(auctions);
     }
 }

@@ -55,6 +55,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Auction> getAll() {
+        return auctionRepository.findAll();
+    }
+
+    @Override
     public Boolean existsById(Long auctionID) {
         return auctionRepository.existsAuctionById(auctionID);
     }
