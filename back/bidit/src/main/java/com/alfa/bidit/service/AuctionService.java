@@ -24,4 +24,10 @@ public interface AuctionService{
     Boolean existsById(Long auctionID);
 
     void endAuctionById(Long id);
+
+    Double getHighestBid(Long id);
+
+    void updateHighestBid(Long auctionID, Double newHighestBid);
+
+    Long getSellerIDByAuctionID(Long auctionID);
 }

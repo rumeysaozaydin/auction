@@ -31,6 +31,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Auction create(Auction auction) {
         // TODO IT DOES NOT CHECK WHETHER THE SELLER EXIST.
+        auction.setHighestBid(auction.getInitialPrice());
         auctionRepository.save(auction);
         auctionManagerService.pushExpirationQueue(auction.getId(), auction.getExpirationTime());
         return auction;
@@ -72,6 +73,23 @@ public class AuctionServiceImpl implements AuctionService {
             System.out.println("Auction " + auction.getId() + " has been successfully expired. ");
             auctionRepository.save(auction);
         });
+    }
+
+    @Override
+    public Double getHighestBid(Long id) {
+        return getById(id).getHighestBid();
+    }
+
+    @Override
+    public void updateHighestBid(Long auctionID, Double newHighestBid) {
+        Auction auction = getById(auctionID);
+        auction.setHighestBid(newHighestBid);
+        auctionRepository.save(auction);
+    }
+
+    @Override
+    public Long getSellerIDByAuctionID(Long auctionID) {
+        return getById(auctionID).getSellerID();
     }
 
 }
