@@ -21,34 +21,4 @@ public class UserTests {
     public UserTests(UserService userService) {
         this.userService = userService;
     }
-
-    User createUser(String email,
-                    String firstname,
-                    String lastname,
-                    String phoneNumber,
-                    String password,
-                    String imagePath){
-        User user = new User();
-        user.setEmail(email);
-        user.setFirstname(firstname);
-        user.setContactNumber(phoneNumber);
-        user.setLastname(lastname);
-        user.setPassword(password);
-        user.setImagePath(imagePath);
-        return user;
-    }
-
-    @Test
-    void userAlreadyExistsTest(){
-        User user1 = createUser("asg@gmail.com", "ahmet", "gurbuz", "5344656451", "123456", "image.png");
-        User user2 = createUser("asg2@gmail.com", "ahmet", "gurbuz", "5344656451", "123456", "image.png");
-        userService.register(user1);
-        try {
-            userService.register(user2);
-        }
-        catch (Exception ex){
-            assertThat(ex.getClass() == UserAlreadyExistsException.class);
-        }
-        assertThat(false);
-    }
 }
