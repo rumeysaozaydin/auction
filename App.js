@@ -174,6 +174,7 @@ export default function App() {
           password: password,
         })
         .then( ({data}) => {
+            console.log("signin")
             axios.get(`${BASE_URL}/users/email/${username}`, {
             headers: {
               Authorization: `bearer ${data.token}`,
@@ -204,6 +205,7 @@ export default function App() {
           password: password,
         })
         .then( () => {
+            console.log("seredar")
             axios.post(`${BASE_URL}/authenticate`, {
               username: username,
               password: password,
@@ -222,12 +224,13 @@ export default function App() {
                 headers: {
                   Authorization: `bearer ${data.token}`,
                 },
-              }).then (() => {
+              }).then (res => {
+                console.log(res);
                 console.log("4")
               })
               .catch(function (error) {
                 console.log("3")
-                console.log(error.message);
+                console.log(error.response.data.message);
               });
             })
             .catch(function (error) {
