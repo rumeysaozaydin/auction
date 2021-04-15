@@ -30,14 +30,14 @@ public class UserController {
 
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
-    public ResponseEntity<List<User>> getAll(){
+    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token){
         System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") Long id){
+    @GetMapping("/id/{id}")
+    public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         System.out.println("[GET USER REQUEST]:  " + id);
         try {
             User user = userService.getById(id);
@@ -48,8 +48,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getByEmail(@PathVariable("email") String email, @RequestHeader("Authorization") String token){
+        System.out.println("[GET USER REQUEST]:  " + email);
+        try {
+            User user = userService.getByEmail(email);
+            return ResponseEntity.ok(user);
+        }
+        catch (UserNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Long> register(@RequestBody User user){
+    public ResponseEntity<Long> register(@RequestBody User user, @RequestHeader("Authorization") String token){
         // TODO email validation needed.
         System.out.println("[USER REGISTER REQUEST]:  " + user);
         try {
