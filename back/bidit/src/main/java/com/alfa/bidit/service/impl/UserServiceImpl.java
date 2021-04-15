@@ -29,9 +29,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        Optional<User> optionalStudent = userRepository.findUserByEmail(user.getEmail());
+        if(existsByEmail(user.getEmail())) throw new UserAlreadyExistsException(user);
 
-        if(optionalStudent.isPresent()) throw new UserAlreadyExistsException(user);
+        user.setImagePath("defaultImagePathByServer.png");
 
      //   if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
 
@@ -66,5 +66,10 @@ public class UserServiceImpl implements UserService {
 
     public Boolean existsById(Long id) {
         return userRepository.existsUserById(id);
+    }
+
+    @Override
+    public Boolean existsByEmail(String email) {
+        return userRepository.existsUserByEmail(email);
     }
 }

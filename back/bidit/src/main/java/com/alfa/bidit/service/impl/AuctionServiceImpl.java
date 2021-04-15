@@ -8,11 +8,15 @@ import com.alfa.bidit.service.AuctionManagerService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.Constants;
+import com.alfa.bidit.utils.Constants.AuctionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+
+import static com.alfa.bidit.utils.DateUtil.*;
 
 @Service
 public class AuctionServiceImpl implements AuctionService {
@@ -31,7 +35,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Auction create(Auction auction) {
         // TODO IT DOES NOT CHECK WHETHER THE SELLER EXIST.
+        auction.setStartingTime(now());
+        auction.setExpirationTime(toDate(toLocalDateTime(now()).plusDays(1))); // Temporarily one day.
         auction.setHighestBid(auction.getInitialPrice());
+        auction.setStatus(AuctionStatus.ACTIVE);
+
         auctionRepository.save(auction);
         auctionManagerService.pushExpirationQueue(auction.getId(), auction.getExpirationTime());
         return auction;
@@ -68,7 +76,7 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void endAuctionById(Long id) {
         auctionRepository.findAuctionById(id).ifPresent(auction -> {
-            auction.setStatus(Constants.AuctionStatus.EXPIRED);
+            auction.setStatus(AuctionStatus.EXPIRED);
             // TODO Probably notify the seller and all the attendees here.
             System.out.println("Auction " + auction.getId() + " has been successfully expired. ");
             auctionRepository.save(auction);
