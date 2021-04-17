@@ -1,7 +1,9 @@
 package com.alfa.bidit.auth;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface UserCredentialsRepository extends CrudRepository<UserCredentials, Integer> {
+@Repository
+public interface UserCredentialsRepository extends JpaRepository<UserCredentials, Long> {
     UserCredentials findByUsername(String username);
 }
