@@ -3,6 +3,7 @@ package com.alfa.bidit.service.impl;
 import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.FavoriteAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
+import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Favorite;
 import com.alfa.bidit.repository.AuctionRepository;
 import com.alfa.bidit.repository.FavoriteRepository;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
@@ -69,5 +71,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         return favoriteRepository.deleteFavoriteByUserIDAndAuctionID(userID, auctionID);
     }
 
+    @Override
+    public List<Auction> getFavoriteAuctionsByUserID(Long id) {
+        List<Long> favoriteIDs = getAllByUserID(id).stream().map(Favorite::getAuctionID).collect(Collectors.toList());
+        return auctionService.getAllByIdIn(favoriteIDs);
+    }
 
 }

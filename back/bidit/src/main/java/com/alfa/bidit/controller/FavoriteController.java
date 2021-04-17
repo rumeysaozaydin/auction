@@ -3,6 +3,7 @@ package com.alfa.bidit.controller;
 import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.FavoriteAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
+import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Favorite;
 import com.alfa.bidit.service.FavoriteService;
 import com.alfa.bidit.utils.ApiPaths;
@@ -42,9 +43,9 @@ public class FavoriteController {
     }
 
     @GetMapping("/{user_id}")
-    public ResponseEntity<List<Favorite>> getAllFavoritesByUserId(@PathVariable("user_id") Long userID, @RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Auction>> getAllFavoritesByUserId(@PathVariable("user_id") Long userID, @RequestHeader("Authorization") String token){
         System.out.println("[GET ALL FAVORITES BY USER REQUEST]:  ");
-        List<Favorite> favorites = favoriteService.getAllByUserID(userID);
+        List<Auction> favorites = favoriteService.getFavoriteAuctionsByUserID(userID);
         return ResponseEntity.ok(favorites);
     }
 
