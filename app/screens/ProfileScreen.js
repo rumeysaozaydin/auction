@@ -13,7 +13,7 @@ import {AuthContext} from '../context/AuthContext';
 //import Share from 'react-native-share';
 
 
-function ProfileScreen() {
+function ProfileScreen({navigation}) {
 
     const {
       auth: {signOut},

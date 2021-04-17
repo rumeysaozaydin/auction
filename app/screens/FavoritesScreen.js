@@ -10,6 +10,10 @@ import { ScreenContainer } from 'react-native-screens';
 import {Heading} from '../components/Heading';
 import {AuthContext} from '../context/AuthContext';
 import {useGet} from '../hooks/useGet';
+import { usePost } from '../hooks/usePost';
+import axios from 'axios';
+import {BASE_URL} from '../config/index';
+import { TextButton } from '../components/TextButton';
 
 const FavoritesScreen = ({navigation}) => {
 
@@ -17,12 +21,19 @@ const FavoritesScreen = ({navigation}) => {
       auth: {signOut},
       user,
     } = React.useContext(AuthContext);
-    const auctionList = useGet(`/favorites/${user.id}`);
-    var auctions = [];
-    for(const item of auctionList){
-      auctions.push(item.auctionID);
+    
+    const [auctionList, setAuctionList] = React.useState([]);
+
+    const refresh = () => {
+      useGet(`/favorites/${user.id}`, user.token, setAuctionList);
     }
-    console.log(auctions)
+
+    React.useEffect(() => {
+      refresh()
+    }, []);
+   
+  
+    //let auctionList1 = axios.post(`${BASE_URL}/auctions/list`, auctions).catch(function (error) { console.log(error)});
     let auctionCards = auctionList.map((auction, index) => {
         return (
         <AuctionCard
@@ -35,7 +46,7 @@ const FavoritesScreen = ({navigation}) => {
             highestBid={auction.highestBid} 
             expirationTime={auction.expirationTime}
             navigation={navigation}
-            id={auction.auctionID}
+            id={auction.id}
         />
     );
 
@@ -43,6 +54,10 @@ const FavoritesScreen = ({navigation}) => {
 
   return (
     <ScreenContainer style={styles.container}>
+      <TextButton
+                title={'Refresh' }
+                onPress={refresh}
+      />
       <Heading style={styles.title}>Favorites</Heading>
       <ScrollView style={styles.scroll}>
         <View style={styles.cardsWrapper}>

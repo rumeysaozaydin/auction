@@ -11,32 +11,12 @@ import { Loading } from '../components/Loading';
 
 const SignUpScreen = (props) => {
 
-    const [username, setUsername] = React.useState(null);
-    const [password, setPassword] = React.useState(null);
+    const [username, setUsername] = React.useState('ali');
+    const [password, setPassword] = React.useState('ali');
     const [loading, setLoading] = React.useState(false);
 
 
     const {auth : {signUp}} = React.useContext(AuthContext);
-    // const signUp = async () => {
-
-    //     var myHeaders = new Headers();
-    //     myHeaders.append("Content-Type", "application/json");
-
-    //     var raw = JSON.stringify({"username":username,"password":password});
-
-    //     var requestOptions = {
-    //     method: 'POST',
-    //     headers: myHeaders,
-    //     body: raw,
-    //     redirect: 'follow'
-    //     };
-
-    //     fetch("http://localhost:8080/register", requestOptions)
-    //     .then(response => response.json())
-    //     .then(result =>  alert(result.username + " registered successfully.") ) 
-    //     .catch(error =>  alert( JSON.stringify( "Could not register ") )) ;
-
-    // }
 
     return (
         <ScreenContainer style={styles.container}>
@@ -58,6 +38,7 @@ const SignUpScreen = (props) => {
                 title={'Sign Up'}
                 style={styles.loginButton}
                 onPress={async () => {
+                    
                     try {
                         await signUp(username, password);
                     } catch (e) {

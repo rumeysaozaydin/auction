@@ -4,10 +4,8 @@ import axios from 'axios';
 import {AuthContext} from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 
-export function useGet(endpoint, initialValue = []) {
-  const { user : {token}} = React.useContext(AuthContext);
-  const [data, setData] = React.useState(initialValue);
-  React.useEffect(() => {
+export  function useGet(endpoint, token, setState) {
+  
     axios
       .get(`${BASE_URL}${endpoint}`, {
         headers: {
@@ -15,16 +13,12 @@ export function useGet(endpoint, initialValue = []) {
         },
       })
       .then(({data}) => {
-        console.log('ffd')
-
-        setData(data);
-
-        console.log(data)
+        console.log('success');
+        setState(data);
       })
       .catch(function (error) {
-          console.log("sfsfnsd")
+          console.log("Use get catch")
           console.log(error.message);
       });
-  }, [token, endpoint]);
-  return data;
+  
 }

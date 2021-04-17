@@ -192,13 +192,13 @@ export default function App() {
             })
         })
         .catch(function (error) {
-            console.log("sfsfnsd")
             console.log(error.message);
         });
       },
       signOut: async () => {
         console.log("sign Out")
         dispatch(createAction('REMOVE_USER'));
+      
       },
       signUp: async (username, password) => {
         axios.post(`${BASE_URL}/register`, {
@@ -247,8 +247,6 @@ export default function App() {
     }),
     [],
   );
-
-  console.log(state.user);
 
   let updateToken = (token) => {
     setUserToken(token);

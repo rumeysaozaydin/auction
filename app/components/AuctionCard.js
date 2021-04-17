@@ -20,7 +20,7 @@ const AuctionCard = ({navigation, uri, title, highestBid, id}) => {
                 Current Price : {highestBid}
                 </Text>
                 <IconButton style={styles.cardButton} icon={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_135596.png' }} title="BidIt" 
-                onPress={() => {navigation.navigate("Auction" , { productId: id});}}
+                onPress={() => {navigation.navigate("Auction" , { auctionId: id});}}
                 />
             </View>
             <View style = {styles.cardButtonWrapper}>

@@ -1,51 +1,28 @@
 import React from 'react';
-import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image,  TouchableOpacity } from 'react-native';
-import AuctionCard from "../components/AuctionCard";
-import Swiper from 'react-native-swiper';
-import Ionicons from 'react-native-vector-icons/Ionicons';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Image, Platform, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
-import {AuthContext} from '../context/AuthContext';
-import axios from 'axios';
-import {useGet} from '../hooks/useGet';
+import Swiper from 'react-native-swiper';
+import AuctionCard from "../components/AuctionCard";
+import { TextButton } from '../components/TextButton';
+import { AuthContext } from '../context/AuthContext';
+import { useGet } from '../hooks/useGet';
 
 const HomeScreen = ({navigation}) => {
+    const {
+      auth: {signOut},
+      user,
+    } = React.useContext(AuthContext);
 
-    // const [auctionList, setAuctionList]  = React.useState([
-    //     {
-    //         uri: "https://moderndiplomacy.eu/wp-content/uploads/2019/01/rolex-oyster.jpg",
-    //         name:"Rolex Watch",
-    //         entryPrice:"$690",
-    //         bids: [720, 723, 760, 815],
-    //         lastBid:"$845",
-    //         auctionDeadline:"12.01.2021",
-    //         id: '3'
-    //     },
-    //     {
-    //         uri: "https://static.keymusic.com/products/265499/XL/yamaha-psr-e463.jpg",
-    //         name:"Keyboard - Yamaha PSR",
-    //         entryPrice:"$170",
-    //         bids: [180, 190, 212, 225, 245],
-    //         lastBid:"$260",
-    //         auctionDeadline:"13.01.2021",
-    //         id: '2'
-    //     },
-    //     {
-    //         uri:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ2gR6EMYNpytjkjEIxXBAFCyEkjUWTV7eC2Q&usqp=CAU",
-    //         name:"PS4 + FIFA 2019",
-    //         entryPrice:"$260",
-    //         bids:[263],
-    //         lastBid:"$265",
-    //         auctionDeadline:"14.01.2021",
-    //         id: '1'
-    //     }
-    //   ]
-    // );
-    const auctionList = useGet('/auctions/all');
+    const [auctionList, setAuctionList] = React.useState([]);
 
-  
+    const refresh = () => {
+      useGet('/auctions/all', user.token, setAuctionList);
+    }
+
+    React.useEffect(() => {
+      refresh()
+    }, []);
+
     let auctionCards = auctionList.map((auction, index) => {
         return (
         <AuctionCard
@@ -64,16 +41,9 @@ const HomeScreen = ({navigation}) => {
 
   });
 
-  const {
-    auth: {signOut},
-    user,
-  } = React.useContext(AuthContext);
-
   return (
     <ScreenContainer style={styles.container}>
       <ScrollView style={styles.scroll}>
-    
-      <Text>{user.username}</Text>
 
         <View style={styles.sliderContainer}>
         <Swiper
@@ -106,6 +76,10 @@ const HomeScreen = ({navigation}) => {
         </View>
 
         <View style={styles.cardsWrapper}>
+        <TextButton
+                title={'Refresh' }
+                onPress={refresh}
+        />
         <Text
           style={{
             alignSelf: 'center',

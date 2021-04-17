@@ -11,7 +11,8 @@ import {Heading} from '../components/Heading';
 import {BASE_URL} from '../config/index';
 import axios from 'axios';
 
-const UploadScreen = () => {
+
+const UploadScreen = ({navigation}) => {
     const {
         user
     } = React.useContext(AuthContext);
@@ -21,8 +22,8 @@ const UploadScreen = () => {
     const [title, setTitle] = React.useState("jacket");
     const [description, setDescription] = React.useState("nice jacker");
     const [initialPrice, setInitialPrice] = React.useState("2123123");
-    const [startingTime, setStartingTime] = React.useState("2021-04-15T19:14:15.971Z");
-    const [expirationTime, setExpirationTime] = React.useState('2021-07-15T19:14:15.971Z');
+    //const [startingTime, setStartingTime] = React.useState("2021-04-15T19:14:15.971Z");
+    const [duration, setDuration] = React.useState('60');
 
     return (
         <ScreenContainer style={styles.container}>
@@ -45,17 +46,12 @@ const UploadScreen = () => {
                 value={initialPrice}
                 onChangeText={setInitialPrice}
             />
+            
             <Input
                 style={styles.input}
-                placeholder={'startingTime'}
-                value={startingTime}
-                onChangeText={setStartingTime}
-            />
-            <Input
-                style={styles.input}
-                placeholder={'expirationTime'}
-                value={expirationTime}
-                onChangeText={setExpirationTime}
+                placeholder={'duration'}
+                value={duration}
+                onChangeText={setDuration}
             />
             <FilledButton
                 title={'Upload Auction'}
@@ -65,21 +61,20 @@ const UploadScreen = () => {
                     const newAuc =
                     {
                         "description": description,
-                        "expirationTime": expirationTime,
                         "initialPrice": initialPrice,
                         "sellerID": id,
-                        "startingTime": startingTime,
                         "status": "ACTIVE",
                         "title": title
                     }
                     axios
-                    .post(`${BASE_URL}${endpoint}`, newAuc, {
+                    .post(`${BASE_URL}${endpoint}?duration=${duration}`, newAuc, {
                         headers: {
                         Authorization: `bearer ${user.token}`
                         },
                     })
                     .then(({data}) => {
                         console.log("INSIDE USEPOST THEN")
+                        navigation.navigate("Auction" , { auctionId: data.id});
                     })
                     .catch(function (error) {
                         console.log("INSIDE USEPOST CATCH")
