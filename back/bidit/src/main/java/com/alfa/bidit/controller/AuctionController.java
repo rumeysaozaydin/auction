@@ -27,9 +27,9 @@ public class AuctionController {
     }
 
     @PostMapping
-    public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestHeader("Authorization") String token){
+    public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestParam Long duration, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
-        Auction newAuction = auctionService.create(auction);
+        Auction newAuction = auctionService.create(auction, duration);
         return ResponseEntity.ok(newAuction);
     }
 
