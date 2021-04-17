@@ -1,5 +1,6 @@
 package com.alfa.bidit.service;
 
+import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Favorite;
 import org.springframework.stereotype.Service;
 
@@ -14,4 +15,6 @@ public interface FavoriteService {
     Long deleteById(Long id);
 
     Long deleteByUserIDAndAuctionID(Long userID, Long auctionID);
+
+    List<Auction> getFavoriteAuctionsByUserID(Long id);
 }

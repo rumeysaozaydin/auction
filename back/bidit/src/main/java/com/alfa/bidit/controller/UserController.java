@@ -8,10 +8,13 @@ import com.alfa.bidit.utils.ApiPaths;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -30,14 +33,14 @@ public class UserController {
 
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
-    public ResponseEntity<List<User>> getAll(){
+    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token){
         System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<User> getById(@PathVariable("id") Long id){
+    @GetMapping("/id/{id}")
+    public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         System.out.println("[GET USER REQUEST]:  " + id);
         try {
             User user = userService.getById(id);
@@ -48,8 +51,20 @@ public class UserController {
         }
     }
 
+    @GetMapping("/email/{email}")
+    public ResponseEntity<User> getByEmail(@PathVariable("email") String email, @RequestHeader("Authorization") String token){
+        System.out.println("[GET USER REQUEST]:  " + email);
+        try {
+            User user = userService.getByEmail(email);
+            return ResponseEntity.ok(user);
+        }
+        catch (UserNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+    }
+
     @PostMapping
-    public ResponseEntity<Long> register(@RequestBody User user){
+    public ResponseEntity<Long> register(@RequestBody User user, @RequestHeader("Authorization") String token){
         // TODO email validation needed.
         System.out.println("[USER REGISTER REQUEST]:  " + user);
         try {
@@ -61,4 +76,14 @@ public class UserController {
         }
     }
 
+    @PostMapping(value = "/id/{id}/image")
+    public ResponseEntity<Long> uploadProfilePhoto(@RequestParam MultipartFile multipartImage, @PathVariable Long id) throws Exception {
+        Long imageId = userService.uploadProfilePhoto(id, multipartImage);
+        return ResponseEntity.ok(imageId);
+    }
+
+    @GetMapping(value = "/id/{id}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    Resource downloadImage(@PathVariable Long id) {
+        return userService.getProfilePhoto(id);
+    }
 }

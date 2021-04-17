@@ -6,25 +6,22 @@ import javax.persistence.*;
 
 
 @Entity
-@Table(name = "bids")
+@Table(name = "auction_images")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Bid extends BaseModel {
+public class AuctionImage extends BaseModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private Long userID;
-
     @Column(name = "auction_id", nullable = false)
     private Long auctionID;
 
-    @Column(name = "price", nullable = false) // DO NOT hesitate to change if you have a better naming idea.
-    private Double price;
+    @Column(name = "image_id", nullable = false)
+    private Long imageID;
 
 }

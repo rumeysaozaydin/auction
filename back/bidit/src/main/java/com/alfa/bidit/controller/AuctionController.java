@@ -4,11 +4,9 @@ import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.service.AuctionService;
-import com.alfa.bidit.service.impl.UserServiceImpl;
 import com.alfa.bidit.utils.ApiPaths;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpCookie;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,14 +27,14 @@ public class AuctionController {
     }
 
     @PostMapping
-    public ResponseEntity<Auction> create(@RequestBody Auction auction){
+    public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestParam Long duration, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
-        Auction newAuction = auctionService.create(auction);
+        Auction newAuction = auctionService.create(auction, duration);
         return ResponseEntity.ok(newAuction);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Auction> getById(@PathVariable("id") Long id) {
+    public ResponseEntity<Auction> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token) {
         try {
             Auction auction = auctionService.getById(id);
             return ResponseEntity.ok(auction);
@@ -47,7 +45,7 @@ public class AuctionController {
     }
 
     @GetMapping("/seller/{seller_id}")
-    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID){
+    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID, @RequestHeader("Authorization") String token){
         try {
             List<Auction> auctions = auctionService.getBySellerId(sellerID);
             return ResponseEntity.ok(auctions);
@@ -55,5 +53,19 @@ public class AuctionController {
         catch (UserNotExistException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @PostMapping("/list")
+    public ResponseEntity<List<Auction>> getAllByIdIn(@RequestHeader("Authorization") String token, @RequestBody List<Long> idList){
+        System.out.println("[GET AUCTIONS BY LIST REQUEST]:  " + idList);
+        List<Auction> auctions = auctionService.getAllByIdIn(idList);
+        return ResponseEntity.ok(auctions);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token){
+        System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
+        List<Auction> auctions = auctionService.getAll();
+        return ResponseEntity.ok(auctions);
     }
 }

@@ -13,10 +13,23 @@ import java.util.Optional;
 @Service
 public interface AuctionService{
 
-    Auction create(Auction auction);
+    Auction create(Auction auction, Long duration);
 
     Auction getById(Long id);
 
     List<Auction> getBySellerId(Long sellerID);
 
+    List<Auction> getAll();
+
+    List<Auction> getAllByIdIn(List<Long> ids);
+
+    Boolean existsById(Long auctionID);
+
+    void endAuctionById(Long id);
+
+    Double getHighestBid(Long id);
+
+    void updateHighestBid(Long auctionID, Double newHighestBid);
+
+    Long getSellerIDByAuctionID(Long auctionID);
 }
