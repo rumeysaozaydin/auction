@@ -12,24 +12,8 @@ public class DateUtil {
         return Date.from(Instant.now());
     }
 
-    public static Date plusHours(Date date, int hours){
-        return toDate(toLocalDateTime(date).plusHours(hours));
-    }
-
-    public static Date plusDays(Date date, int days){
-        return toDate(toLocalDateTime(date).plusDays(days));
-    }
-
-    public static Date plusSeconds(Date date, int seconds){
-        return toDate(toLocalDateTime(date).plusSeconds(seconds));
-    }
-
-    public static Date plusMinutes(Date date, int minutes){
-        return toDate(toLocalDateTime(date).plusMinutes(minutes));
-    }
-
-    public static Date plusYears(Date date, int years){
-        return toDate(toLocalDateTime(date).plusYears(years));
+    public static Date plusSeconds(Date date, Long duration){
+        return Date.from(date.toInstant().plusSeconds(duration));
     }
 
     public static LocalDateTime toLocalDateTime(Date date){

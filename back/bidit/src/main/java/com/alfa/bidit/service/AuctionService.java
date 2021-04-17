@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 public interface AuctionService{
 
-    Auction create(Auction auction);
+    Auction create(Auction auction, Long duration);
 
     Auction getById(Long id);
 

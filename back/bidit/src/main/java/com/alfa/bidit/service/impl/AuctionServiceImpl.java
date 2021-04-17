@@ -12,6 +12,7 @@ import com.alfa.bidit.utils.Constants.AuctionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -33,10 +34,10 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public Auction create(Auction auction) {
+    public Auction create(Auction auction, Long duration) {
         // TODO IT DOES NOT CHECK WHETHER THE SELLER EXIST.
-        auction.setStartingTime(now());
-        auction.setExpirationTime(toDate(toLocalDateTime(now()).plusDays(1))); // Temporarily one day.
+
+        setStartingAndExpirationTime(auction, duration);
         auction.setHighestBid(auction.getInitialPrice());
         auction.setStatus(AuctionStatus.ACTIVE);
 
@@ -103,6 +104,17 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public Long getSellerIDByAuctionID(Long auctionID) {
         return getById(auctionID).getSellerID();
+    }
+
+
+    // === PRIVATE METHODS ===
+
+    private void setStartingAndExpirationTime(Auction auction, Long duration){
+        Date startingTime = now();
+        Date expirationTime = plusSeconds(startingTime, duration);
+
+        auction.setStartingTime(startingTime);
+        auction.setExpirationTime(expirationTime);
     }
 
 }
