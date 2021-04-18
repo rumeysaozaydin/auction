@@ -5,6 +5,7 @@ import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInpu
 import CountDown from 'react-native-countdown-component';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
 import {useGet} from '../hooks/useGet';
+import {useRequest} from '../hooks/useRequest';
 import {FilledButton} from '../components/FilledButton';
 import {AuthContext} from '../context/AuthContext';
 import {Input} from '../components/Input';
@@ -21,11 +22,9 @@ const AuctionScreen = ({route,navigation}) => {
 
     const [data, setData] = React.useState({});
     const [seller, setSeller] = React.useState({});
-    //const data = useGet(`/auctions/${productId}`);
     
     const refresh = () => {
-        useGet(`/auctions/${auctionId}`, user.token, setData);
-        
+        useRequest('GET',`/auctions/${auctionId}`, user.token, {setState:setData});  
     }
 
     React.useEffect(() => {
@@ -35,7 +34,7 @@ const AuctionScreen = ({route,navigation}) => {
     React.useEffect(() => {
         if(data.sellerID){
             console.log("seller id " , data.sellerID)
-            useGet(`/users/id/${data.sellerID}`, user.token, setSeller); 
+            useRequest('GET',`/users/id/${data.sellerID}`, user.token, {setState:setSeller}); 
         }
     }, [data]);
     

@@ -13,18 +13,26 @@ import axios from 'axios';
 
 
 const UploadScreen = ({navigation}) => {
+
+    
     const {
         user
     } = React.useContext(AuthContext);
+
+    if(!user){
+        console.log("check not user")
+        return <View></View>
+    }
 
     const id = user.id;
 
     const [title, setTitle] = React.useState("jacket");
     const [description, setDescription] = React.useState("nice jacker");
-    const [initialPrice, setInitialPrice] = React.useState("2123123");
+    const [initialPrice, setInitialPrice] = React.useState("212");
     //const [startingTime, setStartingTime] = React.useState("2021-04-15T19:14:15.971Z");
     const [duration, setDuration] = React.useState('60');
 
+    
     return (
         <ScreenContainer style={styles.container}>
             <Heading style={styles.title}>Upload</Heading>

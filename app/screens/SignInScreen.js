@@ -11,7 +11,7 @@ import { Loading } from '../components/Loading';
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState('ali');
+    const [username, setUsername] = React.useState('serdar');
     const [password, setPassword] = React.useState('ali');
     const [loading, setLoading] = React.useState(false);
     
