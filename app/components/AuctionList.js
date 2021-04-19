@@ -1,11 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image, FlatList } from 'react-native';
-import { IconButton, Colors } from 'react-native-paper';
+import { FlatList } from 'react-native';
 import AuctionCard from "../components/AuctionCard";
+import { AuthContext } from '../context/AuthContext';
 
 
-const AuctionList = ({navigation , auctions, favoriteIds}) => {
-    
+const AuctionList = ({navigation , auctions, favoriteIds, addFav, deleteFav}) => {
+    const {
+        user,
+    } = React.useContext(AuthContext);
+
     return(
         <FlatList 
             // showsVerticalScrollIndicator={false}
@@ -17,7 +20,10 @@ const AuctionList = ({navigation , auctions, favoriteIds}) => {
                     <AuctionCard 
                         navigation={navigation} 
                         data={item}
-                        isFavorite={favoriteIds.includes(item.id)}/>
+                        initIsFavorite={favoriteIds.includes(item.id)}
+                        addFav={addFav}
+                        deleteFav={deleteFav}
+                        />
                 // <TouchableOpacity
                 //     onPress={()=>navigation.navigate("Auction", {ProductId: item.id})} // The object we pass to the next page    
                 // >

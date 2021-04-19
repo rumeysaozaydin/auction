@@ -1,16 +1,10 @@
 import React from 'react';
-import { Platform, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, View, Image,  TouchableOpacity } from 'react-native';
-
-import { ScreenContainer } from 'react-native-screens';
-import {Heading} from '../components/Heading';
-import {AuthContext} from '../context/AuthContext';
-import {useGet} from '../hooks/useGet';
-import {useRequest} from '../hooks/useRequest';
-import { usePost } from '../hooks/usePost';
-import axios from 'axios';
-import {BASE_URL} from '../config/index';
-import { TextButton } from '../components/TextButton';
+import { StyleSheet, Text, View } from 'react-native';
 import AuctionList from "../components/AuctionList";
+import { TextButton } from '../components/TextButton';
+import { AuthContext } from '../context/AuthContext';
+import { useRequest } from '../hooks/useRequest';
+
 
 const FavoritesScreen = ({navigation}) => {
 
@@ -28,6 +22,22 @@ const FavoritesScreen = ({navigation}) => {
     React.useEffect(() => {
       refresh()
     }, []);
+
+    const addFav = (auction) => {
+      const body = {
+          userID: user.id,
+          auctionID: auction.id
+      }
+      useRequest('POST',`/favorites`,user.token, {body:body})
+      const newFavorites = [auction, ...favorites]
+      setFavorites(newFavorites)
+    }
+  
+    const deleteFav = (auction) => {
+        useRequest('DELETE',`/favorites/${user.id}/${auction.id}`, user.token)
+        const newFavorites = favorites.filter((item) => item.id != auction.id)
+        setFavorites(newFavorites)
+    }
 
     return (
       <View >
@@ -48,6 +58,8 @@ const FavoritesScreen = ({navigation}) => {
           navigation={navigation} 
           auctions={favorites}
           favoriteIds={favorites.map(favorites=>favorites.id)}
+          addFav={(auction) => addFav(auction)}
+          deleteFav={(auction) => deleteFav(auction)}
         />
       </View>
     );

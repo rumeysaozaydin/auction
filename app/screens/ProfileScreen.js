@@ -1,14 +1,15 @@
 import React from 'react';
-import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native';
 import {
   Avatar,
-  Title,
-  Caption,
-  TouchableRipple,
-} from 'react-native-paper';
 
+  Caption, Title,
+
+  TouchableRipple
+} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import {AuthContext} from '../context/AuthContext';
+import { AuthContext } from '../context/AuthContext';
+
 
 //import Share from 'react-native-share';
 

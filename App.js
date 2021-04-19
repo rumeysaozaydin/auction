@@ -1,25 +1,18 @@
-import React from 'react';
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
 import 'react-native-gesture-handler';
-import axios from 'axios';
-
-//import MainTabScreen from "./app/screens/MainTabScreen";
+import Icon from 'react-native-vector-icons/Ionicons';
+import { AuthContext } from "./app/context/AuthContext";
+import { useAuth } from './app/hooks/useAuth';
+import AuctionScreen from "./app/screens/AuctionScreen";
+import FavoritesScreen from "./app/screens/FavoritesScreen";
+import HomeScreen from "./app/screens/HomeScreen";
+import ProfileScreen from "./app/screens/ProfileScreen";
 import SignInScreen from "./app/screens/SignInScreen";
 import SignUpScreen from "./app/screens/SignUpScreen";
-import HomeScreen from "./app/screens/HomeScreen";
-import FavoritesScreen from "./app/screens/FavoritesScreen";
 import UploadScreen from "./app/screens/UploadScreen";
-import ProfileScreen from "./app/screens/ProfileScreen";
-import AuctionScreen from "./app/screens/AuctionScreen";
-import {AuthContext} from "./app/context/AuthContext";
-import {createAction} from "./app/utils/CreateAction";
-import {BASE_URL} from './app/config/index';
-import {useAuth} from './app/hooks/useAuth';
-import {useGet} from './app/hooks/useGet';
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();

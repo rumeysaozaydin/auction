@@ -1,18 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
-import { IconButton, Colors } from 'react-native-paper';
-import {useGet} from '../hooks/useGet';
-import {usePost} from '../hooks/usePost';
-import {useRequest} from '../hooks/useRequest';
-import {useDelete} from '../hooks/useDelete';
-import {AuthContext} from '../context/AuthContext';
+import { StyleSheet, Text, View } from 'react-native';
+import { IconButton } from 'react-native-paper';
+import { AuthContext } from '../context/AuthContext';
 
 
-const AuctionCard = ({navigation, data, isFavorite}) => {
+const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     const {
-        auth: {signOut},
         user,
     } = React.useContext(AuthContext);
+
+    const [isFavorite, setIsFavorite] = React.useState();
+    console.log("init is fav", data.title, initIsFavorite);
+    React.useEffect(() => {
+        setIsFavorite(initIsFavorite)
+        console.log("init is fav use effect",data.title, initIsFavorite);
+      }, [initIsFavorite]);
 
     return (
         <View style={styles.card}>
@@ -32,16 +34,18 @@ const AuctionCard = ({navigation, data, isFavorite}) => {
                     
                     <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
                     onPress={() => { 
+                        setIsFavorite(!isFavorite)
                         if(isFavorite){
-                            useRequest('DELETE',`/favorites/${user.id}/${data.id}`, user.token)
-                            isFavorite = false;
+                            // useRequest('DELETE',`/favorites/${user.id}/${data.id}`, user.token)
+                            deleteFav(data)
                         }
                         else{
-                            let body = {
-                                userID: user.id,
-                                auctionID: data.id
-                            }
-                            useRequest('POST',`/favorites`,user.token, {body:body})
+                            // let body = {
+                            //     userID: user.id,
+                            //     auctionID: data.id
+                            // }
+                            // useRequest('POST',`/favorites`,user.token, {body:body})
+                            addFav(data)
                         }
                     }}
                     />

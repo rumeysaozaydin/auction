@@ -1,15 +1,13 @@
 
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import {usePost} from '../hooks/usePost';
-import {AuthContext} from '../context/AuthContext';
-import { ScreenContainer } from 'react-native-screens';
-import {FilledButton} from '../components/FilledButton';
-import {Input} from '../components/Input';
-import {TextButton} from '../components/TextButton';
-import {Heading} from '../components/Heading';
-import {BASE_URL} from '../config/index';
 import axios from 'axios';
+import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import { ScreenContainer } from 'react-native-screens';
+import { FilledButton } from '../components/FilledButton';
+import { Heading } from '../components/Heading';
+import { Input } from '../components/Input';
+import { BASE_URL } from '../config/index';
+import { AuthContext } from '../context/AuthContext';
 
 
 const UploadScreen = ({navigation}) => {

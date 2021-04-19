@@ -4,7 +4,7 @@ import axios from 'axios';
 import {AuthContext} from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 
-export function useRequest(reqType, endpoint, token, {body, setState,callback}) {
+export function useRequest(reqType, endpoint, token, {body, setState,callback}={}) {
     body = body || undefined
     setState = setState || undefined
     callback = callback || (() => {})

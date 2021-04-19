@@ -1,10 +1,8 @@
-import React from 'react';
 import axios from 'axios';
-import SecureStorage from 'react-native-secure-storage';
+import React from 'react';
+import { BASE_URL } from '../config';
+import { createAction } from '../utils/CreateAction';
 
-import {BASE_URL} from '../config';
-import {createAction} from '../utils/CreateAction';
-import {sleep} from '../utils/sleep';
 
 
 export function useAuth() {

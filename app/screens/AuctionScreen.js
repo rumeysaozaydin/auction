@@ -1,17 +1,15 @@
 
-import React from 'react';
-//import { StyleSheet, Text, View } from 'react-native';
-import { Dimensions, Image, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
-import CountDown from 'react-native-countdown-component';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview';
-import {useGet} from '../hooks/useGet';
-import {useRequest} from '../hooks/useRequest';
-import {FilledButton} from '../components/FilledButton';
-import {AuthContext} from '../context/AuthContext';
-import {Input} from '../components/Input';
 import axios from 'axios';
-import {BASE_URL} from '../config/index';
+import React from 'react';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import CountDown from 'react-native-countdown-component';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scrollview';
+import { FilledButton } from '../components/FilledButton';
+import { Input } from '../components/Input';
 import { TextButton } from '../components/TextButton';
+import { BASE_URL } from '../config/index';
+import { AuthContext } from '../context/AuthContext';
+import { useRequest } from '../hooks/useRequest';
 
 const AuctionScreen = ({route,navigation}) => {
     const { auctionId } = route.params;
