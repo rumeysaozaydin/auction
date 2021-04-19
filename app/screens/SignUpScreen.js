@@ -41,7 +41,6 @@ const SignUpScreen = (props) => {
                     try {
                         await signUp(username, password);
                     } catch (e) {
-                        console.log('fdnjfkkmkfldm')
                         console.log(e)
                     }
                   }}

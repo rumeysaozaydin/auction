@@ -31,7 +31,6 @@ const AuctionScreen = ({route,navigation}) => {
 
     React.useEffect(() => {
         if(data.sellerID){
-            console.log("seller id " , data.sellerID)
             useRequest('GET',`/users/id/${data.sellerID}`, user.token, {setState:setSeller}); 
         }
     }, [data]);
@@ -83,7 +82,6 @@ const AuctionScreen = ({route,navigation}) => {
                         })
 
                     } catch (e) {
-                        console.log('fdnjfkkmkfldm')
                         console.log(e)
                     }
                   }}

@@ -12,13 +12,11 @@ import { AuthContext } from '../context/AuthContext';
 
 const UploadScreen = ({navigation}) => {
 
-    
     const {
         user
     } = React.useContext(AuthContext);
 
     if(!user){
-        console.log("check not user")
         return <View></View>
     }
 
@@ -27,7 +25,6 @@ const UploadScreen = ({navigation}) => {
     const [title, setTitle] = React.useState("jacket");
     const [description, setDescription] = React.useState("nice jacker");
     const [initialPrice, setInitialPrice] = React.useState("212");
-    //const [startingTime, setStartingTime] = React.useState("2021-04-15T19:14:15.971Z");
     const [duration, setDuration] = React.useState('60');
 
     
@@ -79,14 +76,11 @@ const UploadScreen = ({navigation}) => {
                         },
                     })
                     .then(({data}) => {
-                        console.log("INSIDE USEPOST THEN")
                         navigation.navigate("Auction" , { auctionId: data.id});
                     })
                     .catch(function (error) {
-                        console.log("INSIDE USEPOST CATCH")
                         console.log(error.message);
                     });
-                    console.log("Upload Product")
                 }}
             />
         </ScreenContainer>

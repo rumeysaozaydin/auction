@@ -10,10 +10,8 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     } = React.useContext(AuthContext);
 
     const [isFavorite, setIsFavorite] = React.useState();
-    console.log("init is fav", data.title, initIsFavorite);
     React.useEffect(() => {
         setIsFavorite(initIsFavorite)
-        console.log("init is fav use effect",data.title, initIsFavorite);
       }, [initIsFavorite]);
 
     return (

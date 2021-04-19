@@ -43,31 +43,24 @@ export function useAuth() {
             password: password,
             })
             .then( ({data}) => {
-                console.log("signin")
                 axios.get(`${BASE_URL}/users/email/${username}`, {
                 headers: {
                 Authorization: `bearer ${data.token}`,
                 }})
-                .then (res => {
-                    console.log("HERE")
-                    
+                .then (res => {                    
                     const user = {
                         username: res.data.email,
                         id: res.data.id,
                         token: data.token,
                     };
-                    console.log(user.token)
                     dispatch(createAction('SET_USER', user));
                 })
             })
             .catch(function (error) {
-                console.log(error.message);
             });
         },
         signOut: async () => {
-            console.log("sign Out")
             dispatch(createAction('REMOVE_USER'));
-        
         },
         signUp: async (username, password) => {
             axios.post(`${BASE_URL}/register`, {
@@ -75,13 +68,11 @@ export function useAuth() {
             password: password,
             })
             .then( () => {
-                console.log("seredar")
                 axios.post(`${BASE_URL}/authenticate`, {
                 username: username,
                 password: password,
                 })
                 .then ( ({data} ) => {   
-                    console.log(data.token);  
                     var postData = {
                         contactNumber: '1232423432342',
                         firstname: 'alissds',
@@ -95,29 +86,21 @@ export function useAuth() {
                         Authorization: `bearer ${data.token}`,
                         },
                     }).then (res => {
-                        console.log(res.data);
                         const user = {
                             username: username,
                             id: res.data,
                             token: data.token,
                     };
-                    //console.log(user.token)
                     dispatch(createAction('SET_USER', user));
-                    console.log("4")
                 })
                 .catch(function (error) {
-                    console.log("3")
                     console.log(error.response.data.message);
                 });
                 })
                 .catch(function (error) {
-                console.log("2")
-                console.log(error.message);
                 });
             })
             .catch(function (error) {
-                console.log("1")
-                console.log(error.message);
             });
         }
         }),

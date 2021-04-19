@@ -41,7 +41,7 @@ export function useRequest(reqType, endpoint, token, {body, setState,callback}={
     }
     response
       .then(({data}) => {
-        console.log('THEN', reqType, endpoint)
+        //console.log('THEN', reqType, endpoint)
         if(setState){
             setState(data);
         }

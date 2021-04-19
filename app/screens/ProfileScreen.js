@@ -88,10 +88,8 @@ function ProfileScreen({navigation}) {
         <TouchableRipple onPress={
            async () => {
             try {
-              console.log("herhehr")
               await signOut();
             } catch (e) {
-                //console.log('signOut')
                 console.log(e)
             }
           }

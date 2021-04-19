@@ -59,7 +59,6 @@ const SignInScreen = (props) => {
                     try {
                       await signIn(username, password);
                     } catch (e) {
-                        console.log('fdnjfkkmkfldm')
                         console.log(e)
                     }
                   }}
