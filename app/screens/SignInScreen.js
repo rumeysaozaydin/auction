@@ -10,7 +10,7 @@ import { AuthContext } from '../context/AuthContext';
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState('serdar');
+    const [username, setUsername] = React.useState('serdar1');
     const [password, setPassword] = React.useState('ali');
     const [loading, setLoading] = React.useState(false);
     

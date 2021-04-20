@@ -5,6 +5,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
+import { useRequest } from '../hooks/useRequest';
 
 
 const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
@@ -13,20 +14,27 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     } = React.useContext(AuthContext);
 
     const [isFavorite, setIsFavorite] = React.useState();
+    const [images, setImages] = React.useState([]);
+
     React.useEffect(() => {
         setIsFavorite(initIsFavorite)
     }, [initIsFavorite]);
 
+    React.useEffect(() => {
+        useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImages})
+    },[]);
+
 
     return (
-        <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id});}}>
-            <View style={styles.card} >
+        <View style={styles.card} >
                 <View style={styles.cardImgWrapper}>
-                    <Image
-                    source={{uri:`${BASE_URL}/images/23`}}
-                    resizeMode="cover"
-                    style={styles.cardImg}
-                    />
+                    <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite});}}>
+                        <Image
+                        source={{uri:`${BASE_URL}/images/${images.length > 0 ? images[0] : 1}`}}
+                        resizeMode="cover"
+                        style={styles.cardImg}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={styles.cardInfo}>
                     <Text style={styles.cardTitle}>{data.title}</Text>
@@ -49,7 +57,6 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
                     </View>
                 </View>
             </View>
-        </TouchableOpacity>
     
     );
 }
