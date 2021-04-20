@@ -3,27 +3,34 @@ package com.alfa.bidit.controller;
 import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
+import com.alfa.bidit.model.AuctionImage;
+import com.alfa.bidit.service.AuctionImageService;
 import com.alfa.bidit.service.AuctionService;
+import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.utils.ApiPaths;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(ApiPaths.AuctionControllerPath.auction)
 @Api(value = ApiPaths.AuctionControllerPath.auction)
 public class AuctionController {
     private final AuctionService auctionService;
+    private final ImageService imageService;
+    private final AuctionImageService auctionImageService;
 
     @Autowired
-    public AuctionController(AuctionService auctionService){
-        this.auctionService=auctionService;
+    public AuctionController(AuctionService auctionService, ImageService imageService, AuctionImageService auctionImageService){
+        this.auctionService = auctionService;
+        this.imageService = imageService;
+        this.auctionImageService = auctionImageService;
     }
 
     @PostMapping
@@ -67,5 +74,20 @@ public class AuctionController {
         System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
         List<Auction> auctions = auctionService.getAll();
         return ResponseEntity.ok(auctions);
+    }
+
+    @GetMapping("/{id}/images")
+    public ResponseEntity<List<Long>> getImageIDs(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
+        System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
+        List<Long> images = auctionImageService.getImageIDsByAuctionID(id);
+        return ResponseEntity.ok(images);
+    }
+
+    @PostMapping("/{id}/images")
+    public ResponseEntity<Long> uploadImage(@PathVariable("id") Long id, @RequestParam MultipartFile multipartImage) throws Exception {
+        // TODO check needed (whether it is successful)
+        Long imageID = imageService.addImage(multipartImage);
+        AuctionImage auctionImage = auctionImageService.upload(id, imageID);
+        return ResponseEntity.ok(imageID);
     }
 }
