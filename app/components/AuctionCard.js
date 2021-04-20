@@ -1,7 +1,10 @@
+import axios from 'axios';
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
+import {BASE_URL} from '../config/index';
 
 
 const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
@@ -12,60 +15,46 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     const [isFavorite, setIsFavorite] = React.useState();
     React.useEffect(() => {
         setIsFavorite(initIsFavorite)
-      }, [initIsFavorite]);
+    }, [initIsFavorite]);
+
 
     return (
-        <View style={styles.card}>
-            {/* <View style={styles.cardImgWrapper}>
-                <Image
-                source={{uri}}
-                resizeMode="cover"
-                style={styles.cardImg}
-                />
-            </View> */}
-            <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>{data.title}</Text>
-                <Text style={styles.cardDetails}>
-                Current Price : {data.highestBid}
-                </Text>
-                <View style={styles.buttonHolder}>
-                    
-                    <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
-                    onPress={() => { 
-                        setIsFavorite(!isFavorite)
-                        if(isFavorite){
-                            // useRequest('DELETE',`/favorites/${user.id}/${data.id}`, user.token)
-                            deleteFav(data)
-                        }
-                        else{
-                            // let body = {
-                            //     userID: user.id,
-                            //     auctionID: data.id
-                            // }
-                            // useRequest('POST',`/favorites`,user.token, {body:body})
-                            addFav(data)
-                        }
-                    }}
-                    />
-                    <IconButton style={styles.cardButton} icon={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_135596.png' }} title="BidIt" 
-                    onPress={() => {navigation.navigate("Auction" , { auctionId: data.id});}}
+        <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id});}}>
+            <View style={styles.card} >
+                <View style={styles.cardImgWrapper}>
+                    <Image
+                    source={{uri:`${BASE_URL}/images/23`}}
+                    resizeMode="cover"
+                    style={styles.cardImg}
                     />
                 </View>
-                
+                <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>{data.title}</Text>
+                    <Text style={styles.cardDetails}>
+                    Current Price : {data.highestBid}
+                    </Text>
+                    <View style={styles.buttonHolder}>
+                        
+                        <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
+                        onPress={() => { 
+                            setIsFavorite(!isFavorite)
+                            if(isFavorite){
+                                deleteFav(data)
+                            }
+                            else{
+                                addFav(data)
+                            }
+                        }}
+                        />
+                    </View>
+                </View>
             </View>
-            <View style = {styles.cardButtonWrapper}>
-            </View>
-        </View>
+        </TouchableOpacity>
     
     );
 }
 
 const styles = StyleSheet.create({
-    cardsWrapper: {
-        marginTop: 20,
-        width: '90%',
-        alignSelf: 'center',
-    },
     card: {
         height: 100,
         marginVertical: 10,
@@ -103,13 +92,6 @@ const styles = StyleSheet.create({
     cardDetails: {
         fontSize: 12,
         color: '#444',
-    },
-    
-    cardButton: {
-        padding: 5,
-        marginTop: 5,
-        marginBottom: 5,
-        alignSelf: 'flex-end'
     },
     favButton: {
         padding: 5,

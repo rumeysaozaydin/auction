@@ -1,7 +1,6 @@
 import React from 'react';
 import axios from 'axios';
 
-import {AuthContext} from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 
 export function useRequest(reqType, endpoint, token, {body, setState,callback}={}) {
