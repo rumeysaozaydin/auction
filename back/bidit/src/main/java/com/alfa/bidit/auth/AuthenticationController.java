@@ -1,6 +1,9 @@
 package com.alfa.bidit.auth;
 
+import com.alfa.bidit.exception.UserAlreadyExistsException;
+import com.alfa.bidit.exception.UserAlreadyExistsRegistrationException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -8,6 +11,7 @@ import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.Instant;
 import java.util.Date;
@@ -50,7 +54,10 @@ public class AuthenticationController {
     public ResponseEntity<?> saveUser(@RequestBody UserCredentialsDto user) throws Exception {
         UserCredentials userCredentials = userDetailsService.save(user);
         if(userCredentials == null){
-            return (ResponseEntity<?>) ResponseEntity.notFound();
+            Exception userAlreadyExistsRegistrationException = new UserAlreadyExistsRegistrationException(user.getUsername());
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE,
+                                              userAlreadyExistsRegistrationException.getMessage(),
+                                              userAlreadyExistsRegistrationException);
         }
         Date now = Date.from(Instant.now());
         System.out.println("[INFO] " + now + " USER CREDENTIALS ARE REGISTERED");
