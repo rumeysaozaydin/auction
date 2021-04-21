@@ -84,7 +84,7 @@ public class AuctionController {
     }
 
     @PostMapping("/{id}/images")
-    public ResponseEntity<Long> uploadImage(@PathVariable("id") Long id, @RequestParam MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<Long> uploadImage(@PathVariable("id") Long id, @RequestParam(value= "image",required = true) MultipartFile multipartImage,  @RequestHeader("Authorization") String token) throws Exception {
         // TODO check needed (whether it is successful)
         Long imageID = imageService.addImage(multipartImage);
         AuctionImage auctionImage = auctionImageService.upload(id, imageID);

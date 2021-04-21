@@ -33,11 +33,13 @@ public class ImageController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> register(@RequestParam MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<Long> register(@RequestParam (value= "image",required = true) MultipartFile multipartImage) throws Exception {
+        System.out.println(multipartImage);
         Long id = imageService.addImage(multipartImage);
         return ResponseEntity.ok(id);
 
     }
+
     @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     Resource downloadImage(@PathVariable Long imageId) {
         return imageService.getById(imageId);
