@@ -4,6 +4,7 @@ import axios from 'axios';
 import {BASE_URL} from '../config/index';
 
 export function useRequest(reqType, endpoint, token, {body, setState,callback}={}) {
+    
     body = body || undefined
     setState = setState || undefined
     callback = callback || (() => {})
@@ -27,26 +28,28 @@ export function useRequest(reqType, endpoint, token, {body, setState,callback}={
     if (reqType === 'POST'){
         response = requestFunction(`${BASE_URL}${endpoint}`,body, {
             headers: {
-              Authorization: `bearer ${token}`
+            Authorization: `bearer ${token}`
             },
         })
     }
     else {
         response = requestFunction(`${BASE_URL}${endpoint}`, {
             headers: {
-              Authorization: `bearer ${token}`
+            Authorization: `bearer ${token}`
             },
         })
     }
     response
-      .then(({data}) => {
-        //console.log('THEN', reqType, endpoint)
+    .then(({data}) => {
+        console.log('THEN', reqType, endpoint)
         if(setState){
             setState(data);
         }
-        callback();
-      })
-      .catch(function (error) {
-          console.log('ERROR' , reqType, endpoint, error.message);
-      });
+        callback(data);
+    })
+    .catch(function (error) {
+        console.log(error)
+        console.log('ERROR' , reqType, endpoint, error.message);
+    });
+    
 }

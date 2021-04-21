@@ -13,8 +13,9 @@ import { useRequest } from '../hooks/useRequest';
 import  AuctionDetail  from '../components/AuctionDetail';
 
 const AuctionScreen = ({route,navigation}) => {
-    const { auctionId, initIsFavorite } = route.params;
+    const { auctionId, initIsFavorite, imageUris } = route.params;
 
+    //TODO INIT IS FAV UNDEFINED
     const {
         user,
     } = React.useContext(AuthContext);
@@ -50,6 +51,7 @@ const AuctionScreen = ({route,navigation}) => {
                 auction={data}
                 seller={seller}
                 initIsFavorite={initIsFavorite}
+                imageUris={imageUris}
             />
             <Text>Recent Bids: </Text>
             <BidList

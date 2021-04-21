@@ -4,14 +4,17 @@ import { StyleSheet, Text, View } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useRequest } from '../hooks/useRequest';
 import { AuthContext } from '../context/AuthContext';
+import { BASE_URL } from '../config/index';
+import { SliderBox } from "react-native-image-slider-box";
 
-const AuctionDetail = ({auction,seller,initIsFavorite}) => {
+const AuctionDetail = ({auction,seller,initIsFavorite,imageUris}) => {
 
     const {
         user,
     } = React.useContext(AuthContext);
 
     const [isFavorite, setIsFavorite] = React.useState();
+
     React.useEffect(() => {
         setIsFavorite(initIsFavorite)
     }, [initIsFavorite]);
@@ -41,6 +44,11 @@ const AuctionDetail = ({auction,seller,initIsFavorite}) => {
                         addFav(auction)
                     }
                 }}
+            />
+            <SliderBox
+                images={imageUris}
+                //onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, auctionIds:auctionIds});}}
+                // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
             />
             <Text>Title: {auction.title}</Text>
             <Text>Seller: {seller.email}</Text>

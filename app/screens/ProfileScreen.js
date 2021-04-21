@@ -38,13 +38,13 @@ function ProfileScreen({navigation}) {
         type: 'image/jpeg'
       };
     
-      data.append('file',  img);
+      data.append('image',  img);
       const config = {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
       }
-      axios.post(`${BASE_URL}/images`,data,config).then((res) => {console.log(res.data)}).catch((e) => {console.log(e) })
+      axios.post(`${BASE_URL}/images`,data).then((res) => {console.log(res.data)}).catch((e) => {console.log(e) })
 
     }
   }, [image])
@@ -53,7 +53,8 @@ function ProfileScreen({navigation}) {
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      allowsMultipleSelection: true,
+      aspect: [1, 1],
       quality: 1,
     });
 

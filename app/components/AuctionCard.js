@@ -6,6 +6,7 @@ import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 import { useRequest } from '../hooks/useRequest';
+import { SliderBox } from "react-native-image-slider-box";
 
 
 const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
@@ -14,33 +15,40 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     } = React.useContext(AuthContext);
 
     const [isFavorite, setIsFavorite] = React.useState();
-    const [images, setImages] = React.useState([]);
+    const [imageIds, setImageIds] = React.useState([]);
 
     React.useEffect(() => {
         setIsFavorite(initIsFavorite)
     }, [initIsFavorite]);
 
     React.useEffect(() => {
-        useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImages})
+        useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImageIds})
     },[]);
-
 
     return (
         <View style={styles.card} >
                 <View style={styles.cardImgWrapper}>
-                    <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite});}}>
+                    {/* <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite});}}>
                         <Image
                         source={{uri:`${BASE_URL}/images/${images.length > 0 ? images[0] : 1}`}}
                         resizeMode="cover"
                         style={styles.cardImg}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
+                    <SliderBox
+                        images={imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)}
+                        onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)});}}
+                        // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
+                    />
                 </View>
+
                 <View style={styles.cardInfo}>
-                    <Text style={styles.cardTitle}>{data.title}</Text>
+                    <Text > Id: {data.id}</Text>
+                    <Text style={styles.cardTitle}> Title: {data.title}</Text>
                     <Text style={styles.cardDetails}>
                     Current Price : {data.highestBid}
                     </Text>
+                    
                     <View style={styles.buttonHolder}>
                         
                         <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
@@ -63,7 +71,7 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
 
 const styles = StyleSheet.create({
     card: {
-        height: 100,
+        height: 200,
         marginVertical: 10,
         flexDirection: 'row',
         shadowColor: '#999',
@@ -73,7 +81,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     cardImgWrapper: {
-        flex: 1,
+        width: 200,
+        height: 200
     },
     cardImg: {
         height: '100%',
