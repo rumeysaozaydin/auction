@@ -26,10 +26,18 @@ const UploadScreen = ({navigation}) => {
     const id = user.id;
 
     const [title, setTitle] = React.useState("jacket");
-    const [description, setDescription] = React.useState("nice jacker");
+    const [description, setDescription] = React.useState("nice jacket");
     const [initialPrice, setInitialPrice] = React.useState("212");
-    const [duration, setDuration] = React.useState('60');
+    const [duration, setDuration] = React.useState('60000');
     const [imageUris, setImageUris] = React.useState([]);
+
+    const reset = () => {
+        setTitle("v60");
+        setDescription('kahve');
+        setInitialPrice('90');
+        setDuration('60000');
+        setImageUris([]);
+    }
 
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -123,7 +131,7 @@ const UploadScreen = ({navigation}) => {
                     )
                 }}
             />
-            <Button style={{marginTop: 120}}title="Pick imageUris from camera roll" onPress={pickImage} />
+            <Button style={{marginTop: 120}}title="Pick an image from camera roll" onPress={pickImage} />
             <FilledButton
                 title={'Upload Auction'}
                 style={styles.loginButton}
@@ -139,7 +147,8 @@ const UploadScreen = ({navigation}) => {
                         {body:newAuction, callback:(response => {
                             console.log('Auction ID', response.id)
                             uploadImages(response.id)
-                            navigation.navigate("Auction" , { auctionId: response.id, initIsFavorite: false, imageUris:imageUris});
+                            navigation.navigate("Auction" , { auctionId: response.id, initIsFavorite: false, imageUris:[...imageUris]})
+                            reset()
                         })} )
                 }}
             />
