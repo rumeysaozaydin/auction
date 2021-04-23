@@ -1,18 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text, View, Button} from 'react-native';
-import { TextInput } from 'react-native-gesture-handler';
+import { StyleSheet } from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
-import {AuthContext} from '../context/AuthContext';
-import {FilledButton} from '../components/FilledButton';
-import {Input} from '../components/Input';
-import {TextButton} from '../components/TextButton'
-import {Heading} from '../components/Heading';
+import { FilledButton } from '../components/FilledButton';
+import { Heading } from '../components/Heading';
+import { Input } from '../components/Input';
 import { Loading } from '../components/Loading';
+import { TextButton } from '../components/TextButton';
+import { AuthContext } from '../context/AuthContext';
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState(null);
-    const [password, setPassword] = React.useState(null);
+    const [username, setUsername] = React.useState('serdar1');
+    const [password, setPassword] = React.useState('ali');
     const [loading, setLoading] = React.useState(false);
     
 
@@ -60,7 +59,6 @@ const SignInScreen = (props) => {
                     try {
                       await signIn(username, password);
                     } catch (e) {
-                        console.log('fdnjfkkmkfldm')
                         console.log(e)
                     }
                   }}

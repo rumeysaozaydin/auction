@@ -1,42 +1,77 @@
+import axios from 'axios';
 import React from 'react';
-import { StyleSheet, Text, View, Button, Image } from 'react-native';
-import { IconButton, Colors } from 'react-native-paper';
+import { StyleSheet, Text, View, Image } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { IconButton } from 'react-native-paper';
+import { AuthContext } from '../context/AuthContext';
+import {BASE_URL} from '../config/index';
+import { useRequest } from '../hooks/useRequest';
+import { SliderBox } from "react-native-image-slider-box";
 
-const AuctionCard = ({navigation, uri, name, lastBid, id}) => {
+
+const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
+    const {
+        user,
+    } = React.useContext(AuthContext);
+
+    const [isFavorite, setIsFavorite] = React.useState();
+    const [imageIds, setImageIds] = React.useState([]);
+
+    React.useEffect(() => {
+        setIsFavorite(initIsFavorite)
+    }, [initIsFavorite]);
+
+    React.useEffect(() => {
+        useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImageIds})
+    },[]);
+
     return (
+        <View style={styles.card} >
+                <View style={styles.cardImgWrapper}>
+                    {/* <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite});}}>
+                        <Image
+                        source={{uri:`${BASE_URL}/images/${images.length > 0 ? images[0] : 1}`}}
+                        resizeMode="cover"
+                        style={styles.cardImg}
+                        />
+                    </TouchableOpacity> */}
+                    <SliderBox
+                        images={imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)}
+                        onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)});}}
+                        // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
+                    />
+                </View>
 
-        <View style={styles.card}>
-            <View style={styles.cardImgWrapper}>
-                <Image
-                source={{uri}}
-                resizeMode="cover"
-                style={styles.cardImg}
-                />
+                <View style={styles.cardInfo}>
+                    <Text > Id: {data.id}</Text>
+                    <Text style={styles.cardTitle}> Title: {data.title}</Text>
+                    <Text style={styles.cardDetails}>
+                    Current Price : {data.highestBid}
+                    </Text>
+                    
+                    <View style={styles.buttonHolder}>
+                        
+                        <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
+                        onPress={() => { 
+                            setIsFavorite(!isFavorite)
+                            if(isFavorite){
+                                deleteFav(data)
+                            }
+                            else{
+                                addFav(data)
+                            }
+                        }}
+                        />
+                    </View>
+                </View>
             </View>
-            <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>{name}</Text>
-                <Text style={styles.cardDetails}>
-                Current Price : {lastBid}
-                </Text>
-                <IconButton style={styles.cardButton} icon={{ uri: 'https://cdn.onlinewebfonts.com/svg/img_135596.png' }} title="BidIt" 
-                onPress={() => {navigation.navigate("Auction" , { productId: id});}}
-                />
-            </View>
-            <View style = {styles.cardButtonWrapper}>
-            </View>
-        </View>
     
     );
 }
 
 const styles = StyleSheet.create({
-    cardsWrapper: {
-        marginTop: 20,
-        width: '90%',
-        alignSelf: 'center',
-    },
     card: {
-        height: 100,
+        height: 200,
         marginVertical: 10,
         flexDirection: 'row',
         shadowColor: '#999',
@@ -46,7 +81,8 @@ const styles = StyleSheet.create({
         elevation: 5,
     },
     cardImgWrapper: {
-        flex: 1,
+        width: 200,
+        height: 200
     },
     cardImg: {
         height: '100%',
@@ -73,12 +109,14 @@ const styles = StyleSheet.create({
         fontSize: 12,
         color: '#444',
     },
-    
-    cardButton: {
+    favButton: {
         padding: 5,
         marginTop: 5,
         marginBottom: 5,
-        alignSelf: 'flex-end'
+        alignSelf: 'flex-start'
+    },
+    buttonHolder: {
+        flexDirection: 'row'
     }
 });
 

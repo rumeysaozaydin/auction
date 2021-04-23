@@ -1,25 +1,18 @@
-import React from 'react';
-
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import Icon from 'react-native-vector-icons/Ionicons';
+import React from 'react';
 import 'react-native-gesture-handler';
-import axios from 'axios';
-
-//import MainTabScreen from "./app/screens/MainTabScreen";
+import Icon from 'react-native-vector-icons/Ionicons';
+import { AuthContext } from "./app/context/AuthContext";
+import { useAuth } from './app/hooks/useAuth';
+import AuctionScreen from "./app/screens/AuctionScreen";
+import FavoritesScreen from "./app/screens/FavoritesScreen";
+import HomeScreen from "./app/screens/HomeScreen";
+import ProfileScreen from "./app/screens/ProfileScreen";
 import SignInScreen from "./app/screens/SignInScreen";
 import SignUpScreen from "./app/screens/SignUpScreen";
-import HomeScreen from "./app/screens/HomeScreen";
-import FavoritesScreen from "./app/screens/FavoritesScreen";
 import UploadScreen from "./app/screens/UploadScreen";
-import ProfileScreen from "./app/screens/ProfileScreen";
-import AuctionScreen from "./app/screens/AuctionScreen";
-import {AuthContext} from "./app/context/AuthContext";
-import {createAction} from "./app/utils/CreateAction";
-import {BASE_URL} from './app/config/index';
-
-import {useGet} from './app/hooks/useGet';
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -134,125 +127,8 @@ const RootStackScreen = ({state}) => (
 )
 
 export default function App() {
-  const [state, dispatch] = React.useReducer(
-    (state, action) => {
-      switch (action.type) {
-        case 'SET_USER':
-          return {
-            ...state,
-            user: {...action.payload},
-          };
-        case 'REMOVE_USER':
-          return {
-            ...state,
-            user: undefined,
-          };
-        case 'SET_LOADING':
-          return {
-            ...state,
-            loading: action.payload,
-          };
-        default:
-          return state;
-      }
-    },
-    {
-      user: undefined,
-      loading: true,
-    },
-  );
-  const [userToken, setUserToken] = React.useState(null);
-
-  const [userId, setUserId] = React.useState(null);
- 
-  const auth = React.useMemo(
-    
-    () => ({
-      signIn: async (username, password) => {
-        axios.post(`${BASE_URL}/authenticate`, {
-          username: username,
-          password: password,
-        })
-        .then( ({data}) => {
-            console.log("signin")
-            axios.get(`${BASE_URL}/users/email/${username}`, {
-            headers: {
-              Authorization: `bearer ${data.token}`,
-            }})
-            .then (res => {
-            console.log("HERE")
-            
-            const user = {
-                username: res.data.email,
-                id: res.data.id,
-                token: data.token,
-            };
-            console.log(user.token)
-            dispatch(createAction('SET_USER', user));
-            })
-        })
-        .catch(function (error) {
-            console.log("sfsfnsd")
-            console.log(error.message);
-        });
-      },
-      signOut: async () => {
-        dispatch(createAction('REMOVE_USER'));
-      },
-      signUp: async (username, password) => {
-        axios.post(`${BASE_URL}/register`, {
-          username: username,
-          password: password,
-        })
-        .then( () => {
-            console.log("seredar")
-            axios.post(`${BASE_URL}/authenticate`, {
-              username: username,
-              password: password,
-            })
-            .then ( ({data} ) => {   
-              console.log(data.token);  
-              var postData = {
-                contactNumber: '1232423432342',
-                firstname: 'alissds',
-                imagePath: 'string',
-                lastname: 'alisfsdfs',
-                email: username,
-                password: password
-              };     
-              axios.post(`${BASE_URL}/users`, postData, {
-                headers: {
-                  Authorization: `bearer ${data.token}`,
-                },
-              }).then (res => {
-                console.log(res);
-                console.log("4")
-              })
-              .catch(function (error) {
-                console.log("3")
-                console.log(error.response.data.message);
-              });
-            })
-            .catch(function (error) {
-              console.log("2")
-              console.log(error.message);
-            });
-        })
-        .catch(function (error) {
-            console.log("1")
-            console.log(error.message);
-        });
-      }
-    }),
-    [],
-  );
-
-  console.log(state.user);
-
-  let updateToken = (token) => {
-    setUserToken(token);
-    console.log(token);
-  }
+  
+  const {auth, state} = useAuth();
 
   return (
     <AuthContext.Provider value={ {auth , user: state.user} }>
