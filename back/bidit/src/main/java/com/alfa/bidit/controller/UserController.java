@@ -5,6 +5,7 @@ import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.ApiPaths;
+import io.github.jav.exposerversdk.PushClientException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,14 +27,17 @@ public class UserController {
 
     private final UserService userService;
 
+
     @Autowired
     public UserController(UserService userService){
         this.userService=userService;
     }
 
+
+
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
-    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token) throws PushClientException, InterruptedException {
         System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);

@@ -1,23 +1,15 @@
 package com.alfa.bidit.controller;
 
-import com.alfa.bidit.exception.UserAlreadyExistsException;
-import com.alfa.bidit.exception.UserNotExistException;
-import com.alfa.bidit.model.Image;
-import com.alfa.bidit.model.User;
-import com.alfa.bidit.repository.ImageRepository;
 import com.alfa.bidit.service.ImageService;
-import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.ApiPaths;
+import io.github.jav.exposerversdk.PushClientException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 
@@ -27,10 +19,11 @@ import java.util.List;
 public class ImageController {
 
 
+
     private final ImageService imageService;
 
     @Autowired
-    public ImageController(ImageService imageService){
+    public ImageController( ImageService imageService){
         this.imageService=imageService;
     }
 
@@ -58,5 +51,8 @@ public class ImageController {
         System.out.println("inside clear all");
         imageService.clear();
     }
+
+
+
 
 }

@@ -19,6 +19,10 @@ public class ApiPaths {
         public static final String image = BASE_PATH + V1_PATH + "/images";
     }
 
+    public static final class NotificationController{
+        public static final String notif = BASE_PATH + V1_PATH + "/notification";
+    }
+
     public static final class FavoriteControllerPath{
         public static final String favorite = BASE_PATH + V1_PATH + "/favorites";
     }
