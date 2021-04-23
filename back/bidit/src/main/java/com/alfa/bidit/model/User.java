@@ -36,4 +36,8 @@ public class User extends BaseModel {
     @Column(name = "image_id")
     private Long imageID;
 
+    @Column(name="pushToken")
+    private String pushToken;
+
+
 }

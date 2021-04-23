@@ -7,12 +7,10 @@ import com.alfa.bidit.repository.AuctionRepository;
 import com.alfa.bidit.service.AuctionManagerService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.UserService;
-import com.alfa.bidit.utils.Constants;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Instant;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
