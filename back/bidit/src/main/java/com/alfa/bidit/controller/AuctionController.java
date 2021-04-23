@@ -78,7 +78,7 @@ public class AuctionController {
 
     @GetMapping("/{id}/images")
     public ResponseEntity<List<Long>> getImageIDs(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
-        System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
+        System.out.println("[GET IMAGE ID REQUEST]:  " + id);
         List<Long> images = auctionImageService.getImageIDsByAuctionID(id);
         return ResponseEntity.ok(images);
     }

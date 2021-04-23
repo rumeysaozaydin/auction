@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ApiPaths.ImageControllerPath.image)
 @Api(value = ApiPaths.ImageControllerPath.image)
@@ -46,5 +48,15 @@ public class ImageController {
 
     }
 
+    @GetMapping("/all")
+    public List<Long> getAll(){
+        return imageService.getAll();
+    }
+
+    @GetMapping("/clear")
+    public void clear(){
+        System.out.println("inside clear all");
+        imageService.clear();
+    }
 
 }

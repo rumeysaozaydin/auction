@@ -17,7 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ImageServiceImpl implements ImageService {
@@ -44,6 +46,16 @@ public class ImageServiceImpl implements ImageService {
                 .getContent();
 
         return new ByteArrayResource(image);
+    }
+
+    @Override
+    public void clear() {
+        imageRepository.deleteAll();
+    }
+
+    @Override
+    public List<Long> getAll() {
+        return imageRepository.findAll().stream().map(image -> { return image.getId();}).collect(Collectors.toList());
     }
 
 
