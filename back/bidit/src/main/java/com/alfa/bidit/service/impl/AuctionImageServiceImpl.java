@@ -25,7 +25,15 @@ public class AuctionImageServiceImpl implements AuctionImageService {
     }
 
     @Override
-    public List<Long> getImagesByAuctionID(Long auctionID) {
+    public List<Long> getImageIDsByAuctionID(Long auctionID) {
         return getAllByAuctionID(auctionID).stream().map(AuctionImage::getImageID).collect(Collectors.toList());
+    }
+
+    @Override
+    public AuctionImage upload(Long auctionID, Long imageID) {
+        AuctionImage auctionImage = new AuctionImage();
+        auctionImage.setAuctionID(auctionID);
+        auctionImage.setImageID(imageID);
+        return auctionImageRepository.save(auctionImage);
     }
 }

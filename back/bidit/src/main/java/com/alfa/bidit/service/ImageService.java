@@ -20,4 +20,8 @@ public interface ImageService {
 
     Resource getById(Long id);
 
+    void clear();
+
+    List<Long> getAll();
+
 }

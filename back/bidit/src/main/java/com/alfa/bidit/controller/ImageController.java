@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
+
 @RestController
 @RequestMapping(ApiPaths.ImageControllerPath.image)
 @Api(value = ApiPaths.ImageControllerPath.image)
@@ -33,16 +35,28 @@ public class ImageController {
     }
 
     @PostMapping
-    public ResponseEntity<Long> register(@RequestParam MultipartFile multipartImage) throws Exception {
+    public ResponseEntity<Long> register(@RequestParam (value= "image",required = true) MultipartFile multipartImage) throws Exception {
+        System.out.println(multipartImage);
         Long id = imageService.addImage(multipartImage);
         return ResponseEntity.ok(id);
 
     }
+
     @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     Resource downloadImage(@PathVariable Long imageId) {
         return imageService.getById(imageId);
 
     }
 
+    @GetMapping("/all")
+    public List<Long> getAll(){
+        return imageService.getAll();
+    }
+
+    @GetMapping("/clear")
+    public void clear(){
+        System.out.println("inside clear all");
+        imageService.clear();
+    }
 
 }

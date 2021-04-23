@@ -10,6 +10,7 @@ public interface AuctionImageService {
 
     List<AuctionImage> getAllByAuctionID(Long auctionID);
 
-    List<Long> getImagesByAuctionID(Long auctionID);
+    List<Long> getImageIDsByAuctionID(Long auctionID);
 
+    AuctionImage upload(Long auctionID, Long imageID);
 }
