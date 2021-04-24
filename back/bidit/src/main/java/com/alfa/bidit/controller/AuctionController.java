@@ -96,9 +96,17 @@ public class AuctionController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token,
+                                                @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList){
         System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
-        List<Auction> auctions = auctionService.getAll();
+        List<Auction> auctions;
+        if (statusList == null){
+            auctions = auctionService.getAll();
+        }
+        else{
+            auctions = auctionService.getAllByStatus(statusList);
+        }
+
         return ResponseEntity.ok(auctions);
     }
 

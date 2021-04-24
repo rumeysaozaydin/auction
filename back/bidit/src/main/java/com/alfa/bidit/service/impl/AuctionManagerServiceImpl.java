@@ -35,7 +35,7 @@ public class AuctionManagerServiceImpl implements AuctionManagerService {
     public void periodicAuctionExpirationJob(){
 
         Date now = Date.from(Instant.now());
-//        System.out.println("[INFO] " + now + " Auction Expiration Job STARTED. ");
+        System.out.println("[INFO] " + now + " Auction Expiration Job STARTED. ");
 
         // Get auction records to be expired. (Consisting of auctionID and Ex date)
         List<AuctionExpirationRecord> auctionsToBeExpired =
@@ -49,7 +49,7 @@ public class AuctionManagerServiceImpl implements AuctionManagerService {
         auctionExpirationRecordRepository.deleteAll(auctionsToBeExpired);
 
         now = Date.from(Instant.now());
-//        System.out.println("[INFO] " + now + " Auction Expiration Job ENDED.");
+        System.out.println("[INFO] " + now + " Auction Expiration Job ENDED.");
     }
 
     @Override
