@@ -1,6 +1,7 @@
 package com.alfa.bidit.repository;
 
 import com.alfa.bidit.model.Auction;
+import com.alfa.bidit.utils.Constants;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
@@ -17,4 +18,8 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
     Optional<List<Auction>> findAllBySellerID(Long sellerID);
 
     List<Auction> findAllByIdIn(List<Long> ids);
+
+    List<Auction> findAllBySellerIDAndStatusIn(Long sellerID, List<Constants.AuctionStatus> statusList);
+
+    List<Auction> findAllByHighestBidOwnerAndStatusIn(Long highestBidOwner, List<Constants.AuctionStatus> statusList);
 }

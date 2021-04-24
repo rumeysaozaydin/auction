@@ -41,6 +41,9 @@ public class Auction extends BaseModel {
     @Column(name = "highest_bid")
     private Double highestBid;
 
+    @Column(name = "highest_bid_owner")
+    private Long highestBidOwner;
+
     @Column(name = "status")
     private AuctionStatus status;
 
