@@ -63,6 +63,13 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Auction> getBySellerIdAndStatus(Long sellerID, List<AuctionStatus> statusList) {
+        if(!userService.existsById(sellerID)) throw new UserNotExistException();
+
+        return auctionRepository.findAllBySellerIDAndStatusIn(sellerID, statusList);
+    }
+
+    @Override
     public List<Auction> getAll() {
         return auctionRepository.findAll();
     }

@@ -8,6 +8,7 @@ import com.alfa.bidit.service.AuctionImageService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.utils.ApiPaths;
+import com.alfa.bidit.utils.Constants;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,9 +53,17 @@ public class AuctionController {
     }
 
     @GetMapping("/seller/{seller_id}")
-    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID, @RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID,
+                                                       @RequestHeader("Authorization") String token,
+                                                       @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList){
         try {
-            List<Auction> auctions = auctionService.getBySellerId(sellerID);
+            List<Auction> auctions;
+            if (statusList == null){
+                auctions = auctionService.getBySellerId(sellerID);
+            }
+            else{
+                auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList);
+            }
             return ResponseEntity.ok(auctions);
         }
         catch (UserNotExistException ex) {

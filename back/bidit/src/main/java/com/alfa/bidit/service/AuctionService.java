@@ -3,6 +3,7 @@ package com.alfa.bidit.service;
 
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.User;
+import com.alfa.bidit.utils.Constants;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,6 +19,8 @@ public interface AuctionService{
     Auction getById(Long id);
 
     List<Auction> getBySellerId(Long sellerID);
+
+    List<Auction> getBySellerIdAndStatus(Long sellerID, List<Constants.AuctionStatus> statusList);
 
     List<Auction> getAll();
 
