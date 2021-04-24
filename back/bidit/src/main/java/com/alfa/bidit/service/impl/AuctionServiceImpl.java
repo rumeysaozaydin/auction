@@ -1,19 +1,24 @@
 package com.alfa.bidit.service.impl;
 
 import com.alfa.bidit.exception.AuctionNotExistException;
+import com.alfa.bidit.exception.AuctionWinnerNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
+import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.AuctionRepository;
 import com.alfa.bidit.service.AuctionManagerService;
 import com.alfa.bidit.service.AuctionService;
+import com.alfa.bidit.service.BidService;
 import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import static com.alfa.bidit.utils.DateUtil.*;
 
@@ -23,12 +28,14 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionRepository auctionRepository;
     private final UserService userService;
     private final AuctionManagerService auctionManagerService;
+    private final BidService bidService;
 
     @Autowired
-    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService,@Lazy BidService bidService) {
         this.auctionRepository = auctionRepository;
         this.userService = userService;
         this.auctionManagerService = auctionManagerService;
+        this.bidService = bidService;
     }
 
     @Override
@@ -80,6 +87,17 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Auction> getAllByBidOwner(Long bidOwner) {
+        return getAllByIdIn(
+                bidService
+                    .getAllByUserID(bidOwner)
+                    .stream()
+                    .map(Bid::getAuctionID)
+                    .distinct()
+                    .collect(Collectors.toList()));
+    }
+
+    @Override
     public Boolean existsById(Long auctionID) {
         return auctionRepository.existsAuctionById(auctionID);
     }
@@ -87,9 +105,19 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void endAuctionById(Long id) {
         auctionRepository.findAuctionById(id).ifPresent(auction -> {
-            auction.setStatus(AuctionStatus.EXPIRED);
+
+            try {
+                Bid winner = bidService.getWinnerBid(id);
+                auction.setStatus(AuctionStatus.EXPIRED_SOLD);
+                System.out.println("Auction " + auction.getId() + " has been successfully expired. Winner is " + winner);
+            }
+            catch (AuctionWinnerNotExistException ex){
+                auction.setStatus(AuctionStatus.EXPIRED_UNSOLD);
+                System.out.println("Auction " + auction.getId() + " has been successfully expired. No winner! ");
+            }
+
             // TODO Probably notify the seller and all the attendees here.
-            System.out.println("Auction " + auction.getId() + " has been successfully expired. ");
+
             auctionRepository.save(auction);
         });
     }

@@ -26,6 +26,8 @@ public interface AuctionService{
 
     List<Auction> getAllByIdIn(List<Long> ids);
 
+    List<Auction> getAllByBidOwner(Long bidOwner);
+
     Boolean existsById(Long auctionID);
 
     void endAuctionById(Long id);

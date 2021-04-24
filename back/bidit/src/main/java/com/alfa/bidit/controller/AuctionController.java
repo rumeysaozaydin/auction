@@ -71,6 +71,12 @@ public class AuctionController {
         }
     }
 
+    @GetMapping("/bidOwner/{bid_owner}")
+    public ResponseEntity<List<Auction>> getByBidOwner(@PathVariable("bid_owner") Long bidOwner,
+                                                       @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(auctionService.getAllByBidOwner(bidOwner));
+    }
+
     @PostMapping("/list")
     public ResponseEntity<List<Auction>> getAllByIdIn(@RequestHeader("Authorization") String token, @RequestBody List<Long> idList){
         System.out.println("[GET AUCTIONS BY LIST REQUEST]:  " + idList);
