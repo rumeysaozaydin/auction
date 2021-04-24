@@ -24,11 +24,15 @@ public interface AuctionService{
 
     List<Auction> getAll();
 
+    List<Auction> getAllByStatus(List<Constants.AuctionStatus> statusList);
+
     List<Auction> getAllByIdIn(List<Long> ids);
 
     List<Auction> getAllByBidOwner(Long bidOwner);
 
     List<Auction> getAllWonByBidOwner(Long bidOwner);
+
+    Boolean isActiveById(Long auctionID);
 
     Boolean existsById(Long auctionID);
 

@@ -52,7 +52,7 @@ public class BidServiceImpl implements BidService {
 
         if (!isBidPriceValid(bid)) throw new BidPriceNotValidException();
 
-        // TODO Add auction status check. (Active | Expired | Cancelled)
+        if(!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException();
 
         auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 

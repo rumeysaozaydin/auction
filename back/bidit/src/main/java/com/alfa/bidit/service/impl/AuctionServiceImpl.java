@@ -82,6 +82,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Auction> getAllByStatus(List<AuctionStatus> statusList) {
+        return auctionRepository.findAllByStatusIn(statusList);
+    }
+
+    @Override
     public List<Auction> getAllByIdIn(List<Long> ids) {
         return auctionRepository.findAllByIdIn(ids);
     }
@@ -100,6 +105,12 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public List<Auction> getAllWonByBidOwner(Long bidOwner) {
         return auctionRepository.findAllByHighestBidOwnerAndStatusIn(bidOwner, List.of(AuctionStatus.EXPIRED_SOLD));
+    }
+
+    @Override
+    public Boolean isActiveById(Long auctionID) {
+        Auction auction = getById(auctionID);
+        return auction.getStatus().equals(AuctionStatus.ACTIVE);
     }
 
     @Override
