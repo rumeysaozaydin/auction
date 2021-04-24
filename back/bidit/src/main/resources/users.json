@@ -17,6 +17,16 @@
     "contactNumber" : "conta2ctoNumberto1",
     "imagePath" : "imagePath2i1",
     "password": "passwordi112"
+  },
+  {
+    "_class": "com.alfa.bidit.model.User",
+    "email" : "efe",
+    "firstname" : "efe",
+    "lastname" : "efe",
+    "contactNumber" : "efe",
+    "imagePath" : "efe",
+    "pushToken" : "ExponentPushToken[pymoyhG9rYlFIUUFrZP5tf]",
+    "password": "efe"
   },{
   "_class": "com.alfa.bidit.model.User",
   "email" : "firstEmail32",
