@@ -1,13 +1,12 @@
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 import { useRequest } from '../hooks/useRequest';
 import { SliderBox } from "react-native-image-slider-box";
-
 
 const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     const {
@@ -26,97 +25,111 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
     },[]);
 
     return (
-        <View style={styles.card} >
-                <View style={styles.cardImgWrapper}>
-                    {/* <TouchableOpacity onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite});}}>
-                        <Image
-                        source={{uri:`${BASE_URL}/images/${images.length > 0 ? images[0] : 1}`}}
-                        resizeMode="cover"
-                        style={styles.cardImg}
-                        />
-                    </TouchableOpacity> */}
-                    <SliderBox
-                        images={imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)}
-                        onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)});}}
-                        // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
-                    />
-                </View>
+        <View style={styles.container} >
 
-                <View style={styles.cardInfo}>
-                    <Text > Id: {data.id}</Text>
-                    <Text style={styles.cardTitle}> Title: {data.title}</Text>
-                    <Text style={styles.cardDetails}>
-                    Current Price : {data.highestBid}
-                    </Text>
-                    
-                    <View style={styles.buttonHolder}>
-                        
-                        <IconButton style={styles.favButton} icon={ isFavorite ? 'heart' : 'heart-outline' } title="BidIt" 
-                        onPress={() => { 
-                            setIsFavorite(!isFavorite)
-                            if(isFavorite){
-                                deleteFav(data)
-                            }
-                            else{
-                                addFav(data)
-                            }
+            
+            
+            <TouchableOpacity onPress={() => { console.log("inside on pree"); navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}>
+                    <SliderBox 
+                        style={{
+                            width: Math.round(Dimensions.get('window').width) - 80,
+                            height: Math.round(Dimensions.get('window').width) - 80,
+                            borderRadius: 20,
                         }}
-                        />
-                    </View>
-                </View>
-            </View>
-    
+                        images={imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())}
+                        disableOnPress = {false}
+                        //onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}
+                    />
+
+                    <Image 
+                        style={{
+                            width: Math.round(Dimensions.get('window').width) -80,
+                            height: Math.round(Dimensions.get('window').width) -80,
+                            borderRadius: 20,
+                            position: 'absolute'
+
+                        }}
+                        source={require('../../assets/shade.png')}
+                        
+                    />                
+            </TouchableOpacity>
+            
+            <Text style={styles.title}>{data.title}</Text>
+            <Text style={styles.price}>£{data.highestBid}</Text>                        
+            <IconButton 
+                style={styles.favorite} 
+                color='#CF2020'
+                size={36}
+                icon={ isFavorite ? 'heart' : 'heart-outline' } 
+                title="BidIt" 
+                onPress={() => { 
+                    setIsFavorite(!isFavorite)
+                    if(isFavorite){
+                        deleteFav(data)
+                    }
+                    else{
+                        addFav(data)
+                    }
+                }}
+            />
+            <Text style={styles.remainingTime}> 1 saat </Text>
+        </View>
+        // <View style={styles.container}>
+        //      <TouchableOpacity onPress={() => { console.log("inside on pree"); navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}>
+        //             <Image 
+        //                 style={{
+        //                     position: 'absolute',
+        //                     width: Math.round(Dimensions.get('window').width) -50,
+        //                     height: Math.round(Dimensions.get('window').width) -50,
+        //                     borderRadius: 20,
+        //                 }}
+        //                 source={require('../../assets/shade.png')}
+                        
+        //             />
+        //     </TouchableOpacity>
+        // </View>
     );
 }
 
 const styles = StyleSheet.create({
-    card: {
-        height: 200,
-        marginVertical: 10,
-        flexDirection: 'row',
-        shadowColor: '#999',
-        shadowOffset: {width: 0, height: 1},
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
-        elevation: 5,
+    container:
+    {
+        width: Math.round(Dimensions.get('window').width) -80,
+        height: Math.round(Dimensions.get('window').width) -80,
+        marginHorizontal: 25,
+        marginBottom: 30,
+        borderRadius: 20,
     },
-    cardImgWrapper: {
-        width: 200,
-        height: 200
+    title: 
+    {
+        position: 'absolute',
+        bottom: 10,
+        left:15,
+        fontSize: 30,
+        color: '#EAEAEA'
     },
-    cardImg: {
-        height: '100%',
-        width: '100%',
-        alignSelf: 'center',
-        borderRadius: 8,
-        borderBottomRightRadius: 0,
-        borderTopRightRadius: 0,
+    price: 
+    {
+        position: 'absolute',
+        right:15,
+        bottom: 10,
+        fontSize: 40,
+        color: '#EAEAEA'
+
     },
-    cardInfo: {
-        flex: 2,
-        padding: 10,
-        borderColor: '#ccc',
-        borderWidth: 1,
-        borderLeftWidth: 0,
-        borderBottomRightRadius: 8,
-        borderTopRightRadius: 8,
-        backgroundColor: '#fff',
+    favorite: 
+    {
+        position: 'absolute',
+        right: 0,
+        top: 0
     },
-    cardTitle: {
-        fontWeight: 'bold',
-    },
-    cardDetails: {
-        fontSize: 12,
-        color: '#444',
-    },
-    favButton: {
-        padding: 5,
-        marginTop: 5,
-        marginBottom: 5,
-        alignSelf: 'flex-start'
-    },
-    buttonHolder: {
-        flexDirection: 'row'
+    remainingTime: 
+    {
+        position: 'absolute',
+        top: 10,
+        left: 10,
+        fontSize: 20,
+        color: '#EAEAEA'
     }
 });
 

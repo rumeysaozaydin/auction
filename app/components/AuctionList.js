@@ -6,7 +6,7 @@ const AuctionList = ({navigation , auctions, favoriteIds, addFav, deleteFav}) =>
 
     return(
         <FlatList 
-            // showsVerticalScrollIndicator={false}
+            showsVerticalScrollIndicator={false}
             // horizontal={false}
             data={auctions}
             keyExtractor={(auction) => auction.id.toString()}

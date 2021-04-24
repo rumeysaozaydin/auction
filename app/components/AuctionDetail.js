@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, Dimensions } from 'react-native';
 import { IconButton } from 'react-native-paper';
 import { useRequest } from '../hooks/useRequest';
 import { AuthContext } from '../context/AuthContext';
@@ -46,6 +46,10 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris}) => {
                 }}
             />
             <SliderBox
+                style={{
+                    width: Math.round(Dimensions.get('window').width) ,
+                    height: Math.round(Dimensions.get('window').width) 
+                }}
                 images={imageUris}
                 //onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, auctionIds:auctionIds});}}
                 // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}

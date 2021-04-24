@@ -28,26 +28,26 @@ function ProfileScreen({navigation}) {
     })();
   }, []);
 
-  React.useEffect(() => {
-    if(image){
-      console.log(typeof(image))
-      const data = new FormData()
-      var img = {
-        uri : 'file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fdemo-9aef5fb8-cd54-4b32-87cd-e6ce418f59fe/ImagePicker/2199240b-3917-42d3-bf0f-1a61c0227218.jpg',
-        name: '2199240b-3917-42d3-bf0f-1a61c0227218.jpg',
-        type: 'image/jpeg'
-      };
+  // React.useEffect(() => {
+  //   if(image){
+  //     console.log(typeof(image))
+  //     const data = new FormData()
+  //     var img = {
+  //       uri : 'file:/data/user/0/host.exp.exponent/cache/ExperienceData/%2540anonymous%252Fdemo-9aef5fb8-cd54-4b32-87cd-e6ce418f59fe/ImagePicker/2199240b-3917-42d3-bf0f-1a61c0227218.jpg',
+  //       name: '2199240b-3917-42d3-bf0f-1a61c0227218.jpg',
+  //       type: 'image/jpeg'
+  //     };
     
-      data.append('image',  img);
-      const config = {
-        headers: {
-            'Content-Type': 'multipart/form-data'
-        }
-      }
-      axios.post(`${BASE_URL}/images`,data).then((res) => {console.log(res.data)}).catch((e) => {console.log(e) })
+  //     data.append('image',  img);
+  //     const config = {
+  //       headers: {
+  //           'Content-Type': 'multipart/form-data'
+  //       }
+  //     }
+  //     axios.post(`${BASE_URL}/images`,data).then((res) => {console.log(res.data)}).catch((e) => {console.log(e) })
 
-    }
-  }, [image])
+  //   }
+  // }, [image])
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -73,7 +73,7 @@ function ProfileScreen({navigation}) {
   } = React.useContext(AuthContext);
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
 
     <View style={styles.userInfoSection}>
       <View style={{flexDirection: 'row', marginTop: 15}}>
@@ -154,7 +154,7 @@ function ProfileScreen({navigation}) {
       <Button title="Pick an image from camera roll" onPress={pickImage} />
       {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
     </View>
-  </SafeAreaView>
+  </View>
   );
 };
 
