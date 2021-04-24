@@ -8,6 +8,7 @@ import com.alfa.bidit.service.AuctionImageService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.utils.ApiPaths;
+import com.alfa.bidit.utils.Constants;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,8 +37,13 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestParam Long duration, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
-        Auction newAuction = auctionService.create(auction, duration);
-        return ResponseEntity.ok(newAuction);
+        try{
+            Auction newAuction = auctionService.create(auction, duration);
+            return ResponseEntity.ok(newAuction);
+        }
+        catch (UserNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
 
     @GetMapping("/{id}")
@@ -52,14 +58,34 @@ public class AuctionController {
     }
 
     @GetMapping("/seller/{seller_id}")
-    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID, @RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID,
+                                                       @RequestHeader("Authorization") String token,
+                                                       @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList){
         try {
-            List<Auction> auctions = auctionService.getBySellerId(sellerID);
+            List<Auction> auctions;
+            if (statusList == null){
+                auctions = auctionService.getBySellerId(sellerID);
+            }
+            else{
+                auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList);
+            }
             return ResponseEntity.ok(auctions);
         }
         catch (UserNotExistException ex) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @GetMapping("/bidOwner/{bid_owner}")
+    public ResponseEntity<List<Auction>> getByBidOwner(@PathVariable("bid_owner") Long bidOwner,
+                                                       @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(auctionService.getAllByBidOwner(bidOwner));
+    }
+
+    @GetMapping("/won/{bid_owner}")
+    public ResponseEntity<List<Auction>> getAuctionsWon(@PathVariable("bid_owner") Long bidOwner,
+                                                       @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(auctionService.getAllWonByBidOwner(bidOwner));
     }
 
     @PostMapping("/list")

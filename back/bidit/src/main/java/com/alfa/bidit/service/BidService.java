@@ -9,5 +9,9 @@ import java.util.List;
 public interface BidService {
     List<Bid> getAllByAuctionID(Long auctionID);
 
+    List<Bid> getAllByUserID(Long userID);
+
     Long bid(Bid bid);
+
+    Bid getWinnerBid(Long auctionID);
 }

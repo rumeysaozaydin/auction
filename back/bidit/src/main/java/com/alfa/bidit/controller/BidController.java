@@ -1,9 +1,6 @@
 package com.alfa.bidit.controller;
 
-import com.alfa.bidit.exception.AuctionNotExistException;
-import com.alfa.bidit.exception.BidOwnerNotValidException;
-import com.alfa.bidit.exception.BidPriceNotValidException;
-import com.alfa.bidit.exception.UserNotExistException;
+import com.alfa.bidit.exception.*;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.service.BidService;
@@ -35,6 +32,16 @@ public class BidController {
             List<Bid> bids = bidService.getAllByAuctionID(auctionID);
             return ResponseEntity.ok(bids);
         } catch (AuctionNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
+    }
+
+    @GetMapping("/winner")
+    public ResponseEntity<Bid> getWinnerBid(@PathVariable("auction_id") Long auctionID){
+        try {
+            Bid bid = bidService.getWinnerBid(auctionID);
+            return ResponseEntity.ok(bid);
+        } catch (AuctionWinnerNotExistException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
     }

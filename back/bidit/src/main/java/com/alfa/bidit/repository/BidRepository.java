@@ -11,4 +11,8 @@ import java.util.Optional;
 @Repository
 public interface BidRepository extends JpaRepository<Bid, Long> {
     Optional<List<Bid>> findAllByAuctionID(Long auctionID);
+
+    List<Bid> findAllByUserID(Long userID);
+
+    Bid findFirstByAuctionIDOrderByPriceDesc(Long auctionID);
 }

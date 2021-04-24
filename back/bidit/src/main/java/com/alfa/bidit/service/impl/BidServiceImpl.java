@@ -1,9 +1,6 @@
 package com.alfa.bidit.service.impl;
 
-import com.alfa.bidit.exception.AuctionNotExistException;
-import com.alfa.bidit.exception.BidPriceNotValidException;
-import com.alfa.bidit.exception.BidOwnerNotValidException;
-import com.alfa.bidit.exception.UserNotExistException;
+import com.alfa.bidit.exception.*;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.BidRepository;
 import com.alfa.bidit.service.AuctionService;
@@ -34,6 +31,11 @@ public class BidServiceImpl implements BidService {
         return bidRepository.findAllByAuctionID(auctionID).orElse(List.of());
     }
 
+    @Override
+    public List<Bid> getAllByUserID(Long userID) {
+        return bidRepository.findAllByUserID(userID);
+    }
+
     public boolean isBidPriceValid(Bid bid){
         Double highestBid = auctionService.getHighestBid(bid.getAuctionID());
 
@@ -52,10 +54,19 @@ public class BidServiceImpl implements BidService {
 
         // TODO Add auction status check. (Active | Expired | Cancelled)
 
-        auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice());
+        auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 
         bidRepository.save(bid);
 
         return bid.getId();
+    }
+
+    @Override
+    public Bid getWinnerBid(Long auctionID) {
+        Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
+
+        if (bid == null) throw new AuctionWinnerNotExistException();
+
+        return bid;
     }
 }
