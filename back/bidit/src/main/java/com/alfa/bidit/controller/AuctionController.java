@@ -124,4 +124,10 @@ public class AuctionController {
         AuctionImage auctionImage = auctionImageService.upload(id, imageID);
         return ResponseEntity.ok(imageID);
     }
+
+    @GetMapping("/search/{auctionTitle}")
+    public ResponseEntity<List<Auction>> searchAuctions(@PathVariable("auctionTitle") String auctionTitle/*,
+                                                        @RequestHeader("Authorization") String token*/){
+        return ResponseEntity.ok(auctionService.getAuctionsByTitleSearch(auctionTitle));
+    }
 }

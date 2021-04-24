@@ -43,4 +43,6 @@ public interface AuctionService{
     void updateHighestBid(Long auctionID, Double newHighestBid, Long bidOwner);
 
     Long getSellerIDByAuctionID(Long auctionID);
+
+    List<Auction> getAuctionsByTitleSearch(String titleName);
 }

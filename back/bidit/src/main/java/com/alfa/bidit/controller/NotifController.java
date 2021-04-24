@@ -30,12 +30,20 @@ public class NotifController {
 
     }
 
-    @GetMapping(value = "/testo")
-    public void denemov() throws PushClientException, InterruptedException {
-        notificationServiceImpl.sendNotif("ExponentPushToken[pymoyhG9rYlFIUUFrZP5tf]","başlıkov","messageov");
-       // sendNotif(pushToken,title,message);
+    @GetMapping(value = "/send/{email}/{title}/{message}")
+    public void sendNotification(@PathVariable("email") String email,@PathVariable("title") String title,@PathVariable("message") String message) throws PushClientException, InterruptedException {
+        notificationServiceImpl.sendNotif(email,title,message);
 
     }
+
+    @GetMapping(value = "/testo")
+    public void denemov() throws PushClientException, InterruptedException {
+      //  notificationServiceImpl.sendNotif("ExponentPushToken[pymoyhG9rYlFIUUFrZP5tf]","başlıkov","messageov");
+       // sendNotif(pushToken,title,message);
+        notificationServiceImpl.sendNotif("efe","başlıkov","messageov");
+    }
+
+
 
     @PostMapping(value = "/sendNotifWithBody")
     public void denemovBody(@RequestBody notificationInfo notificationInfo) throws PushClientException, InterruptedException {

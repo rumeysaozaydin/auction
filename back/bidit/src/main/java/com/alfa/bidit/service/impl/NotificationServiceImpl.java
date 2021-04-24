@@ -1,9 +1,12 @@
 package com.alfa.bidit.service.impl;
 
+import com.alfa.bidit.model.User;
+import com.alfa.bidit.repository.UserRepository;
 import io.github.jav.exposerversdk.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -19,8 +22,17 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationServiceImpl {
 
-    public void sendNotif(String recipient,String title,String message) throws PushClientException, InterruptedException {
+    private final UserRepository userRepository;
 
+
+    public NotificationServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
+    public void sendNotif(String recipient, String title, String message) throws PushClientException, InterruptedException {
+
+       recipient=userRepository.findByEmail(recipient).getPushToken();
+       // System.out.println(recipient);
 
         if (!PushClient.isExponentPushToken(recipient))
             throw new Error("Token:" + recipient + " is not a valid token.");

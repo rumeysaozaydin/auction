@@ -3,9 +3,12 @@ package com.alfa.bidit.repository;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.utils.Constants;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNullApi;
 import org.springframework.stereotype.Repository;
 
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,4 +27,17 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
     List<Auction> findAllByHighestBidOwnerAndStatusIn(Long highestBidOwner, List<Constants.AuctionStatus> statusList);
 
     List<Auction> findAllByStatusIn(List<Constants.AuctionStatus> statusList);
+
+    List<Auction> findByTitleContains(String titleContains);
+
+    List<Auction> findByTitle(String title);
+
+
+    @Transactional
+    @Query(
+            value = "SELECT * FROM auctions u WHERE LOWER (u.title) LIKE LOWER (%:auctionName% )",
+            nativeQuery = true)
+    List<Auction> findSpecificNameAuction(@Param("auctionName") String auctionName);
+
+
 }
