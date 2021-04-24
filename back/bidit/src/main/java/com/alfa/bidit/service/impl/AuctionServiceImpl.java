@@ -40,7 +40,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Auction create(Auction auction, Long duration) {
-        // TODO IT DOES NOT CHECK WHETHER THE SELLER EXIST.
+        if(!userService.existsById(auction.getSellerID())) throw new UserNotExistException();
 
         setStartingAndExpirationTime(auction, duration);
         auction.setHighestBid(auction.getInitialPrice());
@@ -98,6 +98,11 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
+    public List<Auction> getAllWonByBidOwner(Long bidOwner) {
+        return auctionRepository.findAllByHighestBidOwnerAndStatusIn(bidOwner, List.of(AuctionStatus.EXPIRED_SOLD));
+    }
+
+    @Override
     public Boolean existsById(Long auctionID) {
         return auctionRepository.existsAuctionById(auctionID);
     }
@@ -128,9 +133,10 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public void updateHighestBid(Long auctionID, Double newHighestBid) {
+    public void updateHighestBid(Long auctionID, Double newHighestBid, Long bidOwner) {
         Auction auction = getById(auctionID);
         auction.setHighestBid(newHighestBid);
+        auction.setHighestBidOwner(bidOwner);
         auctionRepository.save(auction);
     }
 
@@ -138,7 +144,6 @@ public class AuctionServiceImpl implements AuctionService {
     public Long getSellerIDByAuctionID(Long auctionID) {
         return getById(auctionID).getSellerID();
     }
-
 
     // === PRIVATE METHODS ===
 

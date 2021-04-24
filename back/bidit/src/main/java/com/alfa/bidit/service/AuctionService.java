@@ -28,13 +28,15 @@ public interface AuctionService{
 
     List<Auction> getAllByBidOwner(Long bidOwner);
 
+    List<Auction> getAllWonByBidOwner(Long bidOwner);
+
     Boolean existsById(Long auctionID);
 
     void endAuctionById(Long id);
 
     Double getHighestBid(Long id);
 
-    void updateHighestBid(Long auctionID, Double newHighestBid);
+    void updateHighestBid(Long auctionID, Double newHighestBid, Long bidOwner);
 
     Long getSellerIDByAuctionID(Long auctionID);
 }

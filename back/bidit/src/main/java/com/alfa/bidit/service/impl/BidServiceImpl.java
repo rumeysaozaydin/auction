@@ -54,7 +54,7 @@ public class BidServiceImpl implements BidService {
 
         // TODO Add auction status check. (Active | Expired | Cancelled)
 
-        auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice());
+        auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 
         bidRepository.save(bid);
 

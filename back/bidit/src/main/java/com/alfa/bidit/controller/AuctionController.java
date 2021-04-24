@@ -37,8 +37,13 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestParam Long duration, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
-        Auction newAuction = auctionService.create(auction, duration);
-        return ResponseEntity.ok(newAuction);
+        try{
+            Auction newAuction = auctionService.create(auction, duration);
+            return ResponseEntity.ok(newAuction);
+        }
+        catch (UserNotExistException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        }
     }
 
     @GetMapping("/{id}")
@@ -75,6 +80,12 @@ public class AuctionController {
     public ResponseEntity<List<Auction>> getByBidOwner(@PathVariable("bid_owner") Long bidOwner,
                                                        @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(auctionService.getAllByBidOwner(bidOwner));
+    }
+
+    @GetMapping("/won/{bid_owner}")
+    public ResponseEntity<List<Auction>> getAuctionsWon(@PathVariable("bid_owner") Long bidOwner,
+                                                       @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(auctionService.getAllWonByBidOwner(bidOwner));
     }
 
     @PostMapping("/list")

@@ -20,4 +20,6 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
     List<Auction> findAllByIdIn(List<Long> ids);
 
     List<Auction> findAllBySellerIDAndStatusIn(Long sellerID, List<Constants.AuctionStatus> statusList);
+
+    List<Auction> findAllByHighestBidOwnerAndStatusIn(Long highestBidOwner, List<Constants.AuctionStatus> statusList);
 }
