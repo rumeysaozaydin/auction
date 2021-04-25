@@ -29,6 +29,12 @@ public class NotificationServiceImpl implements NotificationService {
         this.userService = userService;
     }
 
+    public void sendNotification(List<Long> userIDs, String title, String message) throws PushClientException, InterruptedException {
+        for(Long userID : userIDs){
+            sendNotification(userID, title, message);
+        }
+    }
+
     public void sendNotification(Long userID, String title, String message) throws PushClientException, InterruptedException {
 
        String recipient=userService.getById(userID).getPushToken();

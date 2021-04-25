@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class BidServiceImpl implements BidService {
@@ -62,11 +63,29 @@ public class BidServiceImpl implements BidService {
 
         auctionService.getSellerIDByAuctionID(bid.getAuctionID());
 
-        notificationService.sendNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "Bir yeni bidiniz var!", "Yeni bid: $" + bid.getPrice());
+        // Inform the seller
+        informSeller(bid);
+
+        // Inform the attendees
+        informAttendees(bid);
 
         bidRepository.save(bid);
 
         return bid.getId();
+    }
+
+    public void informSeller(Bid bid) throws PushClientException, InterruptedException {
+        notificationService.sendNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "Bir yeni bidiniz var!", "Yeni bid: $" + bid.getPrice());
+    }
+
+    public void informAttendees(Bid bid) throws PushClientException, InterruptedException {
+        List<Long> userIDs = getAllByAuctionID(bid.getAuctionID())
+                                .stream()
+                                .map(Bid::getUserID)
+                                .distinct()
+                                .filter(userID -> userID.equals(bid.getUserID()))
+                                .collect(Collectors.toList());
+        notificationService.sendNotification(userIDs, "Kötü haber", "Bidiniz geçildi! Yeni bid: $" + bid.getPrice());
     }
 
     @Override
