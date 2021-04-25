@@ -5,6 +5,7 @@ import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.service.BidService;
 import com.alfa.bidit.utils.ApiPaths;
+import io.github.jav.exposerversdk.PushClientException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -47,7 +48,7 @@ public class BidController {
     }
 
     @PostMapping("/bid")
-    public ResponseEntity<Long> bid(@PathVariable("auction_id") Long auctionID, @RequestBody Bid bid){
+    public ResponseEntity<Long> bid(@PathVariable("auction_id") Long auctionID, @RequestBody Bid bid) throws PushClientException, InterruptedException {
         try {
             Long bidID = bidService.bid(bid);
             return ResponseEntity.ok(bidID);

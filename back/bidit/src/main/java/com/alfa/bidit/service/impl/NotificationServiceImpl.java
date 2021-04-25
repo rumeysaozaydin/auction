@@ -1,12 +1,11 @@
 package com.alfa.bidit.service.impl;
 
-import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
-import io.github.jav.exposerversdk.*;
+import com.alfa.bidit.service.NotificationService;
+import com.alfa.bidit.service.UserService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
@@ -17,21 +16,28 @@ import io.github.jav.exposerversdk.ExpoPushReceipt;
 import io.github.jav.exposerversdk.ExpoPushTicket;
 import io.github.jav.exposerversdk.PushClient;
 import io.github.jav.exposerversdk.PushClientException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class NotificationServiceImpl {
+public class NotificationServiceImpl implements NotificationService {
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-
-    public NotificationServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    @Autowired
+    public NotificationServiceImpl(UserRepository userRepository, UserService userService) {
+        this.userService = userService;
     }
 
-    public void sendNotif(String recipient, String title, String message) throws PushClientException, InterruptedException {
+    public void sendNotification(List<Long> userIDs, String title, String message) throws PushClientException, InterruptedException {
+        for(Long userID : userIDs){
+            sendNotification(userID, title, message);
+        }
+    }
 
-       recipient=userRepository.findByEmail(recipient).getPushToken();
+    public void sendNotification(Long userID, String title, String message) throws PushClientException, InterruptedException {
+
+       String recipient=userService.getById(userID).getPushToken();
        // System.out.println(recipient);
 
         if (!PushClient.isExponentPushToken(recipient))
