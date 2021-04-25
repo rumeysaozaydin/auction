@@ -83,8 +83,9 @@ public class BidServiceImpl implements BidService {
                                 .stream()
                                 .map(Bid::getUserID)
                                 .distinct()
-                                .filter(userID -> userID.equals(bid.getUserID()))
+                                .filter(userID -> !userID.equals(bid.getUserID()))
                                 .collect(Collectors.toList());
+        System.out.println("Notify edilecek user lar " + userIDs);
         notificationService.sendNotification(userIDs, "Kötü haber", "Bidiniz geçildi! Yeni bid: $" + bid.getPrice());
     }
 
