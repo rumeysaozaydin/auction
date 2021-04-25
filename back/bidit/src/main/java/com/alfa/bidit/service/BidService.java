@@ -1,6 +1,7 @@
 package com.alfa.bidit.service;
 
 import com.alfa.bidit.model.Bid;
+import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ public interface BidService {
 
     List<Bid> getAllByUserID(Long userID);
 
-    Long bid(Bid bid);
+    Long bid(Bid bid) throws PushClientException, InterruptedException;
 
     Bid getWinnerBid(Long auctionID);
 }

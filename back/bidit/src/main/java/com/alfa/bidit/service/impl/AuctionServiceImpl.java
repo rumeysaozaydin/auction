@@ -166,4 +166,9 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setExpirationTime(expirationTime);
     }
 
+    @Override
+    public List<Auction> getAuctionsByTitleSearch(String titleName) {
+        //return auctionRepository.findSpecificNameAuction(titleName);
+        return auctionRepository.findByTitleContains(titleName);
+    }
 }
