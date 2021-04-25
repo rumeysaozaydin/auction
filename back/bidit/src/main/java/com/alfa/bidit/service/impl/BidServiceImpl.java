@@ -75,7 +75,7 @@ public class BidServiceImpl implements BidService {
     }
 
     public void informSeller(Bid bid) throws PushClientException, InterruptedException {
-        notificationService.sendNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "Bir yeni bidiniz var!", "Yeni bid: $" + bid.getPrice());
+        notificationService.sendNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "Bir Yeni Teklifiniz Var :)", "Yeni teklif: $" + bid.getPrice());
     }
 
     public void informAttendees(Bid bid) throws PushClientException, InterruptedException {
@@ -83,9 +83,9 @@ public class BidServiceImpl implements BidService {
                                 .stream()
                                 .map(Bid::getUserID)
                                 .distinct()
-                                .filter(userID -> userID.equals(bid.getUserID()))
+                                .filter(userID -> !userID.equals(bid.getUserID()))
                                 .collect(Collectors.toList());
-        notificationService.sendNotification(userIDs, "Kötü haber", "Bidiniz geçildi! Yeni bid: $" + bid.getPrice());
+        notificationService.sendNotification(userIDs, "Kötü Haber :(", "Teklifiniz geçildi! Yeni teklif: $" + bid.getPrice());
     }
 
     @Override
