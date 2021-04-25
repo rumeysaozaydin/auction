@@ -2,8 +2,9 @@ import axios from 'axios';
 import React from 'react';
 import { BASE_URL } from '../config';
 import { createAction } from '../utils/CreateAction';
-
-
+import { Text, View, Button, Platform } from 'react-native';
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 export function useAuth() {
     const [state, dispatch] = React.useReducer(
@@ -34,77 +35,125 @@ export function useAuth() {
         },
     );
     
-    const auth = React.useMemo(
-        
-        () => ({
-        signIn: async (username, password) => {
-            axios.post(`${BASE_URL}/authenticate`, {
-            username: username,
-            password: password,
-            })
-            .then( ({data}) => {
-                axios.get(`${BASE_URL}/users/email/${username}`, {
-                headers: {
-                Authorization: `bearer ${data.token}`,
-                }})
-                .then (res => {                    
-                    const user = {
-                        username: res.data.email,
-                        id: res.data.id,
-                        token: data.token,
-                    };
-                    dispatch(createAction('SET_USER', user));
-                })
-            })
-            .catch(function (error) {
-            });
-        },
-        signOut: async () => {
-            dispatch(createAction('REMOVE_USER'));
-        },
-        signUp: async (username, password) => {
-            axios.post(`${BASE_URL}/register`, {
-            username: username,
-            password: password,
-            })
-            .then( () => {
-                axios.post(`${BASE_URL}/authenticate`, {
-                username: username,
-                password: password,
-                })
-                .then ( ({data} ) => {   
-                    var postData = {
-                        contactNumber: '1232423432342',
-                        firstname: 'alissds',
-                        imagePath: 'string',
-                        lastname: 'alisfsdfs',
-                        email: username,
-                        password: password
-                    };     
-                    axios.post(`${BASE_URL}/users`, postData, {
-                        headers: {
-                        Authorization: `bearer ${data.token}`,
-                        },
-                    }).then (res => {
-                        const user = {
-                            username: username,
-                            id: res.data,
-                            token: data.token,
-                    };
-                    dispatch(createAction('SET_USER', user));
-                })
-                .catch(function (error) {
-                    console.log(error.response.data.message);
-                });
-                })
-                .catch(function (error) {
-                });
-            })
-            .catch(function (error) {
-            });
+    async function registerForPushNotificationsAsync() {
+        let token;
+        if (Constants.isDevice) {
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
         }
-        }),
-        [],
+        if (finalStatus !== 'granted') {
+            console.log('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        
+        console.log(token);
+        } else {
+        console.log('Must use physical device for Push Notifications');
+        }
+    
+        if (Platform.OS === 'android') {
+        Notifications.setNotificationChannelAsync('default', {
+            name: 'default',
+            importance: Notifications.AndroidImportance.MAX,
+            vibrationPattern: [0, 250, 250, 250],
+            lightColor: '#FF231F7C',
+        });
+        }
+        return token;
+    }
+
+    const register = async (username,password) => {
+        return axios.post(`${BASE_URL}/register`, {
+            username: username,
+            password: password,
+        })
+    }
+
+    const authenticate = async (username,password) => {
+        return axios.post(`${BASE_URL}/authenticate`, {
+            username: username,
+            password: password,
+        })
+    }
+
+    const createUser = async (username,password,token) => {
+        let pushToken = await registerForPushNotificationsAsync()
+        console.log("RES 0 " ,pushToken)
+        var postData = {
+            contactNumber: '5069608***',
+            firstname: 'Rumeysa',
+            imagePath: 'string',
+            lastname: 'ÖZAYDIN',
+            pushToken: pushToken,
+            email: username,
+            password: password
+        }
+        return axios.post(`${BASE_URL}/users`, postData, {
+            headers: {
+            Authorization: `bearer ${token}`,
+            },
+        })
+    }
+
+    const setUserState = (username,id,token) => {
+        const user = {
+            username: username,
+            id: id,
+            token: token,
+        };
+        dispatch(createAction('SET_USER', user));
+    }
+
+    const getUserDetail = async (username, token) => {
+        return axios.get(`${BASE_URL}/users/email/${username}`, {
+            headers: {
+                Authorization: `bearer ${token}`,
+            }
+        })
+    }
+
+    const auth = React.useMemo(
+        () => ({
+            signIn: async (username, password) => {
+                authenticate(username,password).then( ({data}) => {
+                    getUserDetail(username, data.token).then (res => {                    
+                        setUserState(username,res.data.id, data.token)
+                    })
+                    .catch (e => {
+                        console.log("User Detail ERROR", e);
+                    })
+                })
+                .catch (e => {
+                    console.log("Auth ERROR", e);
+                })
+            },
+            signOut: async () => {
+                dispatch(createAction('REMOVE_USER'));
+            },
+            signUp: async (username, password) => {
+                register(username,password).then( () => {
+                    authenticate(username,password).then ( async  ({data}) => { 
+                        createUser(username,password,data.token).then (res => {
+                            setUserState(username,res.data,data.token)
+                        })
+                        .catch (e => {
+                            console.log("Create User ERROR", e);
+                        })
+                    })
+                    .catch (e => {
+                        console.log("Auth ERROR", e);
+                    })
+                })
+                .catch (e => {
+                    console.log("Register User ERROR", e);
+                })
+            }
+        }),[],
     );
+
     return {auth, state};
 }

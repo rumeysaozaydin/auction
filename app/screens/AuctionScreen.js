@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity, View, SafeAreaView, ScrollView} from 'react-native';
 import CountDown from 'react-native-countdown-component';
 import BidList from '../components/BidList';
 import { FilledButton } from '../components/FilledButton';
@@ -11,6 +11,7 @@ import { BASE_URL } from '../config/index';
 import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
 import  AuctionDetail  from '../components/AuctionDetail';
+//import { ScrollView } from 'react-native-gesture-handler';
 
 const AuctionScreen = ({route,navigation}) => {
     const { auctionId, initIsFavorite, imageUris } = route.params;
@@ -81,7 +82,6 @@ const AuctionScreen = ({route,navigation}) => {
                     }
                     }}
             />
-            
         </View>
     );
 };

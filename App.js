@@ -2,6 +2,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
+import { Text, View, Button, Platform } from 'react-native';
 import 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Ionicons';
 import { AuthContext } from "./app/context/AuthContext";
@@ -13,6 +14,8 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import SignInScreen from "./app/screens/SignInScreen";
 import SignUpScreen from "./app/screens/SignUpScreen";
 import UploadScreen from "./app/screens/UploadScreen";
+import Constants from 'expo-constants';
+import * as Notifications from 'expo-notifications';
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -23,6 +26,13 @@ const UploadStack = createStackNavigator();
 const FavoritesStack = createStackNavigator();
 const RootStack = createStackNavigator();
 
+Notifications.setNotificationHandler({
+  handleNotification: async () => ({
+    shouldShowAlert: true,
+    shouldPlaySound: false,
+    shouldSetBadge: false,
+  }),
+});
 
 const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">

@@ -6,7 +6,7 @@ export function TextButton({title, style, onPress}) {
   const {colors} = useTheme();
   return (
     <TouchableOpacity style={[styles.container, style]} onPress={onPress}>
-      <Text style={[styles.text, {color: colors.primary}]}>
+      <Text style={[styles.text, {color: 'black'}]}>
         {title.toUpperCase()}
       </Text>
     </TouchableOpacity>
@@ -18,10 +18,10 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 20,
+    padding: 5,
   },
   text: {
-    fontWeight: '500',
+    fontWeight: '100',
     fontSize: 14,
   },
 });

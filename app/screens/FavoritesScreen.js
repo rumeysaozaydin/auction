@@ -13,26 +13,29 @@ const FavoritesScreen = ({navigation}) => {
     
     const [list, setList] = React.useState([]);
     const [favorites, setFavorites] = React.useState([]);
-    const [whichList, setWhichList] = React.useState('favorilerim');
+    const [whichList, setWhichList] = React.useState('Favorilerim');
+    const [refreshing, setRefreshing] = React.useState(false);
 
-    const refresh = (listName) => {
-        let endpoint = `/favorites/${user.id}`
-        if(listName == 'ilanlarim'){
-            endpoint = `/auctions/seller/${user.id}`
-        }
-        else if(listName == 'teklifVerdiklerim'){
-            endpoint = `/favorites/${user.id}`
-        }
-        else if(listName == 'kazandiklarim'){
-            endpoint = `/favorites/${user.id}`
-        }
-        useRequest('GET', endpoint, user.token, {setState:setList});
-        useRequest('GET', `/favorites/${user.id}`, user.token, {setState:setFavorites});
+    const refresh = () => {
+      setRefreshing(true);
+      let endpoint = `/favorites/${user.id}`
+      if(whichList == 'Ilanlarım'){
+          endpoint = `/auctions/seller/${user.id}`
+      }
+      else if(whichList == 'Teklif Verdiklerim'){
+          endpoint = `/auctions/bidOwner/${user.id}`
+      }
+      else if(whichList == 'Kazandıklarım'){
+          endpoint = `/auctions/won/${user.id}`
+      }
+      useRequest('GET', endpoint, user.token, {setState:setList});
+      useRequest('GET', `/favorites/${user.id}`, user.token, {setState:setFavorites});
+      setRefreshing(false);
     }
 
     React.useEffect(() => {
       refresh()
-    }, []);
+    }, [whichList]);
 
     const addFav = (auction) => {
       const body = {
@@ -53,37 +56,29 @@ const FavoritesScreen = ({navigation}) => {
     return (
       <View style={styles.container}>
         
-        <TextButton
-          title={'Refresh'}
-          onPress={refresh}
-        />
         <View style={styles.tab}>
           <TextButton style={styles.button}
             title={'Favorilerim'}
             onPress={ () => {
                 setWhichList('Favorilerim');
-                refresh('favorilerim');
             }}
           />
           <TextButton style={styles.button}
             title={'Ilanlarim' }
             onPress={ () => {
                 setWhichList('Ilanlarım');
-                refresh('ilanlarim');
             }}
           />
           <TextButton style={styles.button}
             title={'Teklif Verdiklerim' }
             onPress={ () => {
                 setWhichList('Teklif Verdiklerim');
-                refresh('teklifVerdiklerim');
             }}
           />
           <TextButton style={styles.button}
-            title={'Kazandiklarim' }
+            title={'Kazandıklarım' }
             onPress={ () => {
                 setWhichList('Kazandıklarım');
-                refresh('kazandiklarim');
             }}
           />
         </View>
@@ -103,6 +98,8 @@ const FavoritesScreen = ({navigation}) => {
           favoriteIds={favorites.map(favorites=>favorites.id)}
           addFav={(auction) => addFav(auction)}
           deleteFav={(auction) => deleteFav(auction)}
+          refreshing={refreshing}
+          onRefresh={refresh}
         />
       </View>
     );
@@ -110,17 +107,20 @@ const FavoritesScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    //flex: 1,
+    marginTop: 80,
+    flex: 1,
     flexDirection: "column",
     alignItems: 'center',
   },
   tab: {
     //flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
   },
   button: {
-    flex:1
+    flex: 1,
+    color: 'black',
+    fontSize: 20
   }
 });
 

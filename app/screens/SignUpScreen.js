@@ -37,7 +37,6 @@ const SignUpScreen = (props) => {
                 title={'Sign Up'}
                 style={styles.loginButton}
                 onPress={async () => {
-                    
                     try {
                         await signUp(username, password);
                     } catch (e) {

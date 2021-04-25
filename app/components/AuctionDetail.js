@@ -33,38 +33,53 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris}) => {
 
     return (
         <View>
-            <IconButton 
-                icon={ isFavorite ? 'heart' : 'heart-outline' }  
-                onPress={() => { 
-                    setIsFavorite(!isFavorite)
-                    if(isFavorite){
-                        deleteFav(auction)
-                    }
-                    else{
-                        addFav(auction)
-                    }
-                }}
-            />
-            <SliderBox
-                style={{
-                    width: Math.round(Dimensions.get('window').width) ,
-                    height: Math.round(Dimensions.get('window').width) 
-                }}
-                images={imageUris}
-                //onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, auctionIds:auctionIds});}}
-                // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
-            />
-            <Text>Title: {auction.title}</Text>
-            <Text>Seller: {seller.email}</Text>
-            <Text>Highest Bid: {auction.highestBid}</Text>
-            <Text>Entry Price: {auction.initialPrice}</Text> 
-            <Text>Time Left: {(new Date(auction.expirationTime) - Date.now()) / 1000} saniye </Text>
-            
+            <View>
+                <IconButton 
+                    icon={ isFavorite ? 'heart' : 'heart-outline' }  
+                    onPress={() => { 
+                        setIsFavorite(!isFavorite)
+                        if(isFavorite){
+                            deleteFav(auction)
+                        }
+                        else{
+                            addFav(auction)
+                        }
+                    }}
+                />
+            </View>
+            <View style={styles.container}>
+                
+                <View style={{flex:1}}>
+                    <SliderBox
+                        style={{
+                            width: 200 ,
+                            height: 200,
+                        }}
+                        images={imageUris}
+                        //onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, auctionIds:auctionIds});}}
+                        // currentImageEmitter={index => console.warn(`current pos is: ${index}`)}
+                    />
+                </View>
+                <View style={{flex:1}}>
+                    <Text>Title: {auction.title}</Text>
+                    <Text>Seller: {seller.email}</Text>
+                    <Text>Highest Bid: {auction.highestBid}</Text>
+                    <Text>Entry Price: {auction.initialPrice}</Text> 
+                    <Text>Time Left: {(new Date(auction.expirationTime) - Date.now()) / 1000} saniye </Text>
+                </View>
+                
+                
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        alignItems: 'stretch',
+        justifyContent: 'flex-start'
+    },
 });
 
 export default AuctionDetail;

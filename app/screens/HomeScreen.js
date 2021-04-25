@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground , Dimensions} from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground , Dimensions, RefreshControl, Alert } from 'react-native';
 import AuctionList from "../components/AuctionList";
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
@@ -13,10 +13,14 @@ const HomeScreen = ({navigation}) => {
 
   const [auctionList, setAuctionList] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
 
   const refresh = () => {
-    useRequest('GET','/auctions/all', user.token,{setState:setAuctionList});
+    console.log('refresh')
+    setRefreshing(true);
+    useRequest('GET','/auctions/all?status=ACTIVE', user.token,{setState:setAuctionList});
     useRequest('GET',`/favorites/${user.id}`, user.token,{setState:setFavorites});
+    setRefreshing(false);
   }
 
   const addFav = (auction) => {
@@ -42,35 +46,33 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ImageBackground resizeMode= "cover" source={require('../../assets/bckgrnd.jpg')} style={styles.image}>
-        <TextButton
-                  title={'Refresh' }
-                  onPress={refresh}
-          />
-          <Text
-            style={{
-              alignSelf: 'center',
-              fontSize: 18,
-              fontWeight: 'bold',
-              color: '#333',
-            }}>
-            Auctions
-          </Text>
-          <AuctionList 
-            navigation={navigation} 
-            auctions={auctionList}
-            favoriteIds={favorites.map(favorites=>favorites.id)}
-            addFav={(auction) => addFav(auction)}
-            deleteFav={(auction) => deleteFav(auction)}
-          />
-      </ImageBackground>
+        <Text
+          style={{
+            alignSelf: 'center',
+            fontSize: 18,
+            fontWeight: 'bold',
+            color: '#333',
+          }}>
+          Auctions
+        </Text>
+        <AuctionList 
         
+          refreshing={refreshing}
+          onRefresh={refresh}
+          navigation={navigation} 
+          auctions={auctionList}
+          favoriteIds={favorites.map(favorites=>favorites.id)}
+          addFav={(auction) => addFav(auction)}
+          deleteFav={(auction) => deleteFav(auction)}
+        />
+      </ImageBackground>
     </View>
-      
   );
 };
 
 const styles = StyleSheet.create({
   container: {
+    marginTop: 80,
     flex: 1,
     flexDirection: "column",
     alignItems: 'center',

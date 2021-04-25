@@ -1,15 +1,21 @@
 import React from 'react';
-import { FlatList } from 'react-native';
+import { FlatList, StyleSheet, Text, Dimensions, View } from 'react-native';
 import AuctionCard from "../components/AuctionCard";
 
-const AuctionList = ({navigation , auctions, favoriteIds, addFav, deleteFav}) => {
+const AuctionList = ({navigation , auctions, favoriteIds, addFav, deleteFav, refreshing, onRefresh}) => {
 
     return(
         <FlatList 
+            style={styles.list}
             showsVerticalScrollIndicator={false}
+            numColumns={2}
+            key={2}
             // horizontal={false}
             data={auctions}
             keyExtractor={(auction) => auction.id.toString()}
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            ListEmptyComponent={<View style={styles.empty}></View>}
             renderItem={({item}) => {
                 return (
                     <AuctionCard 
@@ -26,4 +32,15 @@ const AuctionList = ({navigation , auctions, favoriteIds, addFav, deleteFav}) =>
 
 
 }
+
+const styles = StyleSheet.create({
+    list: {
+        width: Math.round(Dimensions.get('window').width),
+    },
+    empty:{
+        width: Math.round(Dimensions.get('window').width),
+        height: Math.round(Dimensions.get('window').width),
+    }
+
+})
 export default AuctionList;
