@@ -38,7 +38,11 @@ public class NotificationServiceImpl implements NotificationService {
     public void sendNotification(Long userID, String title, String message) throws PushClientException, InterruptedException {
 
        String recipient=userService.getById(userID).getPushToken();
-       // System.out.println(recipient);
+
+       if (recipient==null)
+           throw new IllegalArgumentException("Push token not found");
+
+        System.out.println("userıd "+userID+" title "+title+" message "+message);
 
         if (!PushClient.isExponentPushToken(recipient))
             throw new Error("Token:" + recipient + " is not a valid token.");

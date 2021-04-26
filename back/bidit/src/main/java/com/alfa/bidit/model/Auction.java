@@ -1,5 +1,7 @@
 package com.alfa.bidit.model;
 
+import com.alfa.bidit.utils.Constants;
+import com.alfa.bidit.utils.Constants.AuctionCategory;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
 import lombok.*;
 
@@ -47,4 +49,6 @@ public class Auction extends BaseModel {
     @Column(name = "status")
     private AuctionStatus status;
 
+    @Column(name="category")
+    private AuctionCategory auctionCategory;
 }

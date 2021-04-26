@@ -130,4 +130,18 @@ public class AuctionController {
                                                         @RequestHeader("Authorization") String token*/){
         return ResponseEntity.ok(auctionService.getAuctionsByTitleSearch(auctionTitle));
     }
+    @GetMapping("/search/{categories}")
+    public ResponseEntity<List<Auction>> getSelectedAuctionCategory(@RequestParam(value = "categories", required = false) List<Constants.AuctionCategory> categories/*,
+                                                        @RequestHeader("Authorization") String token*/){
+        List<Auction> auctions;
+        if (categories == null){
+            auctions = auctionService.getAll();
+        }
+        else{
+            auctions = auctionService.getAllByCategoryIn(categories);
+        }
+
+        return ResponseEntity.ok(auctions);
+
+        }
 }
