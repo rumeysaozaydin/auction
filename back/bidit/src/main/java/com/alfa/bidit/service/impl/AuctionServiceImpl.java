@@ -6,11 +6,9 @@ import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.AuctionRepository;
-import com.alfa.bidit.service.AuctionManagerService;
-import com.alfa.bidit.service.AuctionService;
-import com.alfa.bidit.service.BidService;
-import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.service.*;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
+import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
@@ -29,13 +27,15 @@ public class AuctionServiceImpl implements AuctionService {
     private final UserService userService;
     private final AuctionManagerService auctionManagerService;
     private final BidService bidService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService,@Lazy BidService bidService) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService, @Lazy BidService bidService, NotificationService notificationService) {
         this.auctionRepository = auctionRepository;
         this.userService = userService;
         this.auctionManagerService = auctionManagerService;
         this.bidService = bidService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -119,24 +119,40 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public void endAuctionById(Long id) {
+    public void endAuctionById(Long id){
         auctionRepository.findAuctionById(id).ifPresent(auction -> {
 
+            boolean sold;
             try {
                 Bid winner = bidService.getWinnerBid(id);
                 auction.setStatus(AuctionStatus.EXPIRED_SOLD);
                 System.out.println("Auction " + auction.getId() + " has been successfully expired. Winner is " + winner);
+                sold = true;
             }
             catch (AuctionWinnerNotExistException ex){
                 auction.setStatus(AuctionStatus.EXPIRED_UNSOLD);
                 System.out.println("Auction " + auction.getId() + " has been successfully expired. No winner! ");
+                sold = false;
             }
 
-            // TODO Probably notify the seller and all the attendees here.
+            try {
+                // Inform the seller
+                informSellerOnExpiration(sold, auction);
+
+                // Inform attendees
+                if(sold) {
+                    informAttendeesOnExpiration(auction);
+                }
+            } catch (Exception e) {
+                System.out.println("ERROR while sending user push notification on auction expiration.");
+                e.printStackTrace();
+            }
 
             auctionRepository.save(auction);
         });
     }
+
+
 
     @Override
     public Double getHighestBid(Long id) {
@@ -156,6 +172,12 @@ public class AuctionServiceImpl implements AuctionService {
         return getById(auctionID).getSellerID();
     }
 
+    @Override
+    public List<Auction> getAuctionsByTitleSearch(String titleName) {
+        //return auctionRepository.findSpecificNameAuction(titleName);
+        return auctionRepository.findByTitleContains(titleName);
+    }
+
     // === PRIVATE METHODS ===
 
     private void setStartingAndExpirationTime(Auction auction, Long duration){
@@ -166,9 +188,42 @@ public class AuctionServiceImpl implements AuctionService {
         auction.setExpirationTime(expirationTime);
     }
 
-    @Override
-    public List<Auction> getAuctionsByTitleSearch(String titleName) {
-        //return auctionRepository.findSpecificNameAuction(titleName);
-        return auctionRepository.findByTitleContains(titleName);
+    private void informSellerOnExpiration(boolean sold, Auction auction) throws PushClientException, InterruptedException {
+        String title = "1 Yeni Müjdeniz Var!"; // TODO Yaratıcı arkadaşları buraya bekliyorum.
+        String description = auction.getTitle() + " başlıklı ilanınız alıcısını buldu! Verilen en yüksek teklif: $" + auction.getHighestBid();
+
+        if(!sold){
+            title = "İlanınızın süresi doldu!";
+            description = auction.getTitle() + " başlıklı ilanınız hiç teklif almadı.";
+        }
+
+        notificationService.sendNotification(auction.getSellerID(), title, description);
     }
+
+    private void informAttendeesOnExpiration(Auction auction) throws PushClientException, InterruptedException {
+        List<Long> losers = bidService
+                                    .getAllByAuctionID(auction.getId())
+                                    .stream()
+                                    .map(Bid::getUserID)
+                                    .distinct()
+                                    .filter(id -> !id.equals(auction.getHighestBidOwner()))
+                                    .collect(Collectors.toList());
+
+        informLosersOnExpiration(auction, losers);
+        informWinnerOnExpiration(auction);
+    }
+
+    private void informLosersOnExpiration(Auction auction, List<Long> losers) throws PushClientException, InterruptedException {
+        String title = "1 Yeni Kötü Haberiniz Var :(";
+        String description = auction.getTitle() + " başlıklı ilan $" + auction.getHighestBid() + " değerindeki başka bir teklifle son buldu.";
+        notificationService.sendNotification(losers, title, description);
+    }
+
+    private void informWinnerOnExpiration(Auction auction) throws PushClientException, InterruptedException {
+        String title = "1 Yeni Müjdeniz Var!";
+        String description = auction.getTitle() + " başlıklı ilanı, verdiğiniz $" + auction.getHighestBid() + " teklifiyle kazandınız. İyi günlerde kullanın :)" ;
+        notificationService.sendNotification(auction.getHighestBidOwner(), title, description);
+    }
+
+
 }
