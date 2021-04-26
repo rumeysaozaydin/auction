@@ -27,6 +27,10 @@ public class ApiPaths {
         public static final String favorite = BASE_PATH + V1_PATH + "/favorites";
     }
 
+    public static final class CommentControllerPath{
+        public static final String comment = BASE_PATH + V1_PATH + "/comments";
+    }
+
     public static final class BidControllerPath{
         public static final String bid = AuctionControllerPath.auction + "/{auction_id}";
     }
