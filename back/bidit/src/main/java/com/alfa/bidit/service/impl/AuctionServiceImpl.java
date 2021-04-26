@@ -10,6 +10,7 @@ import com.alfa.bidit.service.AuctionManagerService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.BidService;
 import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.utils.Constants;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -170,5 +171,18 @@ public class AuctionServiceImpl implements AuctionService {
     public List<Auction> getAuctionsByTitleSearch(String titleName) {
         //return auctionRepository.findSpecificNameAuction(titleName);
         return auctionRepository.findByTitleContains(titleName);
+    }
+
+    @Override
+    public List<Auction> getAllByCategoryIn(List<Constants.AuctionCategory> auctionCategory) {
+
+
+
+      //  return auctionRepository.findAllByAuctionCategoryEquals(auctionCategory);
+
+        return auctionRepository.findAllByAuctionCategoryIn(auctionCategory);
+
+
+
     }
 }
