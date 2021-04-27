@@ -17,11 +17,10 @@ import com.alfa.bidit.utils.Constants.AuctionStatus;
 import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.alfa.bidit.utils.DateUtil.*;
@@ -35,6 +34,8 @@ public class AuctionServiceImpl implements AuctionService {
     private final BidService bidService;
     private final NotificationService notificationService;
 
+    private Map<Constants.AuctionSorting, Sort> sortingMapping;
+
     @Autowired
     public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService, @Lazy BidService bidService, NotificationService notificationService) {
         this.auctionRepository = auctionRepository;
@@ -42,6 +43,8 @@ public class AuctionServiceImpl implements AuctionService {
         this.auctionManagerService = auctionManagerService;
         this.bidService = bidService;
         this.notificationService = notificationService;
+
+        buildSortMapping();
     }
 
     @Override
@@ -67,50 +70,50 @@ public class AuctionServiceImpl implements AuctionService {
     }
 
     @Override
-    public List<Auction> getBySellerId(Long sellerID) {
+    public List<Auction> getBySellerId(Long sellerID, Constants.AuctionSorting sort) {
         if(!userService.existsById(sellerID)) throw new UserNotExistException();
 
-        Optional<List<Auction>> auctions = auctionRepository.findAllBySellerID(sellerID);
+        Optional<List<Auction>> auctions = auctionRepository.findAllBySellerID(sellerID, getSort(sort));
 
         return auctions.orElse(List.of());
     }
 
     @Override
-    public List<Auction> getBySellerIdAndStatus(Long sellerID, List<AuctionStatus> statusList) {
+    public List<Auction> getBySellerIdAndStatus(Long sellerID, List<AuctionStatus> statusList, Constants.AuctionSorting sort) {
         if(!userService.existsById(sellerID)) throw new UserNotExistException();
 
-        return auctionRepository.findAllBySellerIDAndStatusIn(sellerID, statusList);
+        return auctionRepository.findAllBySellerIDAndStatusIn(sellerID, statusList, getSort(sort));
     }
 
     @Override
-    public List<Auction> getAll() {
-        return auctionRepository.findAll();
+    public List<Auction> getAll(Constants.AuctionSorting sort) {
+        return auctionRepository.findAll(getSort(sort));
     }
 
     @Override
-    public List<Auction> getAllByStatus(List<AuctionStatus> statusList) {
-        return auctionRepository.findAllByStatusIn(statusList);
+    public List<Auction> getAllByStatus(List<AuctionStatus> statusList, Constants.AuctionSorting sort) {
+        return auctionRepository.findAllByStatusIn(statusList, getSort(sort));
     }
 
     @Override
-    public List<Auction> getAllByIdIn(List<Long> ids) {
-        return auctionRepository.findAllByIdIn(ids);
+    public List<Auction> getAllByIdIn(List<Long> ids, Constants.AuctionSorting sort) {
+        return auctionRepository.findAllByIdIn(ids, getSort(sort));
     }
 
     @Override
-    public List<Auction> getAllByBidOwner(Long bidOwner) {
+    public List<Auction> getAllByBidOwner(Long bidOwner, Constants.AuctionSorting sort) {
         return getAllByIdIn(
                 bidService
                     .getAllByUserID(bidOwner)
                     .stream()
                     .map(Bid::getAuctionID)
                     .distinct()
-                    .collect(Collectors.toList()));
+                    .collect(Collectors.toList()), sort);
     }
 
     @Override
-    public List<Auction> getAllWonByBidOwner(Long bidOwner) {
-        return auctionRepository.findAllByHighestBidOwnerAndStatusIn(bidOwner, List.of(AuctionStatus.EXPIRED_SOLD));
+    public List<Auction> getAllWonByBidOwner(Long bidOwner, Constants.AuctionSorting sort) {
+        return auctionRepository.findAllByHighestBidOwnerAndStatusIn(bidOwner, List.of(AuctionStatus.EXPIRED_SOLD), getSort(sort));
     }
 
     @Override
@@ -229,8 +232,6 @@ public class AuctionServiceImpl implements AuctionService {
 
         return auctionRepository.findAllByAuctionCategoryIn(auctionCategory);
 
-
-
     }
 
     private void informLosersOnExpiration(Auction auction, List<Long> losers) throws PushClientException, InterruptedException {
@@ -245,5 +246,22 @@ public class AuctionServiceImpl implements AuctionService {
         notificationService.sendNotification(auction.getHighestBidOwner(), title, description);
     }
 
+    private void buildSortMapping(){
+        sortingMapping = new HashMap<>();
+        sortingMapping.put(Constants.AuctionSorting.UNSORTED, Sort.unsorted());
+        sortingMapping.put(Constants.AuctionSorting.BY_EXPIRATION_TIME_ASC, Sort.by(Sort.Direction.ASC, "expirationTime"));
+        sortingMapping.put(Constants.AuctionSorting.BY_EXPIRATION_TIME_DESC, Sort.by(Sort.Direction.DESC, "expirationTime"));
+        sortingMapping.put(Constants.AuctionSorting.BY_STARTING_TIME_ASC, Sort.by(Sort.Direction.ASC, "startingTime"));
+        sortingMapping.put(Constants.AuctionSorting.BY_STARTING_TIME_DESC, Sort.by(Sort.Direction.DESC, "startingTime"));
+        sortingMapping.put(Constants.AuctionSorting.BY_PRICE_ASC, Sort.by(Sort.Direction.ASC, "highestBid"));
+        sortingMapping.put(Constants.AuctionSorting.BY_PRICE_DESC, Sort.by(Sort.Direction.DESC, "highestBid"));
+    }
+
+    private Sort getSort(Constants.AuctionSorting sortingKey){
+        if(sortingKey == null)
+            return sortingMapping.get(Constants.AuctionSorting.UNSORTED);
+
+        return this.sortingMapping.get(sortingKey);
+    }
 
 }

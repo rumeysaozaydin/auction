@@ -4,6 +4,7 @@ package com.alfa.bidit.service;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.utils.Constants;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -18,19 +19,19 @@ public interface AuctionService{
 
     Auction getById(Long id);
 
-    List<Auction> getBySellerId(Long sellerID);
+    List<Auction> getBySellerId(Long sellerID, Constants.AuctionSorting sort);
 
-    List<Auction> getBySellerIdAndStatus(Long sellerID, List<Constants.AuctionStatus> statusList);
+    List<Auction> getBySellerIdAndStatus(Long sellerID, List<Constants.AuctionStatus> statusList, Constants.AuctionSorting sort);
 
-    List<Auction> getAll();
+    List<Auction> getAll(Constants.AuctionSorting sort);
 
-    List<Auction> getAllByStatus(List<Constants.AuctionStatus> statusList);
+    List<Auction> getAllByStatus(List<Constants.AuctionStatus> statusList, Constants.AuctionSorting sort);
 
-    List<Auction> getAllByIdIn(List<Long> ids);
+    List<Auction> getAllByIdIn(List<Long> ids, Constants.AuctionSorting sort);
 
-    List<Auction> getAllByBidOwner(Long bidOwner);
+    List<Auction> getAllByBidOwner(Long bidOwner, Constants.AuctionSorting sort);
 
-    List<Auction> getAllWonByBidOwner(Long bidOwner);
+    List<Auction> getAllWonByBidOwner(Long bidOwner, Constants.AuctionSorting sort);
 
     List<Auction> getAllByCategoryIn(List<Constants.AuctionCategory> auctionCategory);
 
