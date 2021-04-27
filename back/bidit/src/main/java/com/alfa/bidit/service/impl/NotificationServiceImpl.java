@@ -39,8 +39,13 @@ public class NotificationServiceImpl implements NotificationService {
 
        String recipient=userService.getById(userID).getPushToken();
 
+       // -SERDAR
+       // Burada hata kaldırdığımız zaman front ende 406 gidiyor ve error tetikleniyor. Kullanıcı bid veremediğini sanıyor.
+       // Onun yerine şimdilik burda hata kaldırmayalım. Mümkünse sonra 200 OK döneriz.
+
        if (recipient==null)
-           throw new IllegalArgumentException("Bildirim Servisi Aktif Degil! ");
+           return;
+           //throw new IllegalArgumentException("Bildirim Servisi Aktif Degil! ");
 
         System.out.println("userıd "+userID+" title "+title+" message "+message);
 
