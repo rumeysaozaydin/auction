@@ -33,7 +33,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public Long comment(Comment comment) {
+    public Comment comment(Comment comment) {
         if(comment.getAuthorID().equals(comment.getSellerID()))
             throw new CommentAuthorNotValidException();
 
@@ -49,6 +49,6 @@ public class CommentServiceImpl implements CommentService {
         userService.rateUser(comment.getSellerID(), comment.getRating());
 
         commentRepository.save(comment);
-        return comment.getId();
+        return comment;
     }
 }

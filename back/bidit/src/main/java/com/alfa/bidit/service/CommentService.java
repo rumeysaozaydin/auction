@@ -9,5 +9,5 @@ import java.util.List;
 public interface CommentService {
     List<Comment> getAllBySellerIDOrderByTimeDesc(Long sellerID);
 
-    Long comment(Comment comment);
+    Comment comment(Comment comment);
 }
