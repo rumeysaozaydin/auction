@@ -33,10 +33,10 @@ public class CommentController {
     }
 
     @PostMapping()
-    public ResponseEntity<Long> comment(@RequestHeader("Authorization") String token, @RequestBody Comment comment){
+    public ResponseEntity<Comment> comment(@RequestHeader("Authorization") String token, @RequestBody Comment comment){
         try {
-            Long commentID = commentService.comment(comment);
-            return ResponseEntity.ok(commentID);
+            Comment newComment = commentService.comment(comment);
+            return ResponseEntity.ok(newComment);
         } catch (UserNotExistException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         } catch (MultiCommentException | CommentAuthorNotValidException | InvalidRatingException ex){
