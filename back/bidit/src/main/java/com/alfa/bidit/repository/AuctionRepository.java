@@ -2,6 +2,7 @@ package com.alfa.bidit.repository;
 
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.utils.Constants;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,15 +20,15 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
 
     Optional<Auction> findAuctionById(Long id);
 
-    Optional<List<Auction>> findAllBySellerID(Long sellerID);
+    Optional<List<Auction>> findAllBySellerID(Long sellerID, Sort sort);
 
-    List<Auction> findAllByIdIn(List<Long> ids);
+    List<Auction> findAllByIdIn(List<Long> ids, Sort sort);
 
-    List<Auction> findAllBySellerIDAndStatusIn(Long sellerID, List<Constants.AuctionStatus> statusList);
+    List<Auction> findAllBySellerIDAndStatusIn(Long sellerID, List<Constants.AuctionStatus> statusList, Sort sort);
 
-    List<Auction> findAllByHighestBidOwnerAndStatusIn(Long highestBidOwner, List<Constants.AuctionStatus> statusList);
+    List<Auction> findAllByHighestBidOwnerAndStatusIn(Long highestBidOwner, List<Constants.AuctionStatus> statusList, Sort sort);
 
-    List<Auction> findAllByStatusIn(List<Constants.AuctionStatus> statusList);
+    List<Auction> findAllByStatusIn(List<Constants.AuctionStatus> statusList, Sort sort);
 
     List<Auction> findByTitleContains(String titleContains);
 
@@ -37,7 +38,7 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
 
 
 
-    List<Auction> findByTitle(String title);
+    List<Auction> findByTitle(String title, Sort sort);
 
 
     @Transactional

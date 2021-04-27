@@ -22,33 +22,33 @@ public class Auction extends BaseModel {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(name = "starting_time", nullable = false)
+    @Column(nullable = false)
     private Date startingTime;
 
-    @Column(name = "expiration_time", nullable = false)
+    @Column(nullable = false)
     private Date expirationTime;
 
-    @Column(name = "title", length = 100, nullable = false)
+    @Column(length = 100, nullable = false)
     private String title;
 
-    @Column(name = "description", length = 400)
+    @Column(length = 400)
     private String description;
 
-    @Column(name = "seller_id", nullable = false)
+    @Column(nullable = false)
     private Long sellerID;
 
-    @Column(name = "initial_price", nullable = false)
+    @Column(nullable = false)
     private Double initialPrice;
 
-    @Column(name = "highest_bid")
+    @Column
     private Double highestBid;
 
-    @Column(name = "highest_bid_owner")
+    @Column
     private Long highestBidOwner;
 
-    @Column(name = "status")
+    @Column
     private AuctionStatus status;
 
-    @Column(name="category")
+    @Column
     private AuctionCategory auctionCategory;
 }

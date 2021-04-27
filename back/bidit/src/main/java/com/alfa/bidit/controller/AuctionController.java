@@ -8,6 +8,7 @@ import com.alfa.bidit.service.AuctionImageService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.utils.ApiPaths;
+import com.alfa.bidit.utils.Constants.AuctionSorting;
 import com.alfa.bidit.utils.Constants;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
+
+
 
 import java.util.List;
 
@@ -47,7 +50,8 @@ public class AuctionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Auction> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token) {
+    public ResponseEntity<Auction> getById(@PathVariable("id") Long id,
+                                           @RequestHeader("Authorization") String token) {
         try {
             Auction auction = auctionService.getById(id);
             return ResponseEntity.ok(auction);
@@ -60,14 +64,15 @@ public class AuctionController {
     @GetMapping("/seller/{seller_id}")
     public ResponseEntity<List<Auction>> getBySellerId(@PathVariable("seller_id") Long sellerID,
                                                        @RequestHeader("Authorization") String token,
-                                                       @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList){
+                                                       @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList,
+                                                       @RequestParam(value = "sort", required = false) AuctionSorting sort){
         try {
             List<Auction> auctions;
             if (statusList == null){
-                auctions = auctionService.getBySellerId(sellerID);
+                auctions = auctionService.getBySellerId(sellerID, sort);
             }
             else{
-                auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList);
+                auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList, sort);
             }
             return ResponseEntity.ok(auctions);
         }
@@ -78,40 +83,47 @@ public class AuctionController {
 
     @GetMapping("/bidOwner/{bid_owner}")
     public ResponseEntity<List<Auction>> getByBidOwner(@PathVariable("bid_owner") Long bidOwner,
-                                                       @RequestHeader("Authorization") String token){
-        return ResponseEntity.ok(auctionService.getAllByBidOwner(bidOwner));
+                                                       @RequestHeader("Authorization") String token,
+                                                       @RequestParam(value = "sort", required = false) AuctionSorting sort){
+        return ResponseEntity.ok(auctionService.getAllByBidOwner(bidOwner, sort));
     }
 
     @GetMapping("/won/{bid_owner}")
     public ResponseEntity<List<Auction>> getAuctionsWon(@PathVariable("bid_owner") Long bidOwner,
-                                                       @RequestHeader("Authorization") String token){
-        return ResponseEntity.ok(auctionService.getAllWonByBidOwner(bidOwner));
+                                                       @RequestHeader("Authorization") String token,
+                                                        @RequestParam(value = "sort", required = false) AuctionSorting sort){
+        return ResponseEntity.ok(auctionService.getAllWonByBidOwner(bidOwner, sort));
     }
 
     @PostMapping("/list")
-    public ResponseEntity<List<Auction>> getAllByIdIn(@RequestHeader("Authorization") String token, @RequestBody List<Long> idList){
+    public ResponseEntity<List<Auction>> getAllByIdIn(@RequestHeader("Authorization") String token,
+                                                      @RequestBody List<Long> idList,
+                                                      @RequestParam(value = "sort", required = false) AuctionSorting sort){
         System.out.println("[GET AUCTIONS BY LIST REQUEST]:  " + idList);
-        List<Auction> auctions = auctionService.getAllByIdIn(idList);
+        List<Auction> auctions = auctionService.getAllByIdIn(idList, sort);
         return ResponseEntity.ok(auctions);
     }
 
     @GetMapping("/all")
     public ResponseEntity<List<Auction>> getAll(@RequestHeader("Authorization") String token,
-                                                @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList){
-        System.out.println("[GET ALL AUCTIONS REQUEST]:  ");
+                                                @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList,
+                                                @RequestParam(value = "sort", required = false) AuctionSorting sort){
+        System.out.println("[GET ALL AUCTIONS REQUEST]:  " + statusList + " | " + sort);
         List<Auction> auctions;
+
         if (statusList == null){
-            auctions = auctionService.getAll();
+            auctions = auctionService.getAll(sort);
         }
         else{
-            auctions = auctionService.getAllByStatus(statusList);
+            auctions = auctionService.getAllByStatus(statusList, sort);
         }
 
         return ResponseEntity.ok(auctions);
     }
 
     @GetMapping("/{id}/images")
-    public ResponseEntity<List<Long>> getImageIDs(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
+    public ResponseEntity<List<Long>> getImageIDs(@PathVariable("id") Long id,
+                                                  @RequestHeader("Authorization") String token){
         System.out.println("[GET IMAGE ID REQUEST]:  " + id);
         List<Long> images = auctionImageService.getImageIDsByAuctionID(id);
         return ResponseEntity.ok(images);
@@ -135,7 +147,7 @@ public class AuctionController {
                                                         @RequestHeader("Authorization") String token*/){
         List<Auction> auctions;
         if (categories == null){
-            auctions = auctionService.getAll();
+            auctions = auctionService.getAll(AuctionSorting.UNSORTED);
         }
         else{
             auctions = auctionService.getAllByCategoryIn(categories);
