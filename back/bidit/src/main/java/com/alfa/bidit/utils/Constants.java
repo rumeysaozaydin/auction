@@ -10,4 +10,8 @@ public class Constants {
 
     }
 
+    public interface Rating{
+        Long MIN_RATE = 0L;
+        Long MAX_RATE = 5L;
+    }
 }

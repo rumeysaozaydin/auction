@@ -39,5 +39,10 @@ public class User extends BaseModel {
     @Column(name="pushToken")
     private String pushToken;
 
+    @Column(name="rating_count")
+    private Long ratingCount;
+
+    @Column(name="rating_sum")
+    private Long ratingSum;
 
 }

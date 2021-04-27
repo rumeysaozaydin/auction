@@ -63,13 +63,13 @@ public class BidServiceImpl implements BidService {
 
         auctionService.getSellerIDByAuctionID(bid.getAuctionID());
 
+        bidRepository.save(bid);
+
         // Inform the seller
         informSeller(bid);
 
         // Inform the attendees
         informAttendees(bid);
-
-        bidRepository.save(bid);
 
         return bid.getId();
     }
