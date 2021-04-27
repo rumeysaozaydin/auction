@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        if(existsByEmail(user.getEmail())) throw new UserAlreadyExistsException(user);
+        if(existsByEmail(user.getEmail()))  throw new IllegalArgumentException("User Already registered");
 
         user.setImageID(-1L); // TODO USER PP EKLE
 
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         Optional<User> optionalStudent = userRepository.findUserByEmail(email);
 
-        if(optionalStudent.isEmpty()) throw new UserNotExistException("with email: " + email);
+        if(optionalStudent.isEmpty()) throw new IllegalArgumentException("User not Found with this email: " + email);
 
         return optionalStudent.get();
     }
