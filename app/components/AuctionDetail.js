@@ -66,18 +66,17 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => 
                     />
                 </View>
                 <View style={{flex:1}}>
-                    <Text>Title: {auction.title}</Text>
+                    <Text>Ürün: {auction.title}</Text>
                     <View style={{flexDirection:'row'}}> 
-                        <Text>Seller: </Text>
+                        <Text>Satıcı: </Text>
                         <TextButton
                             title={seller.email == null ? ' ' : seller.email}
                             onPress={() => {navigation.navigate("User", {seller: seller})}}
                         />
                     </View>
                     
-                    <Text>Highest Bid: {auction.highestBid}</Text>
-                    <Text>Entry Price: {auction.initialPrice}</Text> 
-                    <Text>Time Left: {(new Date(auction.expirationTime) - Date.now()) / 1000} saniye </Text>
+                    <Text>En Yüksek Teklif: {auction.highestBid}</Text>
+                    <Text>Başlangıç Fiyatı: {auction.initialPrice}</Text> 
                 </View>
                 
                 

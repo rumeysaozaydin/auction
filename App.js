@@ -76,7 +76,7 @@ const TabsScreen = () => (
     name="Home" 
     component={HomeStackScreen}
     options={{
-      tabBarLabel: 'Home',
+      tabBarLabel: 'Anasayfa',
       tabBarColor: '#009387',
       tabBarIcon: ({ color }) => (
         <Icon name="ios-home" color={color} size={26} />
@@ -87,7 +87,7 @@ const TabsScreen = () => (
     name="Upload"
     component={UploadStackScreen}
     options={{
-      tabBarLabel: 'Upload',
+      tabBarLabel: 'Ürün Yükleme',
       tabBarColor: '#1f65ff',
       tabBarIcon: ({ color }) => (
         <Icon name="add-outline" color={color} size={26} />
@@ -98,7 +98,7 @@ const TabsScreen = () => (
     name="Favorites" 
     component={FavoritesStackScreen}
     options={{
-      tabBarLabel: 'Favorites',
+      tabBarLabel: 'Listelerim',
       tabBarColor: '#d02860',
       tabBarIcon: ({ color }) => (
         <Icon name="heart-outline" color={color} size={26} />
@@ -109,7 +109,7 @@ const TabsScreen = () => (
     name="Profile" 
     component={ProfileStackScreen}
     options={{
-      tabBarLabel: 'Profile',
+      tabBarLabel: 'Profil',
       tabBarColor: '#694fad',
       tabBarIcon: ({ color }) => (
         <Icon name="ios-person" color={color} size={26} />

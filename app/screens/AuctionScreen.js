@@ -77,7 +77,7 @@ const AuctionScreen = ({route,navigation}) => {
             if((user.id  && data.sellerID && user.id == data.sellerID)){
                 return (<View>
                     <FilledButton
-                        title={'End Auction'}
+                        title={'Açık Artırmayı Sonlandır'}
                         onPress={ () => {
                             console.log("end auc")
                         }}
@@ -87,13 +87,13 @@ const AuctionScreen = ({route,navigation}) => {
             else{
                 return (<View>
                     <Input 
-                        placeholder={'New Bid'}
+                        placeholder={'Yeni Teklif'}
                         value={newBid}
                         onChangeText={setNewBid}
                     />
                     
                     <FilledButton
-                        title={'Bid'}
+                        title={'Teklif Ver'}
                         onPress={async () => {
                             
                                 axios.post(`${BASE_URL}/auctions/${auctionId}/bid`, {
@@ -128,7 +128,7 @@ const AuctionScreen = ({route,navigation}) => {
     return (
         <View style={{paddingTop:20}}>
             <TextButton
-                title={'Refresh'}
+                title={'Yenile'}
                 onPress={refresh}
             />
            
@@ -139,20 +139,19 @@ const AuctionScreen = ({route,navigation}) => {
                 imageUris={imageUris}
                 navigation={navigation}
             />
-            <Text>Recent Bids: </Text>
+            <Text>Teklifler: </Text>
             
             <BidList
                 navigation={navigation}
                 data={allBids}
             />
-            <Text> Here </Text>
 
             {dur > 0 ? <UrgeWithPleasureComponent/> : <View></View> } 
             
             {(user.id  && data.highestBidOwner && data.status == 'EXPIRED_SOLD' && user.id == data.highestBidOwner) ?
                 (<View>
                     <FilledButton
-                        title={'Pay'}
+                        title={'Öde'}
                         onPress={ () => {
                             navigation.navigate("Pay", {auction: data})
                         }}

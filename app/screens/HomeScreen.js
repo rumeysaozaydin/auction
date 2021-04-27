@@ -5,6 +5,15 @@ import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
 
+//         UNSORTED,
+//         BY_EXPIRATION_TIME_ASC,
+//         BY_EXPIRATION_TIME_DESC,
+//         BY_STARTING_TIME_ASC,
+//         BY_STARTING_TIME_DESC,
+//         BY_PRICE_ASC,
+//         BY_PRICE_DESC
+
+
 const HomeScreen = ({navigation}) => {
   const {
     auth: {signOut},
@@ -50,15 +59,6 @@ const HomeScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ImageBackground resizeMode= "cover" source={require('../../assets/bckgrnd.jpg')} style={styles.image}>
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontSize: 18,
-            fontWeight: 'bold',
-            color: '#333',
-          }}>
-          Auctions
-        </Text>
         <AuctionList 
         
           refreshing={refreshing}

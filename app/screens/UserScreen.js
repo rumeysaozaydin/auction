@@ -92,6 +92,7 @@ const styles = StyleSheet.create({
     container: {
       marginTop: 50,
       flexDirection: "column",
+      marginBottom: 20
     },
     input: {
         marginVertical: 8,
