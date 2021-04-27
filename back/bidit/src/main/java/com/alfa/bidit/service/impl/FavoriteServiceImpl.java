@@ -11,6 +11,7 @@ import com.alfa.bidit.repository.UserRepository;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.FavoriteService;
 import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +75,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public List<Auction> getFavoriteAuctionsByUserID(Long id) {
         List<Long> favoriteIDs = getAllByUserID(id).stream().map(Favorite::getAuctionID).collect(Collectors.toList());
-        return auctionService.getAllByIdIn(favoriteIDs);
+        return auctionService.getAllByIdIn(favoriteIDs, Constants.AuctionSorting.UNSORTED);
     }
 
 }
