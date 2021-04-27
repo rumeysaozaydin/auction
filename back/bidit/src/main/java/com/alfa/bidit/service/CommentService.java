@@ -7,5 +7,7 @@ import java.util.List;
 
 @Service
 public interface CommentService {
-    List<Comment> getAllBySellerID(Long sellerID);
+    List<Comment> getAllBySellerIDOrderByTimeDesc(Long sellerID);
+
+    Long comment(Comment comment);
 }

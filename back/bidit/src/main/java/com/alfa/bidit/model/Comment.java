@@ -4,6 +4,7 @@ package com.alfa.bidit.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "comments")
@@ -30,5 +31,8 @@ public class Comment {
     private String content;
 
     @Column(name = "rating", nullable = false) // 1-5
-    private Integer rating;
+    private Long rating;
+
+    @Column(name = "posting_time", nullable = false)
+    private Date postingTime;
 }

@@ -8,5 +8,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    List<Comment> findAllBySellerID(Long sellerID);
+    List<Comment> findAllBySellerIDOrderByPostingTimeDesc(Long sellerID);
+
+    boolean existsCommentByAuthorIDAndSellerID(Long authorID, Long sellerID);
 }

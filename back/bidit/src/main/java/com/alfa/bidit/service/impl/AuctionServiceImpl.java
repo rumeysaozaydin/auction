@@ -135,6 +135,8 @@ public class AuctionServiceImpl implements AuctionService {
                 sold = false;
             }
 
+            auctionRepository.save(auction);
+
             try {
                 // Inform the seller
                 informSellerOnExpiration(sold, auction);
@@ -147,8 +149,6 @@ public class AuctionServiceImpl implements AuctionService {
                 System.out.println("ERROR while sending user push notification on auction expiration.");
                 e.printStackTrace();
             }
-
-            auctionRepository.save(auction);
         });
     }
 

@@ -28,4 +28,6 @@ public interface UserService{
     Long uploadProfilePhoto(Long id, MultipartFile multipartFile) throws IOException;
 
     Resource getProfilePhoto(Long id);
+
+    void rateUser(Long id, Long rating);
 }

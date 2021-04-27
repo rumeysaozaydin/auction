@@ -2,11 +2,9 @@ package com.alfa.bidit.controller;
 
 
 import com.alfa.bidit.exception.*;
-import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.model.Comment;
 import com.alfa.bidit.service.CommentService;
 import com.alfa.bidit.utils.ApiPaths;
-import io.github.jav.exposerversdk.PushClientException;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,17 +28,19 @@ public class CommentController {
 
     @GetMapping("/seller/{seller_id}")
     public ResponseEntity<List<Comment>> getAllBySellerID(@RequestHeader("Authorization") String token, @PathVariable("seller_id") Long sellerID){
-        List<Comment> comments = commentService.getAllBySellerID(sellerID);
+        List<Comment> comments = commentService.getAllBySellerIDOrderByTimeDesc(sellerID);
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping("")
+    @PostMapping()
     public ResponseEntity<Long> comment(@RequestHeader("Authorization") String token, @RequestBody Comment comment){
         try {
-            Long commentID = 0L;
+            Long commentID = commentService.comment(comment);
             return ResponseEntity.ok(commentID);
         } catch (UserNotExistException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        } catch (MultiCommentException | CommentAuthorNotValidException | InvalidRatingException ex){
+            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
         }
     }
 }

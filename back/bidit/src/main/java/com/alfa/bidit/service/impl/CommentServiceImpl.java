@@ -1,10 +1,17 @@
 package com.alfa.bidit.service.impl;
 
+import com.alfa.bidit.exception.CommentAuthorNotValidException;
+import com.alfa.bidit.exception.MultiCommentException;
+import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Comment;
 import com.alfa.bidit.repository.CommentRepository;
 import com.alfa.bidit.service.CommentService;
+import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+
 
 import java.util.List;
 
@@ -12,14 +19,36 @@ import java.util.List;
 public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
+    private final UserService userService;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService) {
         this.commentRepository = commentRepository;
+        this.userService = userService;
     }
 
     @Override
-    public List<Comment> getAllBySellerID(Long sellerID) {
-        return commentRepository.findAllBySellerID(sellerID);
+    public List<Comment> getAllBySellerIDOrderByTimeDesc(Long sellerID) {
+        return commentRepository.findAllBySellerIDOrderByPostingTimeDesc(sellerID);
+    }
+
+    @Override
+    public Long comment(Comment comment) {
+        if(comment.getAuthorID().equals(comment.getSellerID()))
+            throw new CommentAuthorNotValidException();
+
+        if(!userService.existsById(comment.getAuthorID())
+            || !userService.existsById(comment.getSellerID()))
+            throw new UserNotExistException();
+
+        if(commentRepository.existsCommentByAuthorIDAndSellerID(comment.getAuthorID(), comment.getSellerID()))
+            throw new MultiCommentException();
+
+        comment.setPostingTime(DateUtil.now());
+
+        userService.rateUser(comment.getSellerID(), comment.getRating());
+
+        commentRepository.save(comment);
+        return comment.getId();
     }
 }
