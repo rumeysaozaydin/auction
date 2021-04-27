@@ -119,7 +119,7 @@ export function useAuth() {
     const auth = React.useMemo(
         () => ({
             signIn: async (username, password) => {
-                let res = '';
+                let res = 'Başarılı';
                 await authenticate(username,password).then( ({data}) => {
                     getUserDetail(username, data.token).then (res => {                    
                         setUserState(username,res.data.id, data.token)
@@ -140,7 +140,7 @@ export function useAuth() {
                 dispatch(createAction('REMOVE_USER'));
             },
             signUp: async (username, password) => {
-                let res = '';
+                let res = 'Başarılı';
 
                 await register(username,password).then( () => {
                     authenticate(username,password).then ( async  ({data}) => { 
@@ -151,17 +151,17 @@ export function useAuth() {
                         .catch (e => {
                             console.log("Create User ERROR", e);
                             console.log("")
-                            res="Kullanıcı adı kullanılıyor"
+                            res="Kullanıcı adı başka bir kullanıcı tarafından kullanılıyor"
                         })
                     })
                     .catch (e => {
                         console.log("Auth ERROR", e);
-                        res="Kullanıcı adı kullanılıyor"
+                        res="Kullanıcı adı başka bir kullanıcı tarafından kullanılıyor"
                     })
                 })
                 .catch (e => {
                     console.log("Register User ERROR", e);
-                    res="Kullanıcı adı kullanılıyor"
+                    res="Kullanıcı adı başka bir kullanıcı tarafından kullanılıyor"
                 })
                 return res
             }

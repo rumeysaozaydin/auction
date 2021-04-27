@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 import {BASE_URL} from '../config/index';
 
@@ -48,7 +49,11 @@ export function useRequest(reqType, endpoint, token, {body, setState,callback}={
         callback(data);
     })
     .catch(function (error) {
-        console.log(error)
+        console.log(error.message)
+        showMessage({
+            message:error.response.data.message,
+            type: "danger",
+        });
         console.log('ERROR' , reqType, endpoint, error.message);
     });
     

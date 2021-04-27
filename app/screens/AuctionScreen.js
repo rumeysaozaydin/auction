@@ -15,6 +15,7 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import react from 'react';
 import NotificationPopup from 'react-native-push-notification-popup';
 import {showPopUp, customPopup} from "../components/PopUp";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 //import { ScrollView } from 'react-native-gesture-handler';
 
@@ -94,20 +95,29 @@ const AuctionScreen = ({route,navigation}) => {
                     <FilledButton
                         title={'Bid'}
                         onPress={async () => {
-                            try {
-                                await axios.post(`${BASE_URL}/auctions/${auctionId}/bid`, {
+                            
+                                axios.post(`${BASE_URL}/auctions/${auctionId}/bid`, {
                                     auctionID: auctionId,
                                     userID: user.id,
                                     price: parseInt(newBid)
+                                },  
+                                {
+                                    headers: {
+                                        Authorization: `bearer ${user.token}`
+                                    },
                                 }).then(() => {
                                     refresh()
+                                    showMessage({
+                                        message: 'Başarıyla teklif verdiniz',
+                                        type: "success",
+                                    });
+                                }).catch((e) => {
+                                    console.log('Error in bid', e)
+                                    showMessage({
+                                        message:e.response.data.message,
+                                        type: "danger",
+                                    });
                                 })
-    
-                            } catch (e) {
-                                console.log(e)
-                            }
-                            console.log('kamil')
-                            //showPopUp('#FFE9AF',  'My Title', 'My very detailed description', 5000)
                         }}
                     />
                 </View>)
@@ -130,31 +140,27 @@ const AuctionScreen = ({route,navigation}) => {
                 navigation={navigation}
             />
             <Text>Recent Bids: </Text>
+            
             <BidList
                 navigation={navigation}
                 data={allBids}
             />
+            <Text> Here </Text>
 
-            {dur > 0 ? <UrgeWithPleasureComponent/> : <View></View> }
+            {dur > 0 ? <UrgeWithPleasureComponent/> : <View></View> } 
             
             {(user.id  && data.highestBidOwner && data.status == 'EXPIRED_SOLD' && user.id == data.highestBidOwner) ?
-            (<View>
-                <FilledButton
-                    title={'Pay'}
-                    onPress={ () => {
-                        navigation.navigate("Pay", {auction: data})
-                    }}
-                />
-            </View>):
-            (<View></View>)}
+                (<View>
+                    <FilledButton
+                        title={'Pay'}
+                        onPress={ () => {
+                            navigation.navigate("Pay", {auction: data})
+                        }}
+                    />
+                </View>):
+                (<View></View>)
+            }
             {renderActiveData()}
-            
-            {/* <NotificationPopup
-                ref={ref => this.popup = ref}
-                renderPopupContent={customPopup}
-                shouldChildHandleResponderStart={false}/*only make it true if you put a button inside pop-up
-                shouldChildHandleResponderMove={false}/*only make it true if you put a button inside pop-up
-            /> */}
         </View>
     );
 };

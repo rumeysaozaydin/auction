@@ -9,6 +9,8 @@ import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import NotificationPopup from 'react-native-push-notification-popup';
 import {showPopUp, customPopup} from "../components/PopUp";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
 
 const SignUpScreen = (props) => {
 
@@ -40,7 +42,12 @@ const SignUpScreen = (props) => {
                 onPress={async () => {
                     try {
                         let res = await signUp(username, password);
-                        //showPopUp('#FFE9AF',  'My Title', res, 5000)
+                        if(res != 'Başarılı'){
+                            showMessage({
+                                message: res,
+                                type: "danger",
+                            });
+                        }
                     } catch (e) {
                         console.log(e)
                     }

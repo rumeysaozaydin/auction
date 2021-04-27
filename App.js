@@ -18,6 +18,7 @@ import UserScreen from "./app/screens/UserScreen";
 import PayScreen from "./app/screens/PayScreen";
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
+import FlashMessage from "react-native-flash-message";
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -151,9 +152,10 @@ export default function App() {
 
   return (
     <AuthContext.Provider value={ {auth , user: state.user} }>
-    <NavigationContainer>
-    <RootStackScreen state={state}></RootStackScreen>
-    </NavigationContainer>
+      <NavigationContainer>
+        <RootStackScreen state={state}></RootStackScreen>
+      </NavigationContainer>
+      <FlashMessage position="top" floating={true} />
     </AuthContext.Provider>
   );
 }

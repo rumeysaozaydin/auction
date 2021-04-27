@@ -7,8 +7,7 @@ import { Input } from '../components/Input';
 import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
-import NotificationPopup from 'react-native-push-notification-popup';
-import {showPopUp, customPopup} from "../components/PopUp";
+import { showMessage, hideMessage } from "react-native-flash-message";
 
 const SignInScreen = (props) => {
     
@@ -41,10 +40,13 @@ const SignInScreen = (props) => {
                 style={styles.loginButton}
                 onPress={async () => {
                     try {
-                      let res = await signIn(username, password);
-                      console.log( res)
-                    //   showPopUp('#FFE9AF',  'My Title', res, 5000)
-                      
+                        let res = await signIn(username, password);
+                        if(res != 'Başarılı'){
+                            showMessage({
+                                message: res,
+                                type: "danger",
+                            });
+                        }
                     } catch (e) {
                         console.log(e)
                     }
@@ -56,13 +58,6 @@ const SignInScreen = (props) => {
                     props.navigation.navigate("SignUp")
                 }}
             />
-            {/* {username == '' || password == '' ? <Text></Text> : */}
-            {/* <NotificationPopup */}
-                {/* ref={ref => this.popup = ref} */}
-                {/* renderPopupContent={customPopup} */}
-                {/* shouldChildHandleResponderStart={false/*only make it true if you put a button inside pop-up*/} 
-                {/* shouldChildHandleResponderMove={false/*only make it true if you put a button inside pop-up*/}  
-            {/* />} */}
         </ScreenContainer>
     );
 }

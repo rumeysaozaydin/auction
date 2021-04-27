@@ -71,7 +71,7 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => 
                         <Text>Seller: </Text>
                         <TextButton
                             title={seller.email == null ? ' ' : seller.email}
-                            onPress={() => {navigation.navigate("User", {user: seller})}}
+                            onPress={() => {navigation.navigate("User", {seller: seller})}}
                         />
                     </View>
                     
