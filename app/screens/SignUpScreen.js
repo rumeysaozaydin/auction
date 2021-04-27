@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
 import { FilledButton } from '../components/FilledButton';
 import { Heading } from '../components/Heading';
@@ -7,13 +7,14 @@ import { Input } from '../components/Input';
 import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
+import NotificationPopup from 'react-native-push-notification-popup';
+import {showPopUp, customPopup} from "../components/PopUp";
 
 const SignUpScreen = (props) => {
 
-    const [username, setUsername] = React.useState('ali');
-    const [password, setPassword] = React.useState('ali');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
-
 
     const {auth : {signUp}} = React.useContext(AuthContext);
 
@@ -38,7 +39,8 @@ const SignUpScreen = (props) => {
                 style={styles.loginButton}
                 onPress={async () => {
                     try {
-                        await signUp(username, password);
+                        let res = await signUp(username, password);
+                        //showPopUp('#FFE9AF',  'My Title', res, 5000)
                     } catch (e) {
                         console.log(e)
                     }
@@ -50,7 +52,13 @@ const SignUpScreen = (props) => {
                     props.navigation.navigate("SignIn")
                 }}
             />
-            <Loading loading={loading}/>
+            {/* {username == '' || password == '' ? <Text></Text> :
+            <NotificationPopup
+                ref={ref => this.popup = ref}
+                renderPopupContent={customPopup}
+                shouldChildHandleResponderStart={false/*only make it true if you put a button inside pop-up
+                shouldChildHandleResponderMove={false/*only make it true if you put a button inside pop-up
+            />} */}
             
         </ScreenContainer>
     );

@@ -10,6 +10,10 @@ const FavoritesScreen = ({navigation}) => {
     const {
       user,
     } = React.useContext(AuthContext);
+
+    if(!user){
+      return <View></View>
+    }
     
     const [list, setList] = React.useState([]);
     const [favorites, setFavorites] = React.useState([]);

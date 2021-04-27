@@ -72,6 +72,10 @@ function ProfileScreen({navigation}) {
     user,
   } = React.useContext(AuthContext);
 
+  if(!user){
+    return <View></View>
+  }
+
   return (
     <View style={styles.container}>
 

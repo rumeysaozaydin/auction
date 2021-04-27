@@ -6,12 +6,17 @@ import { useRequest } from '../hooks/useRequest';
 import { AuthContext } from '../context/AuthContext';
 import { BASE_URL } from '../config/index';
 import { SliderBox } from "react-native-image-slider-box";
+import { TextButton } from './TextButton'
 
-const AuctionDetail = ({auction,seller,initIsFavorite,imageUris}) => {
-
+const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => {
+    
     const {
         user,
     } = React.useContext(AuthContext);
+
+    if(!user){
+        return <View></View>
+    }
 
     const [isFavorite, setIsFavorite] = React.useState();
 
@@ -62,7 +67,14 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris}) => {
                 </View>
                 <View style={{flex:1}}>
                     <Text>Title: {auction.title}</Text>
-                    <Text>Seller: {seller.email}</Text>
+                    <View style={{flexDirection:'row'}}> 
+                        <Text>Seller: </Text>
+                        <TextButton
+                            title={seller.email == null ? ' ' : seller.email}
+                            onPress={() => {navigation.navigate("User", {user: seller})}}
+                        />
+                    </View>
+                    
                     <Text>Highest Bid: {auction.highestBid}</Text>
                     <Text>Entry Price: {auction.initialPrice}</Text> 
                     <Text>Time Left: {(new Date(auction.expirationTime) - Date.now()) / 1000} saniye </Text>

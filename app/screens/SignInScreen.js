@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text, Image } from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
 import { FilledButton } from '../components/FilledButton';
 import { Heading } from '../components/Heading';
@@ -7,36 +7,20 @@ import { Input } from '../components/Input';
 import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
+import NotificationPopup from 'react-native-push-notification-popup';
+import {showPopUp, customPopup} from "../components/PopUp";
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState('serdar1');
+    const [username, setUsername] = React.useState('rumeysa');
     const [password, setPassword] = React.useState('ali');
     const [loading, setLoading] = React.useState(false);
     
 
     const { auth : {signIn}} = React.useContext(AuthContext);
-    // const signIn = async () => {
 
-    //     var myHeaders = new Headers();
-    //     myHeaders.append("Content-Type", "application/json");
-
-    //     var raw = JSON.stringify({"username":username,"password":password});
-
-    //     var requestOptions = {
-    //     method: 'POST',
-    //     headers: myHeaders,
-    //     body: raw,
-    //     redirect: 'follow'
-    //     };
-
-    //     fetch("http://localhost:8080/authenticate", requestOptions)
-    //     .then(response => response.json())
-    //     .then(result =>  props.route.params.updateToken(result.token) ) 
-    //     .catch(error =>  alert( JSON.stringify( 'errorAQQQ' ) )) ;
-    // }
-
-    return (
+    return (  
+        
         <ScreenContainer style={styles.container}>
             <Heading style={styles.title}>Sign In</Heading>
             <Input
@@ -57,11 +41,14 @@ const SignInScreen = (props) => {
                 style={styles.loginButton}
                 onPress={async () => {
                     try {
-                      await signIn(username, password);
+                      let res = await signIn(username, password);
+                      console.log( res)
+                    //   showPopUp('#FFE9AF',  'My Title', res, 5000)
+                      
                     } catch (e) {
                         console.log(e)
                     }
-                  }}
+                }}
             />
             <TextButton
                 title={'You Don\'t Have an account? Create one'}
@@ -69,7 +56,13 @@ const SignInScreen = (props) => {
                     props.navigation.navigate("SignUp")
                 }}
             />
-            <Loading loading={loading}/>
+            {/* {username == '' || password == '' ? <Text></Text> : */}
+            {/* <NotificationPopup */}
+                {/* ref={ref => this.popup = ref} */}
+                {/* renderPopupContent={customPopup} */}
+                {/* shouldChildHandleResponderStart={false/*only make it true if you put a button inside pop-up*/} 
+                {/* shouldChildHandleResponderMove={false/*only make it true if you put a button inside pop-up*/}  
+            {/* />} */}
         </ScreenContainer>
     );
 }

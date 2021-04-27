@@ -14,6 +14,8 @@ import ProfileScreen from "./app/screens/ProfileScreen";
 import SignInScreen from "./app/screens/SignInScreen";
 import SignUpScreen from "./app/screens/SignUpScreen";
 import UploadScreen from "./app/screens/UploadScreen";
+import UserScreen from "./app/screens/UserScreen";
+import PayScreen from "./app/screens/PayScreen";
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 
@@ -38,6 +40,8 @@ const HomeStackScreen = () => (
   <HomeStack.Navigator headerMode="none">
     <HomeStack.Screen name="Home" component={HomeScreen}/>
     <HomeStack.Screen name="Auction" component={AuctionScreen}/>
+    <HomeStack.Screen name="User" component={UserScreen}/>
+    <HomeStack.Screen name="Pay" component={PayScreen}/>
   </HomeStack.Navigator>
 )
 
@@ -50,6 +54,9 @@ const ProfileStackScreen = () => (
 const UploadStackScreen = () => (
   <UploadStack.Navigator headerMode="none">
     <UploadStack.Screen name="Upload" component={UploadScreen}/>
+    <UploadStack.Screen name="Auction" component={AuctionScreen}/>
+    <UploadStack.Screen name="User" component={UserScreen}/>
+    <UploadStack.Screen name="Pay" component={PayScreen}/>
   </UploadStack.Navigator>
 )
 
@@ -57,6 +64,8 @@ const FavoritesStackScreen = () => (
   <FavoritesStack.Navigator headerMode="none">
     <FavoritesStack.Screen name="Favorites" component={FavoritesScreen}/>
     <FavoritesStack.Screen name="Auction" component={AuctionScreen}/>
+    <FavoritesStack.Screen name="User" component={UserScreen}/>
+    <FavoritesStack.Screen name="Pay" component={PayScreen}/>
   </FavoritesStack.Navigator>
 )
 

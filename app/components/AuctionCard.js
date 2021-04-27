@@ -17,6 +17,10 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
         user,
     } = React.useContext(AuthContext);
 
+    if(!user){
+        return <View></View>
+    }
+
     const [isFavorite, setIsFavorite] = React.useState();
     const [imageIds, setImageIds] = React.useState([]);
 

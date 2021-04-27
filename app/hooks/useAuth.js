@@ -119,38 +119,51 @@ export function useAuth() {
     const auth = React.useMemo(
         () => ({
             signIn: async (username, password) => {
-                authenticate(username,password).then( ({data}) => {
+                let res = '';
+                await authenticate(username,password).then( ({data}) => {
                     getUserDetail(username, data.token).then (res => {                    
                         setUserState(username,res.data.id, data.token)
+                        res='Başarılı'
                     })
                     .catch (e => {
+                        res='Böyle bir kullanıcı bulunmuyor!'
                         console.log("User Detail ERROR", e);
                     })
                 })
                 .catch (e => {
+                    res='Email veya şifre hatalı!'
                     console.log("Auth ERROR", e);
                 })
+                return res
             },
             signOut: async () => {
                 dispatch(createAction('REMOVE_USER'));
             },
             signUp: async (username, password) => {
-                register(username,password).then( () => {
+                let res = '';
+
+                await register(username,password).then( () => {
                     authenticate(username,password).then ( async  ({data}) => { 
                         createUser(username,password,data.token).then (res => {
                             setUserState(username,res.data,data.token)
+                            res='Başarılı'
                         })
                         .catch (e => {
                             console.log("Create User ERROR", e);
+                            console.log("")
+                            res="Kullanıcı adı kullanılıyor"
                         })
                     })
                     .catch (e => {
                         console.log("Auth ERROR", e);
+                        res="Kullanıcı adı kullanılıyor"
                     })
                 })
                 .catch (e => {
                     console.log("Register User ERROR", e);
+                    res="Kullanıcı adı kullanılıyor"
                 })
+                return res
             }
         }),[],
     );

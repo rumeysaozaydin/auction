@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image, ImageBackground , Dimensions, RefreshControl, Alert } from 'react-native';
+import { StyleSheet, Text, View, Image, ImageBackground , Dimensions, RefreshControl, Alert, Button } from 'react-native';
 import AuctionList from "../components/AuctionList";
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
@@ -10,6 +10,10 @@ const HomeScreen = ({navigation}) => {
     auth: {signOut},
     user,
   } = React.useContext(AuthContext);
+
+  if(!user){
+    return <View></View>
+  }
 
   const [auctionList, setAuctionList] = React.useState([]);
   const [favorites, setFavorites] = React.useState([]);
