@@ -32,6 +32,8 @@ public interface AuctionService{
 
     List<Auction> getAllWonByBidOwner(Long bidOwner);
 
+    List<Auction> getAllByCategoryIn(List<Constants.AuctionCategory> auctionCategory);
+
     Boolean isActiveById(Long auctionID);
 
     Boolean existsById(Long auctionID);

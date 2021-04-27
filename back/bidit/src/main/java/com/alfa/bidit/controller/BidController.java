@@ -28,7 +28,7 @@ public class BidController {
     }
 
     @GetMapping("/bids")
-    public ResponseEntity<List<Bid>> getAllBids(@PathVariable("auction_id") Long auctionID){
+    public ResponseEntity<List<Bid>> getAllBids(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID){
         try {
             List<Bid> bids = bidService.getAllByAuctionID(auctionID);
             return ResponseEntity.ok(bids);
@@ -38,7 +38,7 @@ public class BidController {
     }
 
     @GetMapping("/winner")
-    public ResponseEntity<Bid> getWinnerBid(@PathVariable("auction_id") Long auctionID){
+    public ResponseEntity<Bid> getWinnerBid(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID){
         try {
             Bid bid = bidService.getWinnerBid(auctionID);
             return ResponseEntity.ok(bid);
@@ -48,7 +48,7 @@ public class BidController {
     }
 
     @PostMapping("/bid")
-    public ResponseEntity<Long> bid(@PathVariable("auction_id") Long auctionID, @RequestBody Bid bid) throws PushClientException, InterruptedException {
+    public ResponseEntity<Long> bid(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID, @RequestBody Bid bid) throws PushClientException, InterruptedException {
         try {
             Long bidID = bidService.bid(bid);
             return ResponseEntity.ok(bidID);

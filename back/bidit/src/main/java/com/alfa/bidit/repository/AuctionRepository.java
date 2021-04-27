@@ -14,6 +14,7 @@ import java.util.Optional;
 
 @Repository
 public interface AuctionRepository extends JpaRepository<Auction, Long>{
+
     Boolean existsAuctionById(Long id);
 
     Optional<Auction> findAuctionById(Long id);
@@ -29,6 +30,12 @@ public interface AuctionRepository extends JpaRepository<Auction, Long>{
     List<Auction> findAllByStatusIn(List<Constants.AuctionStatus> statusList);
 
     List<Auction> findByTitleContains(String titleContains);
+
+    //List<Auction> findAllByAuctionCategoryEquals(Constants.AuctionCategory auctionCategory);
+
+    List<Auction> findAllByAuctionCategoryIn(List<Constants.AuctionCategory> auctionCategory);
+
+
 
     List<Auction> findByTitle(String title);
 

@@ -6,6 +6,12 @@ import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.AuctionRepository;
+
+import com.alfa.bidit.service.AuctionManagerService;
+import com.alfa.bidit.service.AuctionService;
+import com.alfa.bidit.service.BidService;
+import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.utils.Constants;
 import com.alfa.bidit.service.*;
 import com.alfa.bidit.utils.Constants.AuctionStatus;
 import io.github.jav.exposerversdk.PushClientException;
@@ -135,6 +141,8 @@ public class AuctionServiceImpl implements AuctionService {
                 sold = false;
             }
 
+            auctionRepository.save(auction);
+
             try {
                 // Inform the seller
                 informSellerOnExpiration(sold, auction);
@@ -147,8 +155,6 @@ public class AuctionServiceImpl implements AuctionService {
                 System.out.println("ERROR while sending user push notification on auction expiration.");
                 e.printStackTrace();
             }
-
-            auctionRepository.save(auction);
         });
     }
 
@@ -211,6 +217,20 @@ public class AuctionServiceImpl implements AuctionService {
 
         informLosersOnExpiration(auction, losers);
         informWinnerOnExpiration(auction);
+    }
+
+
+    @Override
+    public List<Auction> getAllByCategoryIn(List<Constants.AuctionCategory> auctionCategory) {
+
+
+
+      //  return auctionRepository.findAllByAuctionCategoryEquals(auctionCategory);
+
+        return auctionRepository.findAllByAuctionCategoryIn(auctionCategory);
+
+
+
     }
 
     private void informLosersOnExpiration(Auction auction, List<Long> losers) throws PushClientException, InterruptedException {

@@ -1,12 +1,14 @@
 package com.alfa.bidit.service.impl;
 
 
+import com.alfa.bidit.exception.InvalidRatingException;
 import com.alfa.bidit.exception.UserAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
@@ -22,28 +24,23 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ImageService imageService;
 
-   // private final ModelMapper modelMapper; // yeni
 
-    @Autowired // modelmapper tarafı ek
-    public UserServiceImpl(UserRepository userRepository,/*,ModelMapper modelMapper*/ImageService imageService) {
+    @Autowired
+    public UserServiceImpl(UserRepository userRepository,ImageService imageService) {
 
         this.userRepository = userRepository;
-       // this.modelMapper=modelMapper;
         this.imageService = imageService;
     }
 
     public Long register(User user) {
         if(existsByEmail(user.getEmail())) throw new UserAlreadyExistsException(user);
 
-        user.setImageID(-1L);
+        user.setImageID(-1L); // TODO USER PP EKLE
 
-     //   if (user.getEmail()==null || user.getPassword()==null) throw  new UserEmptyAreaException();
+        user.setRatingCount(0L);
+        user.setRatingSum(0L);
 
-     //   User u = modelMapper.map(user, User.class);
-        userRepository.save(user); //yerine alt satır ve modelmapper için üst geldi
-    //    userRepository.save(u);
-       // user.setId(u.getId());
-
+        userRepository.save(user);
         return user.getId();
     }
 
@@ -92,5 +89,20 @@ public class UserServiceImpl implements UserService {
         User user = getById(id);
         Long imageId = user.getImageID();
         return imageService.getById(imageId);
+    }
+
+    @Override
+    public void rateUser(Long id, Long rating) {
+        validateRating(rating);
+        User user = getById(id);
+        user.setRatingSum(user.getRatingSum() + rating);
+        user.setRatingCount(user.getRatingCount() + 1);
+        userRepository.save(user);
+    }
+
+    private void validateRating(Long rating){
+        if(rating < Constants.Rating.MIN_RATE ||
+            rating > Constants.Rating.MAX_RATE)
+            throw new InvalidRatingException();
     }
 }
