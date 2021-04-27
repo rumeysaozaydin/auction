@@ -40,7 +40,7 @@ public class NotificationServiceImpl implements NotificationService {
        String recipient=userService.getById(userID).getPushToken();
 
        if (recipient==null)
-           throw new IllegalArgumentException("Push token not found");
+           throw new IllegalArgumentException("Bildirim Servisi Aktif Degil! ");
 
         System.out.println("userıd "+userID+" title "+title+" message "+message);
 

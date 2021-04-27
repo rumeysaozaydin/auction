@@ -55,7 +55,7 @@ public class BidServiceImpl implements BidService {
 
         if (auctionService.getSellerIDByAuctionID(bid.getAuctionID()).equals(bid.getUserID())) throw new BidOwnerNotValidException();
 
-        if (!isBidPriceValid(bid)) throw new IllegalArgumentException("Bid is not enough to buy me a car :( ");
+        if (!isBidPriceValid(bid)) throw new IllegalArgumentException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
 
         if(!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException();
 

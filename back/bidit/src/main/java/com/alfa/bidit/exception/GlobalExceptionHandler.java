@@ -19,7 +19,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler{
     public ResponseEntity<?> exHandler(Exception exception, WebRequest webRequest) {
         GlobalExceptionResponse response = new GlobalExceptionResponse(exception.getMessage(),new Date());
         ResponseEntity<?> entity = new ResponseEntity<>(response, HttpStatus.NOT_ACCEPTABLE);
-        logger.error("Exception:  " +exception.getMessage());
+        logger.error("Hata :  " +exception.getMessage());
 
         return entity;
     }

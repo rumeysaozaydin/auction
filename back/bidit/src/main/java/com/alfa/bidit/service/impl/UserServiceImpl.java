@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        if(existsByEmail(user.getEmail()))  throw new IllegalArgumentException("User Already registered");
+        if(existsByEmail(user.getEmail()))  throw new IllegalArgumentException("Bu Email kullaniliyor. ");
 
         user.setImageID(-1L); // TODO USER PP EKLE
 
