@@ -93,26 +93,26 @@ const UploadScreen = ({navigation}) => {
             <Heading style={styles.title}>Upload</Heading>
             <Input
                 style={styles.input}
-                placeholder={'Title'}
+                placeholder={'Ürün İsmi'}
                 value={title}
                 onChangeText={setTitle}
             />
             <Input
                 style={styles.input}
-                placeholder={'Description'}
+                placeholder={'Açıklama'}
                 value={description}
                 onChangeText={setDescription}
             />
             <Input
                 style={styles.input}
-                placeholder={'InitialPrice'}
+                placeholder={'Başlangıç Fiyatı'}
                 value={initialPrice}
                 onChangeText={setInitialPrice}
             />
             
             <Input
                 style={styles.input}
-                placeholder={'duration'}
+                placeholder={'Süre'}
                 value={duration}
                 onChangeText={setDuration}
             />
@@ -133,7 +133,7 @@ const UploadScreen = ({navigation}) => {
             />
             <Button style={{marginTop: 120}}title="Pick an image from camera roll" onPress={pickImage} />
             <FilledButton
-                title={'Upload Auction'}
+                title={'Yükle'}
                 style={styles.loginButton}
                 onPress={async () => {
                     const newAuction =

@@ -2,12 +2,12 @@ import React from 'react';
 import { FlatList, StyleSheet, Text, Dimensions, View } from 'react-native';
 import CommentCard from "../components/CommentCard";
 
-const CommentList = ({navigation , data, refreshing, onRefresh}) => {
-
+const CommentList = ({navigation , comments, refreshing, onRefresh}) => {
+    console.log(comments)
     return(
         <FlatList 
             style={styles.list}
-            data={data}
+            data={comments}
             keyExtractor={(data) => data.id.toString()}
             refreshing={refreshing}
             ListEmptyComponent={<View style={styles.empty}></View>}

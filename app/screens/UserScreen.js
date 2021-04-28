@@ -20,7 +20,7 @@ function UserScreen({navigation, route}) {
     const [comments, setComments] = React.useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [comment, setComment] = React.useState('');
-    const [rating, setRating] = React.useState(0);
+    const [rating, setRating] = React.useState(3);
 
     const { seller } = route.params;
 
@@ -42,7 +42,7 @@ function UserScreen({navigation, route}) {
 
     const reset = () => {
         setComment("");
-        setRating(0);
+        setRating(3);
     }
 
     return (
@@ -50,7 +50,7 @@ function UserScreen({navigation, route}) {
             <Text>Welcome to User Screen of {seller.email}</Text>
             <Input
                 style={styles.input}
-                placeholder={'Comment'}
+                placeholder={'Yorum Yaz'}
                 value={comment}
                 onChangeText={setComment}
             />
@@ -61,7 +61,7 @@ function UserScreen({navigation, route}) {
                 style={{ paddingVertical: 10 }}
             />
             <FilledButton
-                title={'Upload Comment'}
+                title={'Yorum Yap'}
                 style={styles.loginButton}
                 onPress={async () => {
                     const newComment =
@@ -69,19 +69,27 @@ function UserScreen({navigation, route}) {
                         "authorID": user.id,
                         "authorName": user.username,
                         "content": comment,
-                        "postingTime": "2021-04-27T20:14:59.328Z",
                         "rating": rating,
                         "sellerID": seller.id
                     }
-                    await useRequest('POST', `/comments`, user.token, {body:newComment} );
-                    reset()
+                    useRequest('POST', `/comments`, user.token, {body:newComment, callback: (data) => {
+                        showMessage({
+                            message: 'Başarıyla yorum yapıldı',
+                            type: "success",
+                        });
+                        const newComments = [ data,...comments]
+                        setComments(newComments)
+                        reset()
+                    }     
+                    });
+                    
                 }}
             />
             <CommentList 
                 refreshing={refreshing}
                 onRefresh={refresh}
                 navigation={navigation} 
-                data={comments}
+                comments={comments}
                 seller={seller}
             />
         </View>
@@ -90,9 +98,10 @@ function UserScreen({navigation, route}) {
 
 const styles = StyleSheet.create({
     container: {
-      marginTop: 50,
+      marginTop: 60,
       flexDirection: "column",
-      marginBottom: 20
+      marginBottom: 80,
+      flex: 1,
     },
     input: {
         marginVertical: 8,

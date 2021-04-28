@@ -50,10 +50,10 @@ export function useRequest(reqType, endpoint, token, {body, setState,callback}={
     })
     .catch(function (error) {
         console.log(error.message)
-        showMessage({
-            message:error.response.data.message,
-            type: "danger",
-        });
+        // showMessage({
+        //     message:error.response.data.message,
+        //     type: "danger",
+        // });
         console.log('ERROR' , reqType, endpoint, error.message);
     });
     
