@@ -24,4 +24,6 @@ public interface ImageService {
 
     List<Long> getAll();
 
+    void deleteById(Long id);
+
 }

@@ -58,5 +58,10 @@ public class ImageServiceImpl implements ImageService {
         return imageRepository.findAll().stream().map(image -> { return image.getId();}).collect(Collectors.toList());
     }
 
+    @Override
+    public void deleteById(Long id) {
+        imageRepository.deleteById(id);
+    }
+
 
 }
