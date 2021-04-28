@@ -36,8 +36,6 @@ public class UserServiceImpl implements UserService {
     public Long register(User user) {
         if(existsByEmail(user.getEmail()))  throw new IllegalArgumentException("Bu Email kullaniliyor. ");
 
-        user.setImageID(-1L); // TODO USER PP EKLE
-
         user.setRatingCount(0L);
         user.setRatingSum(0L);
 
@@ -77,10 +75,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Long uploadProfilePhoto(Long id, MultipartFile multipartFile) throws IOException {
-        // TODO Do not forget to delete the previous photo.
         User user = getById(id);
+
+        if(user.getImageID() != null){
+            imageService.deleteById(user.getImageID());
+            user.setImageID(null);
+        }
+
         Long imageID = imageService.addImage(multipartFile);
         user.setImageID(imageID);
+
         userRepository.save(user);
         return imageID;
     }
@@ -88,7 +92,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public Resource getProfilePhoto(Long id) {
         User user = getById(id);
+
         Long imageId = user.getImageID();
+
+        if(imageId == null) return null;
+
         return imageService.getById(imageId);
     }
 
