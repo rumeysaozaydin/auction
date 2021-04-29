@@ -112,12 +112,6 @@ public class NotificationServiceImpl implements NotificationService {
             System.out.println("GENERAL ERROR IN PUSH NOTIFICATION " + e.getMessage());
         }
 
-
-
-/*
-        System.out.println(
-                "Recieved " + receipts.size() + " receipts:");
-
     }
 
 
@@ -131,9 +125,6 @@ public class NotificationServiceImpl implements NotificationService {
 
         notificationRepository.save(notification);
     }
-
- */
-
 
     @Override
     public void saveInAppNotification(List<Long> receiverIDs, String title, String content) {
