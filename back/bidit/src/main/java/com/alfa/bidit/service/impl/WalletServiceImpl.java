@@ -64,7 +64,7 @@ public class WalletServiceImpl implements WalletService {
     public Wallet createWallet(Long userID) {
         Wallet wallet = new Wallet();
         wallet.setUserID(userID);
-        wallet.setBalance(0.0);
+        wallet.setBalance(1000.0);
         walletRepository.save(wallet);
         return wallet;
     }
