@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         Optional<User> optionalStudent = userRepository.findUserByEmail(email);
 
-        if(optionalStudent.isEmpty()) throw new IllegalArgumentException("User not Found with this email: " + email);
+        if(optionalStudent.isEmpty()) throw new IllegalArgumentException("Bu mail ile bir kulanıcı bulunamadı : " + email);
 
         return optionalStudent.get();
     }

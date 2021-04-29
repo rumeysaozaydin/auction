@@ -123,6 +123,8 @@ public class NotificationServiceImpl implements NotificationService {
             e.printStackTrace();
         }
 
+
+/*
         System.out.println(
                 "Recieved " + receipts.size() + " receipts:");
 
@@ -134,6 +136,8 @@ public class NotificationServiceImpl implements NotificationService {
                             reciept.getStatus());
 
         }
+
+ */
 
 
 
