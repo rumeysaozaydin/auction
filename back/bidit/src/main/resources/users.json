@@ -7,7 +7,10 @@
     "lastname" : "lastiname1",
     "contactNumber" : "contactoNumberto1",
     "imagePath" : "imagePathi1",
-    "password": "passwordi11"
+    "password": "passwordi11",
+    "pushToken": "string",
+    "ratingCount": 0,
+    "ratingSum": 0
   },
   {
     "_class": "com.alfa.bidit.model.User",
@@ -16,7 +19,10 @@
     "lastname" : "lastiname2",
     "contactNumber" : "conta2ctoNumberto1",
     "imagePath" : "imagePath2i1",
-    "password": "passwordi112"
+    "password": "passwordi112",
+    "pushToken": "string",
+    "ratingCount": 0,
+    "ratingSum": 0
   },
   {
     "_class": "com.alfa.bidit.model.User",
@@ -25,8 +31,10 @@
     "lastname" : "efe",
     "contactNumber" : "efe",
     "imagePath" : "efe",
-    "pushToken" : "ExponentPushToken[pymoyhG9rYlFIUUFrZP5tf]",
-    "password": "efe"
+    "password": "efe",
+    "pushToken": "string",
+    "ratingCount": 0,
+    "ratingSum": 0
   },{
   "_class": "com.alfa.bidit.model.User",
   "email" : "firstEmail32",
@@ -34,7 +42,10 @@
   "lastname" : "lastiname32",
   "contactNumber" : "conta2ctoNumber3to1",
   "imagePath" : "imagePat3h2i1",
-  "password": "passwordi1312"
+  "password": "passwordi1312",
+  "pushToken": "string",
+  "ratingCount": 0,
+  "ratingSum": 0
 },{
   "_class": "com.alfa.bidit.model.User",
   "email" : "firstEmail42",
@@ -42,6 +53,9 @@
   "lastname" : "lastiname42",
   "contactNumber" : "conta2ctoNumbert4o1",
   "imagePath" : "imagePath24i1",
-  "password": "passwordi1142"
+  "password": "passwordi1142",
+  "pushToken": "string",
+  "ratingCount": 0,
+  "ratingSum": 0
 }
 ]
