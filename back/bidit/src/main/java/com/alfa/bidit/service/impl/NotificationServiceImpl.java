@@ -114,6 +114,7 @@ public class NotificationServiceImpl implements NotificationService {
 
     }
 
+
     @Override
     public void saveInAppNotification(Long receiverID, String title, String content) {
         Notification notification = new Notification();
@@ -129,6 +130,7 @@ public class NotificationServiceImpl implements NotificationService {
     public void saveInAppNotification(List<Long> receiverIDs, String title, String content) {
         for(Long receiverID : receiverIDs) saveInAppNotification(receiverID, title, content);
     }
+
 
     @Override
     public List<Notification> getAllByReceiverID(Long receiverID) {

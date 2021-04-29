@@ -137,12 +137,15 @@ public class AuctionController {
         return ResponseEntity.ok(imageID);
     }
 
-    @GetMapping("/search/{auctionTitle}")
+    @GetMapping("/searchAuction/{auctionTitle}")
     public ResponseEntity<List<Auction>> searchAuctions(@PathVariable("auctionTitle") String auctionTitle/*,
                                                         @RequestHeader("Authorization") String token*/){
         return ResponseEntity.ok(auctionService.getAuctionsByTitleSearch(auctionTitle));
     }
-    @GetMapping("/search/{categories}")
+
+
+
+    @GetMapping("/searchCategory/{categories}")
     public ResponseEntity<List<Auction>> getSelectedAuctionCategory(@RequestParam(value = "categories", required = false) List<Constants.AuctionCategory> categories/*,
                                                         @RequestHeader("Authorization") String token*/){
         List<Auction> auctions;
