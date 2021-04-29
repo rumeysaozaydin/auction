@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, TouchableHighlight} from 'react-native';
 // import { TouchableOpacity } from 'react-native-gesture-handler';
 import { IconButton } from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 import { useRequest } from '../hooks/useRequest';
 import { SliderBox } from "react-native-image-slider-box";
+//import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
 const marginSize = 20
@@ -32,45 +33,25 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
         useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImageIds})
     },[]);
 
-  
-
     return (
         <View style={styles.container} >
-            
-            {/* <TouchableOpacity 
-
-                onPress={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}> */}
-                    <SliderBox 
-                        style={{
-                            width: imageWidth,
-                            height: imageWidth,
-                            borderRadius: 10,
-                        }}
-                        circleLoop={true}
-                        images={imageIds.length == 0 ? ([require('../../assets/noimage.jpg')]) : imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())}
-                        
-                        onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}
-                    />
-
-                    {/* <Image 
-                        style={{
-                            width: imageWidth,
-                            height: imageWidth,
-                            borderRadius: 10,
-                            position: 'absolute'
-
-                        }}
-                        source={require('../../assets/shade.png')}
-                        
-                    />                 */}
-            {/* </TouchableOpacity> */}
-            
+            <SliderBox 
+                style={{
+                    width: imageWidth,
+                    height: imageWidth,
+                    borderRadius: 10,
+                }}
+                circleLoop={true}
+                images={imageIds.length == 0 ? ([require('../../assets/noimage.jpg')]) : imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())}
+                
+                onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}
+            />                    
             <Text style={styles.title}>{data.title}</Text>
             <Text style={styles.price}>£{data.highestBid}</Text>                        
             <IconButton 
                 style={styles.favorite} 
-                color='#CF2020'
-                size={30}
+                color='#6B9080'
+                size={20}
                 icon={ isFavorite ? 'heart' : 'heart-outline' } 
                 title="BidIt" 
                 onPress={() => { 
@@ -119,7 +100,11 @@ const styles = StyleSheet.create({
     {
         position: 'absolute',
         right: 0,
-        top: 0
+        top: 0,
+        backgroundColor: '#CCE3DE' /* '#FF6347' */,
+        borderRadius: 50,
+        width: 30,
+        height: 30,
     },
     remainingTime: 
     {
