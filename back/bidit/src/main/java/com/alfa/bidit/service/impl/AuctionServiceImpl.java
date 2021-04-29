@@ -1,6 +1,5 @@
 package com.alfa.bidit.service.impl;
 
-import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.AuctionWinnerNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
@@ -33,16 +32,18 @@ public class AuctionServiceImpl implements AuctionService {
     private final AuctionManagerService auctionManagerService;
     private final BidService bidService;
     private final NotificationService notificationService;
+    private final TransactionService transactionService;
 
     private Map<Constants.AuctionSorting, Sort> sortingMapping;
 
     @Autowired
-    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService, @Lazy BidService bidService, NotificationService notificationService) {
+    public AuctionServiceImpl(AuctionRepository auctionRepository, UserService userService, AuctionManagerService auctionManagerService, @Lazy BidService bidService, NotificationService notificationService, TransactionService transactionService) {
         this.auctionRepository = auctionRepository;
         this.userService = userService;
         this.auctionManagerService = auctionManagerService;
         this.bidService = bidService;
         this.notificationService = notificationService;
+        this.transactionService = transactionService;
 
         buildSortMapping();
     }
@@ -135,6 +136,7 @@ public class AuctionServiceImpl implements AuctionService {
             try {
                 Bid winner = bidService.getWinnerBid(id);
                 auction.setStatus(AuctionStatus.EXPIRED_SOLD);
+                createTransferTransaction(auction.getSellerID(), winner.getUserID(), auction);
                 System.out.println("Auction " + auction.getId() + " has been successfully expired. Winner is " + winner);
                 sold = true;
             }
@@ -208,6 +210,19 @@ public class AuctionServiceImpl implements AuctionService {
 
 
         return  auctionList;
+    }
+
+    @Override
+    public void createTransferTransaction(Long sellerID, Long buyerID, Auction auction) {
+        Long transactionID = transactionService.createTransfer(buyerID, sellerID, auction.getHighestBid());
+        auction.setTransactionID(transactionID);
+        auctionRepository.save(auction);
+    }
+
+    @Override
+    public void approveDelivery(Long id) {
+        Auction auction = getById(id);
+        transactionService.approveTransaction(auction.getTransactionID());
     }
 
     // === PRIVATE METHODS ===

@@ -48,4 +48,8 @@ public interface AuctionService{
     Long getSellerIDByAuctionID(Long auctionID);
 
     List<Auction> getAuctionsByTitleSearch(String titleName);
+
+    void createTransferTransaction(Long sellerID, Long buyerID, Auction auction);
+
+    void approveDelivery(Long id);
 }

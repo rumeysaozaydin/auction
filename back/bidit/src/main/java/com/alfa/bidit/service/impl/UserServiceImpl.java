@@ -2,16 +2,15 @@ package com.alfa.bidit.service.impl;
 
 
 import com.alfa.bidit.exception.InvalidRatingException;
-import com.alfa.bidit.exception.UserAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.service.WalletService;
 import com.alfa.bidit.utils.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,13 +23,15 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ImageService imageService;
+    private final WalletService walletService;
 
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository,ImageService imageService) {
+    public UserServiceImpl(UserRepository userRepository, ImageService imageService, WalletService walletService) {
 
         this.userRepository = userRepository;
         this.imageService = imageService;
+        this.walletService = walletService;
     }
 
     public Long register(User user) {
@@ -40,6 +41,9 @@ public class UserServiceImpl implements UserService {
         user.setRatingSum(0L);
 
         userRepository.save(user);
+
+        walletService.createWallet(user.getId());
+
         return user.getId();
     }
 

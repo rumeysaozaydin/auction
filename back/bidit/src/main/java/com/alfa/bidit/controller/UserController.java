@@ -4,17 +4,16 @@ import com.alfa.bidit.exception.UserAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.service.WalletService;
 import com.alfa.bidit.utils.ApiPaths;
 import io.github.jav.exposerversdk.PushClientException;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -26,11 +25,12 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-
+    private final WalletService walletService;
 
     @Autowired
-    public UserController(UserService userService){
+    public UserController(UserService userService, WalletService walletService){
         this.userService=userService;
+        this.walletService = walletService;
     }
 
 
@@ -65,6 +65,12 @@ public class UserController {
         catch (UserNotExistException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
         }
+    }
+
+    @GetMapping("/{id}/balance")
+    public ResponseEntity<Double> getBalanceByID(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
+        return ResponseEntity.ok(walletService.getByUserID(id).getBalance());
+
     }
 
     @PostMapping
