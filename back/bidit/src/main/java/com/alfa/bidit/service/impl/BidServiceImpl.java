@@ -57,7 +57,7 @@ public class BidServiceImpl implements BidService {
 
         if (!isBidPriceValid(bid)) throw new IllegalArgumentException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
 
-        if(!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException();
+        if(!auctionService.isActiveById(bid.getAuctionID())) throw new IllegalArgumentException(" İlan suresi bitti ! ");;
 
         auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 
@@ -94,7 +94,7 @@ public class BidServiceImpl implements BidService {
     public Bid getWinnerBid(Long auctionID) {
         Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
 
-        if (bid == null) throw new AuctionWinnerNotExistException();
+        if (bid == null) throw new IllegalArgumentException(" İlana kimse teklif vermedi ! ");;
 
         return bid;
     }

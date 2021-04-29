@@ -42,7 +42,8 @@ public class CommentServiceImpl implements CommentService {
             throw new UserNotExistException();
 
         if(commentRepository.existsCommentByAuthorIDAndSellerID(comment.getAuthorID(), comment.getSellerID()))
-            throw new MultiCommentException();
+           // throw new MultiCommentException();
+            throw new IllegalArgumentException(" Birden çok yorum yapıldı ! ");
 
         comment.setPostingTime(DateUtil.now());
 

@@ -64,7 +64,7 @@ public class AuctionServiceImpl implements AuctionService {
     public Auction getById(Long id) {
         Optional<Auction> auction = auctionRepository.findAuctionById(id);
 
-        if (auction.isEmpty()) throw new AuctionNotExistException();
+        if (auction.isEmpty()) throw new IllegalArgumentException(" Aradiginiz ilana ulasilamadi ! ");;
 
         return auction.get();
     }
@@ -184,7 +184,30 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public List<Auction> getAuctionsByTitleSearch(String titleName) {
         //return auctionRepository.findSpecificNameAuction(titleName);
-        return auctionRepository.findByTitleContains(titleName);
+        String[] tokens = titleName.split(" ");
+
+        System.out.println(Arrays.toString(tokens));
+
+        List<Auction> auctions = new ArrayList<>();
+
+        for (String t : tokens) {
+
+          //  auctions.addAll(auctionRepository.findByTitleContains(t.toLowerCase()));
+          //  auctions.addAll(auctionRepository.findByDescriptionContains(t.toLowerCase()));
+
+            if(!t.isEmpty()) {
+                auctions.addAll(auctionRepository.findByTitleContainingIgnoreCase(t.toLowerCase()));
+                auctions.addAll(auctionRepository.findByDescriptionContainingIgnoreCase(t.toLowerCase()));
+            }
+        }
+
+        List<Auction> auctionList = auctions.stream()
+                .distinct()
+                .collect(Collectors.toList());
+
+
+
+        return  auctionList;
     }
 
     // === PRIVATE METHODS ===
