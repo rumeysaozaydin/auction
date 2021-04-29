@@ -129,6 +129,14 @@ public class AuctionController {
         return ResponseEntity.ok(images);
     }
 
+    // TODO change return type
+    @GetMapping("/{id}/approveDelivery")
+    public ResponseEntity<Boolean> approveDelivery(@PathVariable("id") Long id,
+                                                  @RequestHeader("Authorization") String token){
+        auctionService.approveDelivery(id);
+        return ResponseEntity.ok(true);
+    }
+
     @PostMapping("/{id}/images")
     public ResponseEntity<Long> uploadImage(@PathVariable("id") Long id, @RequestParam(value= "image",required = true) MultipartFile multipartImage,  @RequestHeader("Authorization") String token) throws Exception {
         // TODO check needed (whether it is successful)
