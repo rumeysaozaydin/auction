@@ -27,6 +27,13 @@ public class Constants {
         BY_PRICE_DESC
     }
 
+    public enum TransactionStatus{
+        WITHDRAW,
+        DEPOSIT,
+        PENDING_TRANSFER,
+        APPROVED_TRANSFER
+    }
+
 //    public interface AuctionSorting{
 //        Sort UNSORTED = Sort.unsorted();
 //        Sort BY_EXPIRATION_TIME_ASC = Sort.by(Sort.Direction.ASC, "expiration_time");

@@ -31,6 +31,10 @@ public class ApiPaths {
         public static final String comment = BASE_PATH + V1_PATH + "/comments";
     }
 
+    public static final class TransactionControllerPath{
+        public static final String transaction = BASE_PATH + V1_PATH + "/transactions";
+    }
+
     public static final class BidControllerPath{
         public static final String bid = AuctionControllerPath.auction + "/{auction_id}";
     }

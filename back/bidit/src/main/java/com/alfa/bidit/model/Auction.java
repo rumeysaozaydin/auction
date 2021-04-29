@@ -51,4 +51,7 @@ public class Auction extends BaseModel {
 
     @Column
     private AuctionCategory auctionCategory;
+
+    @Column
+    private Long transactionID;
 }

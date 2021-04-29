@@ -3,10 +3,7 @@ package com.alfa.bidit.service.impl;
 import com.alfa.bidit.exception.*;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.BidRepository;
-import com.alfa.bidit.service.AuctionService;
-import com.alfa.bidit.service.BidService;
-import com.alfa.bidit.service.NotificationService;
-import com.alfa.bidit.service.UserService;
+import com.alfa.bidit.service.*;
 import io.github.jav.exposerversdk.PushClientException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,13 +17,15 @@ public class BidServiceImpl implements BidService {
     private final AuctionService auctionService;
     private final UserService userService;
     private final NotificationService notificationService;
+    private final WalletService walletService;
 
     @Autowired
-    public BidServiceImpl(BidRepository bidRepository, AuctionService auctionService, UserService userService, NotificationService notificationService) {
+    public BidServiceImpl(BidRepository bidRepository, AuctionService auctionService, UserService userService, NotificationService notificationService, WalletService walletService) {
         this.bidRepository = bidRepository;
         this.auctionService = auctionService;
         this.userService = userService;
         this.notificationService = notificationService;
+        this.walletService = walletService;
     }
 
     @Override
@@ -57,7 +56,9 @@ public class BidServiceImpl implements BidService {
 
         if (!isBidPriceValid(bid)) throw new IllegalArgumentException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
 
-        if(!auctionService.isActiveById(bid.getAuctionID())) throw new IllegalArgumentException(" İlan suresi bitti ! ");;
+        if (!auctionService.isActiveById(bid.getAuctionID())) throw new IllegalArgumentException(" İlan suresi bitti ! ");;
+
+        if (walletService.getBalance(bid.getUserID()) < bid.getPrice()) throw new InsufficientBalanceException();
 
         auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 
