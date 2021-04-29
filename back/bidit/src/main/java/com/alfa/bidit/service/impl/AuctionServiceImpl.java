@@ -206,7 +206,8 @@ public class AuctionServiceImpl implements AuctionService {
             description = auction.getTitle() + " başlıklı ilanınız hiç teklif almadı.";
         }
 
-        notificationService.sendNotification(auction.getSellerID(), title, description);
+        notificationService.sendPushNotification(auction.getSellerID(), title, description);
+        notificationService.saveInAppNotification(auction.getSellerID(), title, description);
     }
 
     private void informAttendeesOnExpiration(Auction auction) throws PushClientException, InterruptedException {
@@ -237,13 +238,15 @@ public class AuctionServiceImpl implements AuctionService {
     private void informLosersOnExpiration(Auction auction, List<Long> losers) throws PushClientException, InterruptedException {
         String title = "1 Yeni Kötü Haberiniz Var :(";
         String description = auction.getTitle() + " başlıklı ilan $" + auction.getHighestBid() + " değerindeki başka bir teklifle son buldu.";
-        notificationService.sendNotification(losers, title, description);
+        notificationService.sendPushNotification(losers, title, description);
+        notificationService.saveInAppNotification(losers, title, description);
     }
 
     private void informWinnerOnExpiration(Auction auction) throws PushClientException, InterruptedException {
         String title = "1 Yeni Müjdeniz Var!";
         String description = auction.getTitle() + " başlıklı ilanı, verdiğiniz $" + auction.getHighestBid() + " teklifiyle kazandınız. İyi günlerde kullanın :)" ;
-        notificationService.sendNotification(auction.getHighestBidOwner(), title, description);
+        notificationService.sendPushNotification(auction.getHighestBidOwner(), title, description);
+        notificationService.saveInAppNotification(auction.getHighestBidOwner(), title, description);
     }
 
     private void buildSortMapping(){
