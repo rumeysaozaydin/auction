@@ -7,6 +7,7 @@ import { AuthContext } from '../context/AuthContext';
 import {BASE_URL} from '../config/index';
 import { useRequest } from '../hooks/useRequest';
 import { SliderBox } from "react-native-image-slider-box";
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
 //import { TouchableHighlight } from 'react-native-gesture-handler';
 
 
@@ -47,10 +48,10 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
                 onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}
             />                    
             <Text style={styles.title}>{data.title}</Text>
-            <Text style={styles.price}>£{data.highestBid}</Text>                        
+            <Text style={styles.price}>₺{data.highestBid}</Text>                        
             <IconButton 
                 style={styles.favorite} 
-                color='#6B9080'
+                color={shade5}
                 size={20}
                 icon={ isFavorite ? 'heart' : 'heart-outline' } 
                 title="BidIt" 
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
         bottom: 10,
         left:15,
         fontSize: 20,
-        color: '#FFFFFF'
+        color: shade1
     },
     price: 
     {
@@ -93,7 +94,7 @@ const styles = StyleSheet.create({
         right:15,
         bottom: 10,
         fontSize: 20,
-        color: '#FFFFFF'
+        color: shade1
 
     },
     favorite: 
@@ -101,7 +102,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         top: 0,
-        backgroundColor: '#CCE3DE' /* '#FF6347' */,
+        backgroundColor: shade1 /* '#FF6347' */,
         borderRadius: 50,
         width: 30,
         height: 30,
@@ -112,7 +113,7 @@ const styles = StyleSheet.create({
         top: 10,
         left: 10,
         fontSize: 15,
-        color: '#FFFFFF'
+        color: shade1
     }
 });
 

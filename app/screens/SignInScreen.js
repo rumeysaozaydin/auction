@@ -8,6 +8,8 @@ import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import { showMessage, hideMessage } from "react-native-flash-message";
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+
 
 const SignInScreen = (props) => {
     
@@ -69,6 +71,7 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 120,
         alignItems: 'center',
+        backgroundColor: shade1
     },
     title: {
         marginBottom: 48,

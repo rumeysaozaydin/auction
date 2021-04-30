@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, View, Button, Image } from 'react-native';
+import { StyleSheet, View, Button, Image, Text} from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
 import { FilledButton } from '../components/FilledButton';
 import { Heading } from '../components/Heading';
@@ -11,6 +11,8 @@ import { AuthContext } from '../context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
 import { useRequest } from '../hooks/useRequest';
+import {Picker} from '@react-native-picker/picker';
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
 
 
 const UploadScreen = ({navigation}) => {
@@ -30,6 +32,8 @@ const UploadScreen = ({navigation}) => {
     const [initialPrice, setInitialPrice] = React.useState("212");
     const [duration, setDuration] = React.useState('60000');
     const [imageUris, setImageUris] = React.useState([]);
+    const [days, setDays] = React.useState('0');
+    const [ hours, setHours] = React.useState('0')
 
     const reset = () => {
         setTitle("v60");
@@ -89,8 +93,7 @@ const UploadScreen = ({navigation}) => {
     }
     
     return (
-        <View>
-            <Heading style={styles.title}>Upload</Heading>
+        <View style={styles.container}>
             <Input
                 style={styles.input}
                 placeholder={'Ürün İsmi'}
@@ -116,6 +119,37 @@ const UploadScreen = ({navigation}) => {
                 value={duration}
                 onChangeText={setDuration}
             />
+
+                {/* <View
+                >
+                    <Picker
+                    style={{height: 20, width: 120}}
+                    itemStyle={{height: 100}}
+                    selectedValue={days}
+                    onValueChange={(itemValue, itemIndex) =>
+                        setDays(itemValue)
+                    }>
+                        <Picker.Item label="0" value='0' />
+                        <Picker.Item label="1" value="1" />
+                        <Picker.Item label="2" value="2" />
+                        <Picker.Item label="3" value="3" />
+                        <Picker.Item label="4" value="4" />
+                        <Picker.Item label="5" value="5" />
+                        <Picker.Item label="6" value="6" />
+                        <Picker.Item label="7" value="7" />
+                        <Picker.Item label="8" value="8" />
+                        <Picker.Item label="9" value="9" />
+                        <Picker.Item label="10" value="10" />
+                        <Picker.Item label="11" value="11" />
+                        <Picker.Item label="12" value="12" />
+                        <Picker.Item label="13" value="13" />
+                        <Picker.Item label="14" value="14" />
+                        <Picker.Item label="15" value="15" />
+                        
+                    </Picker>
+
+                </View> */}
+
             <FlatList 
                 horizontal= {true}
                 showsHorizontalScrollIndicator= {false}
@@ -162,12 +196,15 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 50,
         alignItems: 'center',
+        backgroundColor: shade1
     },
     title: {
         marginBottom: 20,
     },
     input: {
         marginVertical: 8,
+        backgroundColor: shadeTrans,
+        color: shade5
     },
     loginButton: {
         marginVertical: 32,

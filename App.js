@@ -16,9 +16,13 @@ import SignUpScreen from "./app/screens/SignUpScreen";
 import UploadScreen from "./app/screens/UploadScreen";
 import UserScreen from "./app/screens/UserScreen";
 import PayScreen from "./app/screens/PayScreen";
+import NotificationScreen from "./app/screens/NotificationScreen"
 import Constants from 'expo-constants';
 import * as Notifications from 'expo-notifications';
 import FlashMessage from "react-native-flash-message";
+import {shade1, shade2, shade3, shade4, shade5} from "./app/config/color"
+
+
 
 const AuthStack = createStackNavigator();
 const Stack = createStackNavigator();
@@ -28,6 +32,7 @@ const ProfileStack = createStackNavigator();
 const UploadStack = createStackNavigator();
 const FavoritesStack = createStackNavigator();
 const RootStack = createStackNavigator();
+const NotificationStack = createStackNavigator();
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -44,6 +49,12 @@ const HomeStackScreen = () => (
     <HomeStack.Screen name="User" component={UserScreen}/>
     <HomeStack.Screen name="Pay" component={PayScreen}/>
   </HomeStack.Navigator>
+)
+
+const NotificationStackScreen = () => (
+  <NotificationStack.Navigator headerMode="none">
+    <NotificationStack.Screen name="Notification" component={NotificationScreen}/>
+  </NotificationStack.Navigator>
 )
 
 const ProfileStackScreen = () => (
@@ -77,9 +88,20 @@ const TabsScreen = () => (
     component={HomeStackScreen}
     options={{
       tabBarLabel: 'Anasayfa',
-      tabBarColor: '#6B9080',
+      tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
-        <Icon name="ios-home" color={color} size={26} />
+        <Icon name="ios-home-outline" color={shade3} size={26} />
+      ),
+    }}
+    />
+    <Tabs.Screen 
+    name="Notification" 
+    component={NotificationStackScreen}
+    options={{
+      tabBarLabel: 'Bildirimler',
+      tabBarColor: shade5,
+      tabBarIcon: ({ color }) => (
+        <Icon name="notifications-outline" color={shade3} size={26} />
       ),
     }}
     />
@@ -88,9 +110,9 @@ const TabsScreen = () => (
     component={UploadStackScreen}
     options={{
       tabBarLabel: 'Ürün Yükleme',
-      tabBarColor: '#6B9080',
+      tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
-        <Icon name="add-outline" color={color} size={26} />
+        <Icon name="add-outline" color={shade3} size={26} />
       ),
     }}
     />
@@ -99,9 +121,9 @@ const TabsScreen = () => (
     component={FavoritesStackScreen}
     options={{
       tabBarLabel: 'Listelerim',
-      tabBarColor: '#6B9080',
+      tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
-        <Icon name="heart-outline" color={color} size={26} />
+        <Icon name="heart-outline" color={shade3} size={26} />
       ),
     }}
     />
@@ -110,12 +132,13 @@ const TabsScreen = () => (
     component={ProfileStackScreen}
     options={{
       tabBarLabel: 'Profil',
-      tabBarColor: '#6B9080',
+      tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
-        <Icon name="ios-person" color={color} size={26} />
+        <Icon name="ios-person-outline" color={shade3} size={26} />
       ),
     }}
     />
+    
   </Tabs.Navigator>
 )
 

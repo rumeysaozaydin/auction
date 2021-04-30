@@ -6,6 +6,8 @@ import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { SearchBar } from 'react-native-elements';
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
+
 
 //         UNSORTED,
 //         BY_EXPIRATION_TIME_ASC,
@@ -31,6 +33,8 @@ const HomeScreen = ({navigation}) => {
   const [favorites, setFavorites] = React.useState([]);
   const [refreshing, setRefreshing] = React.useState(false);
   const [search, setSearch] = React.useState('');
+  const [category, setCategory] = React.useState('');
+  const [categoryName, setCategoryName] = React.useState('');
 
 
 
@@ -66,6 +70,14 @@ const HomeScreen = ({navigation}) => {
     refresh()
   }, []);
 
+  React.useEffect(() => {
+    useRequest('GET',`/auctions/search/${search}`, user.token,{setState:setAuctionList});
+  }, [search]);
+
+  React.useEffect(() => {
+    useRequest('GET',`/auctions/search/${category}`, user.token,{setState:setAuctionList});
+  }, [category]);
+
   let iconNames = ["earth", "television", "gamepad-variant-outline", "home-city-outline", "car", "basketball", "tshirt-v-outline", "baby-carriage", "bookshelf", "dots-horizontal"]
   var iconTitles = new Map();
   iconTitles.set("earth", "Tümü");
@@ -79,28 +91,37 @@ const HomeScreen = ({navigation}) => {
   iconTitles.set("bookshelf", 'Kitap');
   iconTitles.set("dots-horizontal", 'Diğer');
 
-  let arr = []
+  var categoryNames = {};
+  categoryNames= {  "earth":"",
+                    "television": "ELECTRONIC",
+                    "gamepad-variant-outline": "GAME",
+                    "home-city-outline": "HOME",
+                    "car": "VEHICLES",
+                    "basketball":"SPORTOUTDOOR",
+                    "tshirt-v-outline":"FASHION",
+                    "baby-carriage": "BABY",
+                    "bookshelf": "FILMBOOKMUSIC",
+                    "dots-horizontal":"OTHERS"
+}
+
   return (
     <View style={styles.container}>
-      <ImageBackground resizeMode= "cover" source={require('../../assets/bckgrnd.jpg')} style={styles.image}>
+      {/* <ImageBackground resizeMode= "cover" source={require('../../assets/bckgrnd.jpg')} style={styles.image}> */}
       
       <View style={{marginTop: 30, marginHorizontal:10}}>
         <SearchBar
-          placeholder="Type Here..."
+          placeholder="Ara..."
           onChangeText={updateSearch}
           value={search}
-          inputStyle={{backgroundColor: 'rgba(52, 52, 52, 0)', color: '#6B9080'}}
+          inputStyle={{backgroundColor: 'rgba(52, 52, 52, 0)', color: shade5}}
           containerStyle={{ backgroundColor: 'rgba(52, 52, 52, 0)', borderWidth: 0, borderTopWidth:0, borderBottomWidth:0}}
-          placeholderTextColor={'#A4C3B2'}
-          inputContainerStyle={{backgroundColor: 'rgba(204, 227, 222, 0.3)', borderRadius: 30,borderColor: 'rgba(52, 52, 52, 0)'}}
-          leftIconContainerStyle={{color:'red'}}
-          searchIcon={{color:'#6B9080'}}
-      />
+          placeholderTextColor={shade4}
+          inputContainerStyle={{backgroundColor: shadeTrans, borderRadius: 30,borderColor: 'rgba(52, 52, 52, 0)'}}
+          searchIcon={{color:shade5}}
+        />
       </View>
-     
        
-       
-        <View style= {{ marginLeft: 20, height: 90}}>
+        <View style= {{marginTop: 10, height: 90}}>
           <FlatList 
             horizontal= {true}
             showsHorizontalScrollIndicator= {false}
@@ -108,9 +129,13 @@ const HomeScreen = ({navigation}) => {
             keyExtractor={(data) => data}
             renderItem={({item}) => {
                 return (
-                  <TouchableOpacity style={styles.categoryBtn} onPress={() => {console.log(iconTitles.get(item))}}>
+                  <TouchableOpacity style={styles.categoryBtn}
+                    onPress={() => {
+                      setCategory(categoryNames.get(item))
+                      setCategoryName(iconTitles.get(item))
+                  }}>
                   <View style={styles.categoryIcon}>
-                    <MaterialCommunityIcons name={item} size={20} color="#6B9080" />
+                    <MaterialCommunityIcons name={item} size={20} color={shade5} />
                   </View>
                   <Text style={styles.categoryBtnTxt}>{iconTitles.get(item)}</Text>
                   </TouchableOpacity>
@@ -118,7 +143,7 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         </View>
-        
+        <Text>{categoryName}</Text>
         <AuctionList 
           refreshing={refreshing}
           onRefresh={refresh}
@@ -128,17 +153,18 @@ const HomeScreen = ({navigation}) => {
           addFav={(auction) => addFav(auction)}
           deleteFav={(auction) => deleteFav(auction)}
         />
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 10,
+    paddingTop: 10,
     flex: 1,
     flexDirection: "column",
     alignItems: 'stretch',
+    backgroundColor: shade1
     //justifyContent: 'flex-start'
   },
   image: {
@@ -146,10 +172,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",    
   },
   categoryBtn: {
-    //flex: 1,
+    flex: 1,
     //alignSelf: 'center',
     height: 50,
-    marginRight: 20,
+    width: 70,
+    //marginRight:5,
   },
   categoryIcon: {
     borderWidth: 0,
@@ -158,13 +185,13 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     width: 40,
     height: 40,
-    backgroundColor: '#CCE3DE' /* '#FF6347' */,
+    backgroundColor: shade3 /* '#FF6347' */,
     borderRadius: 50,
   },
   categoryBtnTxt: {
     alignSelf: 'center',
     marginTop: 5,
-    color: '#6B9080',
+    color: shade5,
     fontWeight: 'bold'
 
   },

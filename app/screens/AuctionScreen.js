@@ -13,9 +13,10 @@ import { useRequest } from '../hooks/useRequest';
 import  AuctionDetail  from '../components/AuctionDetail';
 import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 import react from 'react';
-import NotificationPopup from 'react-native-push-notification-popup';
-import {showPopUp, customPopup} from "../components/PopUp";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+
+
 
 //import { ScrollView } from 'react-native-gesture-handler';
 
@@ -90,6 +91,7 @@ const AuctionScreen = ({route,navigation}) => {
                         placeholder={'Yeni Teklif'}
                         value={newBid}
                         onChangeText={setNewBid}
+                        style={{backgroundColor: shade3}}
                     />
                     
                     <FilledButton
@@ -126,7 +128,7 @@ const AuctionScreen = ({route,navigation}) => {
     }
     
     return (
-        <View style={{paddingTop:20}}>
+        <View style={{paddingTop:20, flex:1, backgroundColor:shade1}}>
             <TextButton
                 title={'Yenile'}
                 onPress={refresh}

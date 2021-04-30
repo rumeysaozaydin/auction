@@ -1,21 +1,29 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Button , Image} from 'react-native';
-import {
-  Avatar,
-
-  Caption, Title,
-
-  TouchableRipple
-} from 'react-native-paper';
+import {Avatar,Caption, Title,TouchableRipple} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { AuthContext } from '../context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
-import {BASE_URL} from '../config/index';
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+import { AuthContext } from '../context/AuthContext';
+import { useRequest } from '../hooks/useRequest';
+
 
 
 function ProfileScreen({navigation}) {
+
+  const {auth: {signOut},
+  user} = React.useContext(AuthContext);
+
+  if(!user){
+    return <View></View>
+  }
+
   const [image, setImage] = React.useState(null);
+  const [wallet, setWallet] = React.useState(0);
+
+  React.useEffect(() => {
+    useRequest('GET',`/users/${user.id}/balance`, user.token, {setState:setWallet})
+  }, []);
 
   React.useEffect(() => {
     (async () => {
@@ -44,15 +52,6 @@ function ProfileScreen({navigation}) {
       setImage(result.uri);
     }
   };
-
-  const {
-    auth: {signOut},
-    user,
-  } = React.useContext(AuthContext);
-
-  if(!user){
-    return <View></View>
-  }
 
   return (
     <View style={styles.container}>
@@ -95,7 +94,7 @@ function ProfileScreen({navigation}) {
           borderRightColor: '#dddddd',
           borderRightWidth: 1
         }]}>
-          <Title>$140.50</Title>
+          <Title>{wallet}₺</Title>
           <Caption>Wallet</Caption>
         </View>
         <View style={styles.infoBox}>
@@ -146,6 +145,7 @@ const styles = StyleSheet.create({
     padding: 16,
     paddingTop: 60,
     alignItems: 'center',
+    backgroundColor: shade1
   },
   userInfoSection: {
     paddingHorizontal: 30,

@@ -7,16 +7,15 @@ import { Input } from '../components/Input';
 import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
-import NotificationPopup from 'react-native-push-notification-popup';
-import {showPopUp, customPopup} from "../components/PopUp";
 import { showMessage, hideMessage } from "react-native-flash-message";
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+
 
 
 const SignUpScreen = (props) => {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-    const [loading, setLoading] = React.useState(false);
 
     const {auth : {signUp}} = React.useContext(AuthContext);
 
@@ -59,13 +58,6 @@ const SignUpScreen = (props) => {
                     props.navigation.navigate("SignIn")
                 }}
             />
-            {/* {username == '' || password == '' ? <Text></Text> :
-            <NotificationPopup
-                ref={ref => this.popup = ref}
-                renderPopupContent={customPopup}
-                shouldChildHandleResponderStart={false/*only make it true if you put a button inside pop-up
-                shouldChildHandleResponderMove={false/*only make it true if you put a button inside pop-up
-            />} */}
             
         </ScreenContainer>
     );
@@ -80,6 +72,7 @@ const styles = StyleSheet.create({
         padding: 16,
         paddingTop: 120,
         alignItems: 'center',
+        backgroundColor: shade1
     },
     title: {
         marginBottom: 48,

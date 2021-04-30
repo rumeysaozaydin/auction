@@ -4,6 +4,8 @@ import AuctionList from "../components/AuctionList";
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+
 
 const FavoritesScreen = ({navigation}) => {
 
@@ -111,10 +113,11 @@ const FavoritesScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 80,
+    paddingTop: 80,
     flex: 1,
     flexDirection: "column",
     alignItems: 'center',
+    backgroundColor: shade1
   },
   tab: {
     //flex: 1,
