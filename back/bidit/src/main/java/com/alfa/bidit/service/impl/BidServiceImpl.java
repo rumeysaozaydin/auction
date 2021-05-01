@@ -95,7 +95,7 @@ public class BidServiceImpl implements BidService {
     public Bid getWinnerBid(Long auctionID) {
         Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
 
-        if (bid == null) throw new IllegalArgumentException(" İlana kimse teklif vermedi ! ");;
+        if (bid == null) throw new AuctionWinnerNotExistException();;
 
         return bid;
     }
