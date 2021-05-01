@@ -34,13 +34,7 @@ public class CommentController {
 
     @PostMapping()
     public ResponseEntity<Comment> comment(@RequestHeader("Authorization") String token, @RequestBody Comment comment){
-        try {
-            Comment newComment = commentService.comment(comment);
-            return ResponseEntity.ok(newComment);
-        } catch (UserNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (MultiCommentException | CommentAuthorNotValidException | InvalidRatingException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
-        }
+        Comment newComment = commentService.comment(comment);
+        return ResponseEntity.ok(newComment);
     }
 }

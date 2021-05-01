@@ -40,25 +40,22 @@ public class AuctionController {
     @PostMapping
     public ResponseEntity<Auction> create(@RequestBody Auction auction, @RequestParam Long duration, @RequestHeader("Authorization") String token){
         // TODO service return type might also be (id(long), auction(DTO), auction(model), success(boolean))
-        try{
-            Auction newAuction = auctionService.create(auction, duration);
-            return ResponseEntity.ok(newAuction);
-        }
-        catch (UserNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        Auction newAuction = auctionService.create(auction, duration);
+        return ResponseEntity.ok(newAuction);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Auction> getById(@PathVariable("id") Long id,
                                            @RequestHeader("Authorization") String token) {
-        try {
-            Auction auction = auctionService.getById(id);
-            return ResponseEntity.ok(auction);
-        }
-        catch (AuctionNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        Auction auction = auctionService.getById(id);
+        return ResponseEntity.ok(auction);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Boolean> deleteById(@PathVariable("id") Long id,
+                                           @RequestHeader("Authorization") String token) {
+        auctionService.deleteById(id);
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/seller/{seller_id}")
@@ -66,19 +63,15 @@ public class AuctionController {
                                                        @RequestHeader("Authorization") String token,
                                                        @RequestParam(value = "status", required = false) List<Constants.AuctionStatus> statusList,
                                                        @RequestParam(value = "sort", required = false) AuctionSorting sort){
-        try {
-            List<Auction> auctions;
-            if (statusList == null){
-                auctions = auctionService.getBySellerId(sellerID, sort);
-            }
-            else{
-                auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList, sort);
-            }
-            return ResponseEntity.ok(auctions);
+
+        List<Auction> auctions;
+        if (statusList == null){
+            auctions = auctionService.getBySellerId(sellerID, sort);
         }
-        catch (UserNotExistException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
+        else{
+            auctions = auctionService.getBySellerIdAndStatus(sellerID, statusList, sort);
         }
+        return ResponseEntity.ok(auctions);
     }
 
     @GetMapping("/bidOwner/{bid_owner}")
@@ -151,8 +144,6 @@ public class AuctionController {
         return ResponseEntity.ok(auctionService.getAuctionsByTitleSearch(auctionTitle));
     }
 
-
-
     @GetMapping("/searchCategory")
     public ResponseEntity<List<Auction>> getSelectedAuctionCategory(@RequestParam(value = "category", required = false) List<Constants.AuctionCategory> categories/*,
                                                         @RequestHeader("Authorization") String token*/){
@@ -165,6 +156,5 @@ public class AuctionController {
         }
 
         return ResponseEntity.ok(auctions);
-
     }
 }

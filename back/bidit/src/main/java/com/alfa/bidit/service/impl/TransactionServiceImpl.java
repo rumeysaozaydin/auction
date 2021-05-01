@@ -30,8 +30,8 @@ public class TransactionServiceImpl implements TransactionService {
         Transaction transaction = getByID(id);
         transaction.setStatus(Constants.TransactionStatus.APPROVED_TRANSFER);
         walletService.depositByUserID(transaction.getReceiverID(), transaction.getAmount());
-        notificationService.saveInAppNotification(transaction.getReceiverID(), "Alıcı teslimatı onayladı!", "Cüzdanınıza $" + transaction.getAmount() + " yatırıldı.");
-        notificationService.sendPushNotification(transaction.getReceiverID(), "Alıcı teslimatı onayladı!", "Cüzdanınıza $" + transaction.getAmount() + " yatırıldı.");
+        notificationService.saveInAppNotification(transaction.getReceiverID(), "Alıcı teslimatı onayladı!", "Cüzdanınıza " + transaction.getAmount() + "₺ yatırıldı.");
+        notificationService.sendPushNotification(transaction.getReceiverID(), "Alıcı teslimatı onayladı!", "Cüzdanınıza " + transaction.getAmount() + "₺ yatırıldı.");
         transactionRepository.save(transaction);
     }
 
@@ -54,8 +54,8 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     public Long createTransfer(Long senderID, Long receiverID, Double amount) {
         walletService.withdrawByUserID(senderID, amount);
-        notificationService.saveInAppNotification(senderID, "Para Transferi", "Cüzdanınızdan $" + amount + " çekildi.");
-        notificationService.sendPushNotification(senderID, "Para Transferi", "Cüzdanınızdan $" + amount + " çekildi.");
+        notificationService.saveInAppNotification(senderID, "Para Transferi", "Cüzdanınızdan " + amount + "₺ çekildi.");
+        notificationService.sendPushNotification(senderID, "Para Transferi", "Cüzdanınızdan " + amount + "₺ çekildi.");
         return createTransaction(senderID, receiverID, amount, TransactionStatus.PENDING_TRANSFER);
     }
 }

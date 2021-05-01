@@ -29,33 +29,19 @@ public class BidController {
 
     @GetMapping("/bids")
     public ResponseEntity<List<Bid>> getAllBids(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID){
-        try {
-            List<Bid> bids = bidService.getAllByAuctionID(auctionID);
-            return ResponseEntity.ok(bids);
-        } catch (AuctionNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        List<Bid> bids = bidService.getAllByAuctionID(auctionID);
+        return ResponseEntity.ok(bids);
     }
 
     @GetMapping("/winner")
     public ResponseEntity<Bid> getWinnerBid(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID){
-        try {
-            Bid bid = bidService.getWinnerBid(auctionID);
-            return ResponseEntity.ok(bid);
-        } catch (AuctionWinnerNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        Bid bid = bidService.getWinnerBid(auctionID);
+        return ResponseEntity.ok(bid);
     }
 
     @PostMapping("/bid")
     public ResponseEntity<Long> bid(@RequestHeader("Authorization") String token, @PathVariable("auction_id") Long auctionID, @RequestBody Bid bid) throws PushClientException, InterruptedException {
-        try {
-            Long bidID = bidService.bid(bid);
-            return ResponseEntity.ok(bidID);
-        } catch (UserNotExistException | AuctionNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (BidPriceNotValidException | BidOwnerNotValidException | AuctionNotActiveException | InsufficientBalanceException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
-        }
+        Long bidID = bidService.bid(bid);
+        return ResponseEntity.ok(bidID);
     }
 }

@@ -52,4 +52,6 @@ public interface AuctionService{
     void createTransferTransaction(Long sellerID, Long buyerID, Auction auction);
 
     void approveDelivery(Long id);
+
+    void deleteById(Long id);
 }

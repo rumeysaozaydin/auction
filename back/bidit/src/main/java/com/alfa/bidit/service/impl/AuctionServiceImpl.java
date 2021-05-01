@@ -226,6 +226,11 @@ public class AuctionServiceImpl implements AuctionService {
         transactionService.approveTransaction(auction.getTransactionID());
     }
 
+    @Override
+    public void deleteById(Long id) {
+        auctionRepository.deleteById(id);
+    }
+
     // === PRIVATE METHODS ===
 
     private void setStartingAndExpirationTime(Auction auction, Long duration){
@@ -238,7 +243,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     private void informSellerOnExpiration(boolean sold, Auction auction) throws PushClientException, InterruptedException {
         String title = "1 Yeni Müjdeniz Var!"; // TODO Yaratıcı arkadaşları buraya bekliyorum.
-        String description = auction.getTitle() + " başlıklı ilanınız alıcısını buldu! Verilen en yüksek teklif: $" + auction.getHighestBid();
+        String description = auction.getTitle() + " başlıklı ilanınız alıcısını buldu! Verilen en yüksek teklif: " + auction.getHighestBid() + "₺";
 
         if(!sold){
             title = "İlanınızın süresi doldu!";
@@ -283,7 +288,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     private void informWinnerOnExpiration(Auction auction) throws PushClientException, InterruptedException {
         String title = "1 Yeni Müjdeniz Var!";
-        String description = auction.getTitle() + " başlıklı ilanı, verdiğiniz $" + auction.getHighestBid() + " teklifiyle kazandınız. İyi günlerde kullanın :)" ;
+        String description = auction.getTitle() + " başlıklı ilanı, verdiğiniz " + auction.getHighestBid() + "₺ teklifiyle kazandınız. İyi günlerde kullanın :)" ;
         notificationService.sendPushNotification(auction.getHighestBidOwner(), title, description);
         notificationService.saveInAppNotification(auction.getHighestBidOwner(), title, description);
     }
