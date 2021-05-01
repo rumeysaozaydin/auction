@@ -54,7 +54,7 @@ public class BidController {
             return ResponseEntity.ok(bidID);
         } catch (UserNotExistException | AuctionNotExistException ex){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (BidPriceNotValidException | BidOwnerNotValidException | AuctionNotActiveException ex){
+        } catch (BidPriceNotValidException | BidOwnerNotValidException | AuctionNotActiveException | InsufficientBalanceException ex){
             throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
         }
     }

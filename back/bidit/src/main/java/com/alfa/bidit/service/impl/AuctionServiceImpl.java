@@ -1,5 +1,6 @@
 package com.alfa.bidit.service.impl;
 
+import com.alfa.bidit.exception.AuctionNotExistException;
 import com.alfa.bidit.exception.AuctionWinnerNotExistException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
@@ -65,7 +66,7 @@ public class AuctionServiceImpl implements AuctionService {
     public Auction getById(Long id) {
         Optional<Auction> auction = auctionRepository.findAuctionById(id);
 
-        if (auction.isEmpty()) throw new IllegalArgumentException(" Aradiginiz ilana ulasilamadi ! ");;
+        if (auction.isEmpty()) throw new AuctionNotExistException(" Aradiginiz ilana ulasilamadi ! ");;
 
         return auction.get();
     }

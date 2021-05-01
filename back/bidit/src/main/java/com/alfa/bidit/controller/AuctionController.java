@@ -153,8 +153,8 @@ public class AuctionController {
 
 
 
-    @GetMapping("/searchCategory/{categories}")
-    public ResponseEntity<List<Auction>> getSelectedAuctionCategory(@RequestParam(value = "categories", required = false) List<Constants.AuctionCategory> categories/*,
+    @GetMapping("/searchCategory")
+    public ResponseEntity<List<Auction>> getSelectedAuctionCategory(@RequestParam(value = "category", required = false) List<Constants.AuctionCategory> categories/*,
                                                         @RequestHeader("Authorization") String token*/){
         List<Auction> auctions;
         if (categories == null){
@@ -166,5 +166,5 @@ public class AuctionController {
 
         return ResponseEntity.ok(auctions);
 
-        }
+    }
 }
