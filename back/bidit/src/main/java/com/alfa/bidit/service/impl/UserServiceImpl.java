@@ -2,6 +2,7 @@ package com.alfa.bidit.service.impl;
 
 
 import com.alfa.bidit.exception.InvalidRatingException;
+import com.alfa.bidit.exception.UserAlreadyExistsException;
 import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.User;
 import com.alfa.bidit.repository.UserRepository;
@@ -35,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        if(existsByEmail(user.getEmail()))  throw new IllegalArgumentException("Bu Email kullaniliyor. ");
+        if(existsByEmail(user.getEmail()))  throw new UserAlreadyExistsException("Bu Email kullaniliyor. ");
 
         user.setRatingCount(0L);
         user.setRatingSum(0L);
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         Optional<User> optionalStudent = userRepository.findUserByEmail(email);
 
-        if(optionalStudent.isEmpty()) throw new IllegalArgumentException("Bu mail ile bir kulanıcı bulunamadı : " + email);
+        if(optionalStudent.isEmpty()) throw new UserNotExistException("Bu mail ile bir kulanıcı bulunamadı : " + email);
 
         return optionalStudent.get();
     }

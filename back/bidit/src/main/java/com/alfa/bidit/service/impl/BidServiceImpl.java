@@ -54,9 +54,9 @@ public class BidServiceImpl implements BidService {
 
         if (auctionService.getSellerIDByAuctionID(bid.getAuctionID()).equals(bid.getUserID())) throw new BidOwnerNotValidException();
 
-        if (!isBidPriceValid(bid)) throw new IllegalArgumentException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
+        if (!isBidPriceValid(bid)) throw new BidPriceNotValidException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
 
-        if (!auctionService.isActiveById(bid.getAuctionID())) throw new IllegalArgumentException(" İlan suresi bitti ! ");;
+        if (!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException(" İlan suresi bitti ! ");;
 
         if (walletService.getBalance(bid.getUserID()) < bid.getPrice()) throw new InsufficientBalanceException();
 
@@ -95,7 +95,7 @@ public class BidServiceImpl implements BidService {
     public Bid getWinnerBid(Long auctionID) {
         Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
 
-        if (bid == null) throw new AuctionWinnerNotExistException();;
+        if (bid == null) throw new AuctionWinnerNotExistException(" İlana kimse teklif vermedi ! ");;
 
         return bid;
     }

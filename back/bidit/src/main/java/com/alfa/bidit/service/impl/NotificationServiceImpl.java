@@ -47,7 +47,6 @@ public class NotificationServiceImpl implements NotificationService {
 
        if (recipient==null)
            return;
-           //throw new IllegalArgumentException("Bildirim Servisi Aktif Degil! ");
 
         try{
             if (!PushClient.isExponentPushToken(recipient))
