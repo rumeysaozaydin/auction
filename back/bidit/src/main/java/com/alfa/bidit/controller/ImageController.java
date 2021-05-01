@@ -17,9 +17,6 @@ import java.util.List;
 @RequestMapping(ApiPaths.ImageControllerPath.image)
 @Api(value = ApiPaths.ImageControllerPath.image)
 public class ImageController {
-
-
-
     private final ImageService imageService;
 
     @Autowired
@@ -29,7 +26,6 @@ public class ImageController {
 
     @PostMapping
     public ResponseEntity<Long> register(@RequestParam (value= "image",required = true) MultipartFile multipartImage) throws Exception {
-        System.out.println(multipartImage);
         Long id = imageService.addImage(multipartImage);
         return ResponseEntity.ok(id);
 
@@ -38,7 +34,6 @@ public class ImageController {
     @GetMapping(value = "/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
     Resource downloadImage(@PathVariable Long imageId) {
         return imageService.getById(imageId);
-
     }
 
     @GetMapping("/all")
@@ -48,11 +43,6 @@ public class ImageController {
 
     @GetMapping("/clear")
     public void clear(){
-        System.out.println("inside clear all");
         imageService.clear();
     }
-
-
-
-
 }

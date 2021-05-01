@@ -54,9 +54,9 @@ public class BidServiceImpl implements BidService {
 
         if (auctionService.getSellerIDByAuctionID(bid.getAuctionID()).equals(bid.getUserID())) throw new BidOwnerNotValidException();
 
-        if (!isBidPriceValid(bid)) throw new BidPriceNotValidException(" Verilen Teklif Guncel Tekliften Az Olamaz ! ");
+        if (!isBidPriceValid(bid)) throw new BidPriceNotValidException("Verilen teklif güncel tekliften az olamaz!");
 
-        if (!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException(" İlan suresi bitti ! ");;
+        if (!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException("İlanın süresi doldu!");;
 
         if (walletService.getBalance(bid.getUserID()) < bid.getPrice()) throw new InsufficientBalanceException();
 
@@ -76,8 +76,8 @@ public class BidServiceImpl implements BidService {
     }
 
     public void informSeller(Bid bid) throws PushClientException, InterruptedException {
-        notificationService.sendPushNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "1 Yeni Teklifiniz Var :)", "Yeni teklif: $" + bid.getPrice());
-        notificationService.saveInAppNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "1 Yeni Teklifiniz Var :)", "Yeni teklif: $" + bid.getPrice());
+        notificationService.sendPushNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "1 Yeni Teklifiniz Var :)", "Yeni teklif: " + bid.getPrice() + "₺");
+        notificationService.saveInAppNotification(auctionService.getSellerIDByAuctionID(bid.getAuctionID()), "1 Yeni Teklifiniz Var :)", "Yeni teklif: " + bid.getPrice() + "₺");
     }
 
     public void informAttendees(Bid bid) throws PushClientException, InterruptedException {
@@ -95,7 +95,7 @@ public class BidServiceImpl implements BidService {
     public Bid getWinnerBid(Long auctionID) {
         Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
 
-        if (bid == null) throw new AuctionWinnerNotExistException(" İlana kimse teklif vermedi ! ");;
+        if (bid == null) throw new AuctionWinnerNotExistException("İlana kimse teklif vermedi!");;
 
         return bid;
     }

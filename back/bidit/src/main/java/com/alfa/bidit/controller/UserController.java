@@ -33,57 +33,35 @@ public class UserController {
         this.walletService = walletService;
     }
 
-
-
     @GetMapping("/all")
    // @ApiOperation(value = "Get All Users",response = User.class)
     public ResponseEntity<List<User>> getAll(@RequestHeader("Authorization") String token) throws PushClientException, InterruptedException {
-        System.out.println("[GET ALL USERS REQUEST]:  ");
         List<User> users = userService.getAll();
         return ResponseEntity.ok(users);
     }
 
     @GetMapping("/id/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
-        System.out.println("[GET USER REQUEST]:  " + id);
-        try {
-            User user = userService.getById(id);
-            return ResponseEntity.ok(user);
-        }
-        catch (UserNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        User user = userService.getById(id);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/email/{email}")
     public ResponseEntity<User> getByEmail(@PathVariable("email") String email, @RequestHeader("Authorization") String token){
-        System.out.println("[GET USER REQUEST]:  " + email);
-        try {
-            User user = userService.getByEmail(email);
-            return ResponseEntity.ok(user);
-        }
-        catch (UserNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        }
+        User user = userService.getByEmail(email);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/{id}/balance")
     public ResponseEntity<Double> getBalanceByID(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         return ResponseEntity.ok(walletService.getByUserID(id).getBalance());
-
     }
 
     @PostMapping
     public ResponseEntity<Long> register(@RequestBody User user, @RequestHeader("Authorization") String token){
         // TODO email validation needed.
-        System.out.println("[USER REGISTER REQUEST]:  " + user);
-        try {
-            Long id = userService.register(user);
-            return ResponseEntity.ok(id);
-        }
-        catch (UserAlreadyExistsException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
-        }
+        Long id = userService.register(user);
+        return ResponseEntity.ok(id);
     }
 
     @PostMapping(value = "/id/{id}/image")

@@ -30,28 +30,18 @@ public class FavoriteController {
 
     @PostMapping
     public ResponseEntity<Long> add(@RequestBody Favorite favorite, @RequestHeader("Authorization") String token){
-        System.out.println("[ADD FAVORITE REQUEST]:  " + favorite);
-        try {
-            Long id = favoriteService.add(favorite);
-            return ResponseEntity.ok(id);
-        }
-        catch (UserNotExistException | AuctionNotExistException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage(), ex);
-        } catch (FavoriteAlreadyExistsException ex){
-            throw new ResponseStatusException(HttpStatus.NOT_ACCEPTABLE, ex.getMessage(), ex);
-        }
+        Long id = favoriteService.add(favorite);
+        return ResponseEntity.ok(id);
     }
 
     @GetMapping("/{user_id}")
     public ResponseEntity<List<Auction>> getAllFavoritesByUserId(@PathVariable("user_id") Long userID, @RequestHeader("Authorization") String token){
-        System.out.println("[GET ALL FAVORITES BY USER REQUEST]:  ");
         List<Auction> favorites = favoriteService.getFavoriteAuctionsByUserID(userID);
         return ResponseEntity.ok(favorites);
     }
 
     @DeleteMapping("/{favorite_id}")
     public ResponseEntity<Long> deleteById(@PathVariable("favorite_id") Long id, @RequestHeader("Authorization") String token){
-        System.out.println("[DELETE FAVORITE BY ID REQUEST]:  " + id);
         Long rows_affected = favoriteService.deleteById(id);
 
         if (rows_affected == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -61,7 +51,6 @@ public class FavoriteController {
 
     @DeleteMapping("/{user_id}/{auction_id}")
     public ResponseEntity<Long> deleteByUserIDAndAuctionID(@PathVariable("user_id") Long userID, @PathVariable("auction_id") Long auctionID, @RequestHeader("Authorization") String token){
-        System.out.println("[DELETE FAVORITE BY USER AND AUCTION REQUEST]:  " + userID + " " + auctionID);
         Long rows_affected = favoriteService.deleteByUserIDAndAuctionID(userID, auctionID);
 
         if (rows_affected == 0) throw new ResponseStatusException(HttpStatus.NOT_FOUND);
