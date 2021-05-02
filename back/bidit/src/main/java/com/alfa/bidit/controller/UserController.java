@@ -40,7 +40,7 @@ public class UserController {
         return ResponseEntity.ok(users);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable("id") Long id, @RequestHeader("Authorization") String token){
         User user = userService.getById(id);
         return ResponseEntity.ok(user);
@@ -64,13 +64,13 @@ public class UserController {
         return ResponseEntity.ok(id);
     }
 
-    @PostMapping(value = "/id/{id}/image")
+    @PostMapping(value = "/{id}/image")
     public ResponseEntity<Long> uploadProfilePhoto(@RequestParam MultipartFile multipartImage, @PathVariable Long id) throws Exception {
         Long imageId = userService.uploadProfilePhoto(id, multipartImage);
         return ResponseEntity.ok(imageId);
     }
 
-    @GetMapping(value = "/id/{id}/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{id}/image", produces = MediaType.IMAGE_JPEG_VALUE)
     Resource downloadImage(@PathVariable Long id) {
         return userService.getProfilePhoto(id);
     }

@@ -147,6 +147,8 @@ public class AuctionServiceImpl implements AuctionService {
                 sold = false;
             }
 
+            auction.setExpirationTime(now()); // For immediate expiration
+
             auctionRepository.save(auction);
 
             try {

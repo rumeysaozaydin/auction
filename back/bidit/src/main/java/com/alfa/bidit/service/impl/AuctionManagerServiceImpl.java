@@ -59,4 +59,12 @@ public class AuctionManagerServiceImpl implements AuctionManagerService {
         auctionExpirationRecordRepository.save(record);
         System.out.println("[INFO] Auction Expiration Record created for ID: " + auctionID);
     }
+
+    @Override
+    public void expireAuctionImmediately(Long auctionID) {
+        auctionService.endAuctionById(auctionID);
+        AuctionExpirationRecord record = auctionExpirationRecordRepository.findAuctionExpirationRecordsByAuctionID(auctionID);
+        if (record != null)
+            auctionExpirationRecordRepository.deleteById(record.getId());
+    }
 }

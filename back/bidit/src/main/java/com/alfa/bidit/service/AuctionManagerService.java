@@ -9,4 +9,6 @@ public interface AuctionManagerService {
     void periodicAuctionExpirationJob();
 
     void pushExpirationQueue(Long auctionID, Date expirationTime);
+
+    void expireAuctionImmediately(Long auctionID);
 }

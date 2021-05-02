@@ -1,10 +1,9 @@
 package com.alfa.bidit.controller;
 
-import com.alfa.bidit.exception.AuctionNotExistException;
-import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.AuctionImage;
 import com.alfa.bidit.service.AuctionImageService;
+import com.alfa.bidit.service.AuctionManagerService;
 import com.alfa.bidit.service.AuctionService;
 import com.alfa.bidit.service.ImageService;
 import com.alfa.bidit.utils.ApiPaths;
@@ -12,12 +11,9 @@ import com.alfa.bidit.utils.Constants.AuctionSorting;
 import com.alfa.bidit.utils.Constants;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-
 
 
 import java.util.List;
@@ -29,12 +25,14 @@ public class AuctionController {
     private final AuctionService auctionService;
     private final ImageService imageService;
     private final AuctionImageService auctionImageService;
+    private final AuctionManagerService auctionManagerService;
 
     @Autowired
-    public AuctionController(AuctionService auctionService, ImageService imageService, AuctionImageService auctionImageService){
+    public AuctionController(AuctionService auctionService, ImageService imageService, AuctionImageService auctionImageService, AuctionManagerService auctionManagerService){
         this.auctionService = auctionService;
         this.imageService = imageService;
         this.auctionImageService = auctionImageService;
+        this.auctionManagerService = auctionManagerService;
     }
 
     @PostMapping
@@ -55,6 +53,13 @@ public class AuctionController {
     public ResponseEntity<Boolean> deleteById(@PathVariable("id") Long id,
                                            @RequestHeader("Authorization") String token) {
         auctionService.deleteById(id);
+        return ResponseEntity.ok(true);
+    }
+
+    @GetMapping("/{id}/end")
+    public ResponseEntity<Boolean> endAuctionImmediately(@PathVariable("id") Long id,
+                                              @RequestHeader("Authorization") String token) {
+        auctionManagerService.expireAuctionImmediately(id);
         return ResponseEntity.ok(true);
     }
 
