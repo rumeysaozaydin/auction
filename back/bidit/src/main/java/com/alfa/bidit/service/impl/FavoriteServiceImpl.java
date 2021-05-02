@@ -38,11 +38,11 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Override
     public Long add(Favorite favorite) {
 
-        if(!userService.existsById(favorite.getUserID())) throw new UserNotExistException();
+        if(!userService.existsById(favorite.getUserID())) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
-        if(!auctionService.existsById(favorite.getAuctionID())) throw new AuctionNotExistException();
+        if(!auctionService.existsById(favorite.getAuctionID())) throw new AuctionNotExistException("İlan mevcut değil.");
 
-        if(favoriteRepository.existsFavoriteByUserIDAndAuctionID(favorite.getUserID(), favorite.getAuctionID())) throw new FavoriteAlreadyExistsException(favorite);
+        if(favoriteRepository.existsFavoriteByUserIDAndAuctionID(favorite.getUserID(), favorite.getAuctionID())) throw new FavoriteAlreadyExistsException("Bu ürünü zaten favorilere eklediniz.");
 
         favoriteRepository.save(favorite);
 

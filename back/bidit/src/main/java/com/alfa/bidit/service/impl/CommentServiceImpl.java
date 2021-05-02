@@ -35,14 +35,14 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Comment comment(Comment comment) {
         if(comment.getAuthorID().equals(comment.getSellerID()))
-            throw new CommentAuthorNotValidException();
+            throw new CommentAuthorNotValidException("Kendinize yorum yapamazsınız.");
 
         if(!userService.existsById(comment.getAuthorID())
             || !userService.existsById(comment.getSellerID()))
-            throw new UserNotExistException();
+            throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         if(commentRepository.existsCommentByAuthorIDAndSellerID(comment.getAuthorID(), comment.getSellerID()))
-            throw new MultiCommentException(" Birden çok yorum yapıldı ! ");
+            throw new MultiCommentException("Bu kullanıcıya daha önce yorum verdiniz.");
 
         comment.setPostingTime(DateUtil.now());
 

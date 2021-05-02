@@ -58,8 +58,6 @@ public class WalletServiceImpl implements WalletService {
         return true;
     }
 
-    // TODO burayı user oluştururken çağır.
-    // TODO User ın wallet ı olup olmadığını kontrol et.
     @Override
     public Wallet createWallet(Long userID) {
         Wallet wallet = new Wallet();
