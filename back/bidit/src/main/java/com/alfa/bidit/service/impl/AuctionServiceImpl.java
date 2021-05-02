@@ -1,8 +1,6 @@
 package com.alfa.bidit.service.impl;
 
-import com.alfa.bidit.exception.AuctionNotExistException;
-import com.alfa.bidit.exception.AuctionWinnerNotExistException;
-import com.alfa.bidit.exception.UserNotExistException;
+import com.alfa.bidit.exception.*;
 import com.alfa.bidit.model.Auction;
 import com.alfa.bidit.model.Bid;
 import com.alfa.bidit.repository.AuctionRepository;
@@ -133,6 +131,8 @@ public class AuctionServiceImpl implements AuctionService {
     public void endAuctionById(Long id){
         auctionRepository.findAuctionById(id).ifPresent(auction -> {
 
+            if(!auction.getStatus().equals(AuctionStatus.ACTIVE)) throw new AuctionNotActiveException("İlan aktif değil.");
+
             boolean sold;
             try {
                 Bid winner = bidService.getWinnerBid(id);
@@ -225,7 +225,11 @@ public class AuctionServiceImpl implements AuctionService {
     @Override
     public void approveDelivery(Long id) {
         Auction auction = getById(id);
+        if(auction.getStatus().equals(AuctionStatus.DELIVERED)) throw new AuctionAlreadyDelivered("Bu ürün zaten teslim alındı.");
+
         transactionService.approveTransaction(auction.getTransactionID());
+        auction.setStatus(AuctionStatus.DELIVERED);
+        auctionRepository.save(auction);
     }
 
     @Override
