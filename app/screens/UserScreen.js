@@ -1,5 +1,6 @@
 import React from 'react';
 import { SafeAreaView, StyleSheet, Text, View, Button , Image } from 'react-native';
+import {Avatar,Caption, Title,TouchableRipple} from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import CommentList from "../components/CommentList";
 import { useRequest } from '../hooks/useRequest';
@@ -9,7 +10,9 @@ import { TextButton } from '../components/TextButton';
 import { Input } from '../components/Input';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AuctionList from "../components/AuctionList";
-import {shade1, shade2 , shade3, shade4, shade5} from "../config/color"
+import {shade1, shade2 , shade3, shade4, shade5, shadeTrans} from "../config/color"
+import {BASE_URL} from '../config/index';
+
 
 
 function UserScreen({navigation, route}) {
@@ -27,6 +30,7 @@ function UserScreen({navigation, route}) {
     const [refreshing, setRefreshing] = React.useState(false);
     const [comment, setComment] = React.useState('');
     const [rating, setRating] = React.useState(3);
+    const [image, setImage] = React.useState(null);
     const [visibleAuctions, setVisibleAuctions] = React.useState(false)
 
     const { seller } = route.params;
@@ -35,8 +39,10 @@ function UserScreen({navigation, route}) {
         console.log('refresh')
         setRefreshing(true);
         useRequest('GET',`/comments/seller/${seller.id}`, user.token,{setState:setComments});
+        setImage(`${BASE_URL}/users/id/${seller.id}/image`)
         setRefreshing(false);
     }
+    console.log('IMAGE', image)
 
     const showAuctions = () => {
         console.log('refresh')
@@ -78,12 +84,33 @@ function UserScreen({navigation, route}) {
 
     return (
         <View style={styles.container}>
-            <Text>Welcome to User Screen of {seller.email}</Text>
+            
+            <View style={styles.userInfoSection}>
+                
+                {image != ''  && image!= null && image !=undefined? <Avatar.Image 
+                    source={{
+                        uri: image,
+                    }}
+                    size={150}
+                    /> : 
+                    <Avatar.Image 
+                    source={require('../../assets/no_image.png')}
+                    size={150}
+                />}
+                <Title 
+                    style={[styles.title, {
+                        marginTop:15,
+                        marginBottom: 5,
+                        color: '#343a40'
+                    }]}>
+                    {seller.firstname} {seller.lastname}
+                </Title>
+            </View>
             
             {!visibleAuctions ? 
             (<View>
                 <TextButton
-                title={ 'See Auctions' }
+                title={ 'Ilanları Gör' }
                 onPress={() => {
                     setVisibleAuctions(true);
                     showAuctions();
@@ -96,8 +123,14 @@ function UserScreen({navigation, route}) {
                 onChangeText={setComment}
                 />
                 <Rating
+                    type='custom'
                     showRating={false}
+                    selectedColor={shade5}
                     onFinishRating={ratingCompleted}
+                    unSelectedColor={shade4}
+                    ratingColor={shade5}
+                    ratingBackgroundColor={shade3}
+                    tintColor={shade1}
                     startingValue={3}
                     style={{ paddingVertical: 10}}
                 />
@@ -137,7 +170,7 @@ function UserScreen({navigation, route}) {
             ):
             (<View>
                 <TextButton
-                    title={'See Comments'}
+                    title={'Yorumları Gör'}
                     onPress={() => {
                         setVisibleAuctions(false);
                     }}
@@ -170,10 +203,17 @@ const styles = StyleSheet.create({
     },
     input: {
         marginVertical: 8,
-        backgroundColor: shade3
+        marginHorizontal: 20,
+        backgroundColor: shadeTrans
     },
     loginButton: {
         marginVertical: 32,
+        marginHorizontal: 100
+    },
+    userInfoSection: {
+        alignItems: 'center',
+        paddingHorizontal: 30,
+        marginBottom: 25,
     },
 });
 

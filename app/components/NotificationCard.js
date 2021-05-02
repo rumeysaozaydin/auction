@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, StyleSheet, View} from 'react-native';
-import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
-
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
+import moment from 'moment'
 
 const NotificationCard = ({navigation, data}) => {
     return (
@@ -13,6 +13,9 @@ const NotificationCard = ({navigation, data}) => {
                 <Text style={styles.cardDetails}>
                 {data.content}
                 </Text>
+                <Text style={{alignSelf:'flex-end', fontSize: 15,color: shade5}}>
+                    {moment((new Date(data.time))).format('DD.MM.YYYY')}    
+                </Text>
             </View>
         </View>
 
@@ -21,7 +24,7 @@ const NotificationCard = ({navigation, data}) => {
 
 const styles = StyleSheet.create({
     card: {
-        height: 75,
+        height: 83,
         marginBottom: 10,
         marginHorizontal: 10,
         flexDirection: 'row',

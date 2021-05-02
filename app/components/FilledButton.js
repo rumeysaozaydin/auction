@@ -9,7 +9,7 @@ export function FilledButton({title, style, onPress}) {
     <TouchableOpacity
       style={[styles.container, style]}
       onPress={onPress}>
-      <Text style={styles.text}>{title.toUpperCase()}</Text>
+      <Text style={styles.text}>{title}</Text>
     </TouchableOpacity>
   );
 }
@@ -26,6 +26,6 @@ const styles = StyleSheet.create({
   text: {
     color: '#CCE3DE',
     fontWeight: '500',
-    fontSize: 16,
+    fontSize: 14,
   },
 });

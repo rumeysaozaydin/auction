@@ -80,14 +80,14 @@ export function useAuth() {
         })
     }
 
-    const createUser = async (username,password,token) => {
+    const createUser = async (username,password,firstname, lastname, contactNumber, token) => {
         let pushToken = await registerForPushNotificationsAsync()
         console.log("RES 0 " ,pushToken)
         var postData = {
-            contactNumber: '5069608***',
-            firstname: 'Rumeysa',
+            contactNumber: contactNumber,
+            firstname: firstname,
             imagePath: 'string',
-            lastname: 'ÖZAYDIN',
+            lastname: lastname,
             pushToken: pushToken,
             email: username,
             password: password
@@ -139,12 +139,12 @@ export function useAuth() {
             signOut: async () => {
                 dispatch(createAction('REMOVE_USER'));
             },
-            signUp: async (username, password) => {
+            signUp: async (username, password, firstname, lastname, contactNumber) => {
                 let res = 'Başarılı';
 
                 await register(username,password).then( () => {
                     authenticate(username,password).then ( async  ({data}) => { 
-                        createUser(username,password,data.token).then (res => {
+                        createUser(username,password,firstname, lastname, contactNumber, data.token).then (res => {
                             setUserState(username,res.data,data.token)
                             res='Başarılı'
                         })

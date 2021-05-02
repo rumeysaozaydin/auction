@@ -8,7 +8,7 @@ import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
 
 
 
@@ -16,31 +16,52 @@ const SignUpScreen = (props) => {
 
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
+    const [firstname, setFirstname] = React.useState('');
+    const [lastname, setLastname] = React.useState('');
+    const [contactNumber, setContactNumber] = React.useState('');
 
     const {auth : {signUp}} = React.useContext(AuthContext);
 
     return (
         <ScreenContainer style={styles.container}>
-            <Heading style={styles.title}>Sign Up</Heading>
+            <Heading style={styles.title}>Kayıt Ol</Heading>
             <Input
                 style={styles.input}
-                placeholder={'Username'}
+                placeholder={'Email'}
                 value={username}
                 onChangeText={setUsername}
             />
             <Input
                 style={styles.input}
-                placeholder={'Password'}
+                placeholder={'Şifre'}
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
             />
+            <Input
+                style={styles.input}
+                placeholder={'Isim'}
+                value={firstname}
+                onChangeText={setFirstname}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'Soyisim'}
+                value={lastname}
+                onChangeText={setLastname}
+            />
+            <Input
+                style={styles.input}
+                placeholder={'Telefon Numarası'}
+                value={contactNumber}
+                onChangeText={setContactNumber}
+            />
             <FilledButton
-                title={'Sign Up'}
+                title={'Üye Ol'}
                 style={styles.loginButton}
                 onPress={async () => {
                     try {
-                        let res = await signUp(username, password);
+                        let res = await signUp(username, password, firstname, lastname, contactNumber);
                         if(res != 'Başarılı'){
                             showMessage({
                                 message: res,
@@ -53,7 +74,7 @@ const SignUpScreen = (props) => {
                   }}
             />
             <TextButton
-                title={'You Already Have an Account? Sign In' }
+                title={'Zaten üyeliğin var mı? Giriş Yap!' }
                 onPress={() => {
                     props.navigation.navigate("SignIn")
                 }}
@@ -70,7 +91,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        paddingTop: 120,
+        paddingTop: 60,
         alignItems: 'center',
         backgroundColor: shade1
     },
@@ -79,6 +100,8 @@ const styles = StyleSheet.create({
     },
     input: {
         marginVertical: 8,
+        backgroundColor: shadeTrans,
+        color: shade5
     },
     loginButton: {
         marginVertical: 32,

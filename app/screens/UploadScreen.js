@@ -11,11 +11,43 @@ import { AuthContext } from '../context/AuthContext';
 import * as ImagePicker from 'expo-image-picker';
 import { FlatList } from 'react-native-gesture-handler';
 import { useRequest } from '../hooks/useRequest';
-import {Picker} from '@react-native-picker/picker';
-import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
+//import {Picker} from '@react-native-picker/picker';
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans, shadeNotTrans} from "../config/color"
+import DropDownPicker from 'react-native-dropdown-picker';
+
 
 
 const UploadScreen = ({navigation}) => {
+
+    var categoryNames = new Map();
+    categoryNames.set("Tümü", "");
+    categoryNames.set("Elektronik", 'ELECTRONIC');
+    categoryNames.set("Oyun", 'GAME');
+    categoryNames.set("Ev", "HOME");
+    categoryNames.set("Araç", 'VEHICLES');
+    categoryNames.set("Spor", 'SPORTOUTDOOR');
+    categoryNames.set("Kıyafet", "FASHION");
+    categoryNames.set("Bebek", 'BABY');
+    categoryNames.set("Kitap", 'FILMBOOKMUSIC');
+    categoryNames.set("Diğer", 'OTHERS');
+
+    var daysItem = []
+    for (var i =0; i<16; i++){
+        var a = {label: (i + ''), value: (i + '')}
+        daysItem.push(a);
+    }
+
+    var hoursItem = []
+    for (var i =0; i<23; i++){
+        var a = {label: (i + ''), value: (i + '')}
+        hoursItem.push(a);
+    } 
+
+    var minutesItem = []
+    for (var i =0; i<59; i++){
+        var a = {label: (i + ''), value: (i + '')}
+        minutesItem.push(a);
+    } 
 
     const {
         user
@@ -27,13 +59,15 @@ const UploadScreen = ({navigation}) => {
 
     const id = user.id;
 
-    const [title, setTitle] = React.useState("jacket");
-    const [description, setDescription] = React.useState("nice jacket");
-    const [initialPrice, setInitialPrice] = React.useState("212");
-    const [duration, setDuration] = React.useState('60000');
+    const [title, setTitle] = React.useState("");
+    const [description, setDescription] = React.useState("");
+    const [initialPrice, setInitialPrice] = React.useState("");
+    const [duration, setDuration] = React.useState('');
     const [imageUris, setImageUris] = React.useState([]);
+    const [category, setCategory] = React.useState(null);
     const [days, setDays] = React.useState('0');
-    const [ hours, setHours] = React.useState('0')
+    const [ hours, setHours] = React.useState('0');
+    const [ minutes, setMinutes] = React.useState('0');
 
     const reset = () => {
         setTitle("v60");
@@ -112,60 +146,87 @@ const UploadScreen = ({navigation}) => {
                 value={initialPrice}
                 onChangeText={setInitialPrice}
             />
+
             
-            <Input
+            <DropDownPicker
+                items={[
+                    {label: 'Elektronik', value: 'ELECTRONIC'},
+                    {label: "Oyun", value:'GAME'},
+                    {label: 'Ev', value: 'HOME'},
+                    {label: "Araç", value:'VEHICLES'},
+                    {label: 'Spor', value: 'SPORTOUTDOOR'},
+                    {label: "Kıyafet", value:'FASHION'},
+                    {label: 'Bebek', value: 'BABY'},
+                    {label: "Kitap", value:'FILMBOOKMUSIC'},
+                    {label: 'Diğer', value: 'OTHERS'},
+                ]}
+                placeholder="Kategori"
+                defaultIndex={0}
+                placeholderStyle={{color: shade5}}
                 style={styles.input}
-                placeholder={'Süre'}
-                value={duration}
-                onChangeText={setDuration}
+                labelStyle={{color: shade5}}
+                containerStyle={{height: 80, width: '90%'}}
+                dropDownStyle={{backgroundColor: shadeNotTrans, color:shade1}}
+                onChangeItem={item => setCategory(item.value)}
             />
 
-                {/* <View
-                >
-                    <Picker
-                    style={{height: 20, width: 120}}
-                    itemStyle={{height: 100}}
-                    selectedValue={days}
-                    onValueChange={(itemValue, itemIndex) =>
-                        setDays(itemValue)
-                    }>
-                        <Picker.Item label="0" value='0' />
-                        <Picker.Item label="1" value="1" />
-                        <Picker.Item label="2" value="2" />
-                        <Picker.Item label="3" value="3" />
-                        <Picker.Item label="4" value="4" />
-                        <Picker.Item label="5" value="5" />
-                        <Picker.Item label="6" value="6" />
-                        <Picker.Item label="7" value="7" />
-                        <Picker.Item label="8" value="8" />
-                        <Picker.Item label="9" value="9" />
-                        <Picker.Item label="10" value="10" />
-                        <Picker.Item label="11" value="11" />
-                        <Picker.Item label="12" value="12" />
-                        <Picker.Item label="13" value="13" />
-                        <Picker.Item label="14" value="14" />
-                        <Picker.Item label="15" value="15" />
-                        
-                    </Picker>
+            <View style={{flexDirection:'row'}}>
+                
+                <DropDownPicker
+                    items={daysItem}
+                    placeholder="Gün"
+                    defaultIndex={0}
+                    placeholderStyle={{color: shade5}}
+                    style={styles.input}
+                    labelStyle={{color: shade5}}
+                    containerStyle={{height: 80, width: '30%'}}
+                    dropDownStyle={{backgroundColor: shadeNotTrans, color:shade1}}
+                    onChangeItem={item => setDays(item.value)}
+                />
 
-                </View> */}
+                <DropDownPicker
+                    items={hoursItem}
+                    placeholder="Saat"
+                    defaultIndex={0}
+                    placeholderStyle={{color: shade5}}
+                    style={styles.input}
+                    labelStyle={{color: shade5}}
+                    containerStyle={{height: 80, width: '30%'}}
+                    dropDownStyle={{backgroundColor: shadeNotTrans, color:shade1}}
+                    onChangeItem={item => setHours(item.value)}
+                />
+
+                <DropDownPicker
+                    items={minutesItem}
+                    placeholder="Dakika"
+                    defaultIndex={0}
+                    placeholderStyle={{color: shade5}}
+                    style={styles.input}
+                    labelStyle={{color: shade5}}
+                    containerStyle={{height: 80, width: '30%'}}
+                    dropDownStyle={{backgroundColor: shadeNotTrans, color:shade1}}
+                    onChangeItem={item => setMinutes(item.value)}
+                />
+            </View>
 
             <FlatList 
                 horizontal= {true}
                 showsHorizontalScrollIndicator= {false}
-                style={{height: 60, marginLeft: 10}}
+                style={{height: 60, marginLeft: 10, marginTop: 5}}
                 data={imageUris}
                 keyExtractor={(data) => data}
                 renderItem={({item}) => {
                     return (
                         <Image 
                             source={{ uri: item }} 
-                            style={{ width: 60, height: 60, marginRight: 10 }}
+                            style={{ width: 40, height: 40, marginRight: 10 }}
                         />
                     )
                 }}
             />
-            <Button style={{marginTop: 120}}title="Pick an image from camera roll" onPress={pickImage} />
+
+            <Button style={{marginTop: 5}}color={shade5} title="Fotoğraf Yükle" onPress={pickImage} />
+            
             <FilledButton
                 title={'Yükle'}
                 style={styles.loginButton}
@@ -175,9 +236,11 @@ const UploadScreen = ({navigation}) => {
                         "description": description,
                         "initialPrice": initialPrice,
                         "sellerID": id,
-                        "title": title
+                        "title": title,
+                        "auctionCategory": category
+
                     }
-                    useRequest('POST', `/auctions?duration=${duration}`, user.token, 
+                    useRequest('POST', `/auctions?duration=${(parseInt(days) * 86400) + (parseInt(hours) * 3600) + (parseInt(minutes) * 60) }`, user.token, 
                         {body:newAuction, callback:(response => {
                             console.log('Auction ID', response.id)
                             uploadImages(response.id)
@@ -207,7 +270,7 @@ const styles = StyleSheet.create({
         color: shade5
     },
     loginButton: {
-        marginVertical: 32,
+        marginVertical: 10,
     },
 });
 

@@ -6,7 +6,6 @@ import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
 import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
 
-
 const FavoritesScreen = ({navigation}) => {
 
     const {
@@ -61,28 +60,28 @@ const FavoritesScreen = ({navigation}) => {
 
     return (
       <View style={styles.container}>
-        
+      
         <View style={styles.tab}>
           <TextButton style={styles.button}
-            title={'Favorilerim'}
+            title={'Favoriler'}
             onPress={ () => {
                 setWhichList('Favorilerim');
             }}
           />
           <TextButton style={styles.button}
-            title={'Ilanlarim' }
+            title={'Ilanlar' }
             onPress={ () => {
                 setWhichList('Ilanlarım');
             }}
           />
           <TextButton style={styles.button}
-            title={'Teklif Verdiklerim' }
+            title={'     Teklif Verilenler' }
             onPress={ () => {
                 setWhichList('Teklif Verdiklerim');
             }}
           />
           <TextButton style={styles.button}
-            title={'Kazandıklarım' }
+            title={'Kazanılanlar' }
             onPress={ () => {
                 setWhichList('Kazandıklarım');
             }}
@@ -92,9 +91,10 @@ const FavoritesScreen = ({navigation}) => {
         <Text
           style={{
             alignSelf: 'center',
-            fontSize: 18,
+            fontSize: 25,
             fontWeight: 'bold',
             color: '#333',
+            marginVertical: 20
           }}>
           {whichList}
         </Text>
@@ -113,7 +113,7 @@ const FavoritesScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 80,
+    paddingTop: 60,
     flex: 1,
     flexDirection: "column",
     alignItems: 'center',
@@ -122,12 +122,13 @@ const styles = StyleSheet.create({
   tab: {
     //flex: 1,
     flexDirection: 'row',
-    alignItems: 'flex-start',
+    
+    fontSize: 5
   },
   button: {
-    flex: 1,
+    flex:1,
     color: 'black',
-    fontSize: 20
+    fontSize: 5,
   }
 });
 

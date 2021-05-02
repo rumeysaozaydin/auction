@@ -34,8 +34,33 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
         useRequest('GET', `/auctions/${data.id}/images`, user.token, {setState:setImageIds})
     },[]);
 
+    // const MySliderBox = React.memo((images, onCurrentImagePressed) => {
+    //     return <SliderBox 
+    //     style={{
+    //         width: imageWidth,
+    //         height: imageWidth,
+    //         borderRadius: 10,
+    //     }}
+    //     circleLoop={true}
+    //     images={images}
+    //     onCurrentImagePressed={onCurrentImagePressed}
+    // />   
+    // })
+
+    // const MyImage = React.memo(() => {
+    //     return <Image
+    //         source={{uri: imageIds.length == 0 ? 'https://icons.iconarchive.com/icons/icons8/windows-8/256/City-No-Camera-icon.png' : `${BASE_URL}/images/${imageIds[0]}`}}
+    //         onPress={() => console.log('asdsd')}
+    //         style={{
+    //             width: imageWidth,
+    //             height: imageWidth,
+    //             borderRadius: 10,
+    //         }}
+    //     />
+    // })
     return (
         <View style={styles.container} >
+            
             <SliderBox 
                 style={{
                     width: imageWidth,
@@ -43,12 +68,12 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
                     borderRadius: 10,
                 }}
                 circleLoop={true}
-                images={imageIds.length == 0 ? ([require('../../assets/noimage.jpg')]) : imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())}
-                
-                onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}?date=` + new Date())});}}
-            />                    
+                images={imageIds.length == 0 ? ([require('../../assets/no_image.png')]) : imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)}
+                onCurrentImagePressed={() => {navigation.navigate("Auction" , { auctionId: data.id, initIsFavorite: initIsFavorite, imageUris: imageIds.map((imageId) => `${BASE_URL}/images/${imageId}`)});}}
+            />   
+           
             <Text style={styles.title}>{data.title}</Text>
-            <Text style={styles.price}>₺{data.highestBid}</Text>                        
+            <Text style={styles.price}>{data.highestBid}₺</Text>                        
             <IconButton 
                 style={styles.favorite} 
                 color={shade5}
@@ -65,7 +90,7 @@ const AuctionCard = ({navigation, data, initIsFavorite, addFav, deleteFav}) => {
                     }
                 }}
             />
-            <Text style={styles.remainingTime}> 1 saat </Text>
+            {/* <Text style={styles.remainingTime}> </Text> */}
         </View>
         
     );
@@ -85,7 +110,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 10,
         left:15,
-        fontSize: 20,
+        fontSize: 15,
         color: shade1
     },
     price: 
@@ -93,7 +118,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right:15,
         bottom: 10,
-        fontSize: 20,
+        fontSize: 15,
         color: shade1
 
     },

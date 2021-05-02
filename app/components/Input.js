@@ -1,13 +1,15 @@
   
 import React from 'react';
 import {StyleSheet, TextInput} from 'react-native';
+import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+
 
 export function Input({style, ...props}) {
   return (
     <TextInput
       {...props}
       style={[styles.input, style]}
-      placeholderTextColor={'darkgray'}
+      placeholderTextColor={shade4}
     />
   );
 }
@@ -15,9 +17,10 @@ export function Input({style, ...props}) {
 const styles = StyleSheet.create({
   input: {
     backgroundColor: '#e8e8e8',
-    width: '100%',
+    width: '90%',
     padding: 20,
     borderRadius: 8,
+
     color: 'black',
   },
 });

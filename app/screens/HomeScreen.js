@@ -36,16 +36,21 @@ const HomeScreen = ({navigation}) => {
   const [category, setCategory] = React.useState('');
   const [categoryName, setCategoryName] = React.useState('');
 
-
-
-  const updateSearch = (search) => {
+  const updateSearchText = (search) => {
     setSearch(search);
   };
 
   const refresh = () => {
     console.log('refresh')
     setRefreshing(true);
-    useRequest('GET','/auctions/all?status=ACTIVE', user.token,{setState:setAuctionList});
+    if(search != ''){
+      useRequest('GET',`/auctions/searchAuction/${search}`, user.token,{setState:setAuctionList});
+    }
+    else if( category != ''){
+      useRequest('GET',`/auctions/searchCategory?category=${category}`, user.token,{setState:setAuctionList}); }  
+    else{
+      useRequest('GET','/auctions/all?status=ACTIVE&sort=BY_STARTING_TIME_DESC', user.token,{setState:setAuctionList});
+    }
     useRequest('GET',`/favorites/${user.id}`, user.token,{setState:setFavorites});
     setRefreshing(false);
   }
@@ -70,12 +75,24 @@ const HomeScreen = ({navigation}) => {
     refresh()
   }, []);
 
-  React.useEffect(() => {
-    useRequest('GET',`/auctions/search/${search}`, user.token,{setState:setAuctionList});
-  }, [search]);
+  const searching = () => {
+    if(search != ''){
+      useRequest('GET',`/auctions/searchAuction/${search}`, user.token,{setState:setAuctionList});
+      setCategory('')
+      setCategoryName('')
+    }
+    else{
+      useRequest('GET','/auctions/all?status=ACTIVE&sort=BY_STARTING_TIME_DESC', user.token,{setState:setAuctionList}); }
+
+  }
 
   React.useEffect(() => {
-    useRequest('GET',`/auctions/search/${category}`, user.token,{setState:setAuctionList});
+    if(category != ''){
+      useRequest('GET',`/auctions/searchCategory?category=${category}`, user.token,{setState:setAuctionList});   
+      setSearch('')
+    }
+    else{
+      useRequest('GET','/auctions/all?status=ACTIVE&sort=BY_STARTING_TIME_DESC', user.token,{setState:setAuctionList});    }  
   }, [category]);
 
   let iconNames = ["earth", "television", "gamepad-variant-outline", "home-city-outline", "car", "basketball", "tshirt-v-outline", "baby-carriage", "bookshelf", "dots-horizontal"]
@@ -91,19 +108,30 @@ const HomeScreen = ({navigation}) => {
   iconTitles.set("bookshelf", 'Kitap');
   iconTitles.set("dots-horizontal", 'Diğer');
 
-  var categoryNames = {};
-  categoryNames= {  "earth":"",
-                    "television": "ELECTRONIC",
-                    "gamepad-variant-outline": "GAME",
-                    "home-city-outline": "HOME",
-                    "car": "VEHICLES",
-                    "basketball":"SPORTOUTDOOR",
-                    "tshirt-v-outline":"FASHION",
-                    "baby-carriage": "BABY",
-                    "bookshelf": "FILMBOOKMUSIC",
-                    "dots-horizontal":"OTHERS"
-}
+  var categoryNames = new Map();
+  categoryNames.set("earth", "");
+  categoryNames.set("television", 'ELECTRONIC');
+  categoryNames.set("gamepad-variant-outline", 'GAME');
+  categoryNames.set("home-city-outline", "HOME");
+  categoryNames.set("car", 'VEHICLES');
+  categoryNames.set("basketball", 'SPORTOUTDOOR');
+  categoryNames.set("tshirt-v-outline", "FASHION");
+  categoryNames.set("baby-carriage", 'BABY');
+  categoryNames.set("bookshelf", 'FILMBOOKMUSIC');
+  categoryNames.set("dots-horizontal", 'OTHERS');
 
+//   var categoryNames = {};
+//   categoryNames= {  "earth":"",
+//                     "television": "ELECTRONIC",
+//                     "gamepad-variant-outline": "GAME",
+//                     "home-city-outline": "HOME",
+//                     "car": "VEHICLES",
+//                     "basketball":"SPORTOUTDOOR",
+//                     "tshirt-v-outline":"FASHION",
+//                     "baby-carriage": "BABY",
+//                     "bookshelf": "FILMBOOKMUSIC",
+//                     "dots-horizontal":"OTHERS"
+// }
   return (
     <View style={styles.container}>
       {/* <ImageBackground resizeMode= "cover" source={require('../../assets/bckgrnd.jpg')} style={styles.image}> */}
@@ -111,7 +139,8 @@ const HomeScreen = ({navigation}) => {
       <View style={{marginTop: 30, marginHorizontal:10}}>
         <SearchBar
           placeholder="Ara..."
-          onChangeText={updateSearch}
+          onChangeText={updateSearchText}
+          onSubmitEditing={searching}
           value={search}
           inputStyle={{backgroundColor: 'rgba(52, 52, 52, 0)', color: shade5}}
           containerStyle={{ backgroundColor: 'rgba(52, 52, 52, 0)', borderWidth: 0, borderTopWidth:0, borderBottomWidth:0}}
@@ -143,7 +172,6 @@ const HomeScreen = ({navigation}) => {
             }}
           />
         </View>
-        <Text>{categoryName}</Text>
         <AuctionList 
           refreshing={refreshing}
           onRefresh={refresh}

@@ -1,12 +1,17 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Button , Image} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Button , Image, TouchableOpacity} from 'react-native';
 import {Avatar,Caption, Title,TouchableRipple} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
 import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
 import { AuthContext } from '../context/AuthContext';
 import { useRequest } from '../hooks/useRequest';
-
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Star from 'react-native-star-view';
+import { TextButton } from '../components/TextButton'
+import axios from 'axios'
+import {BASE_URL} from '../config/index';
+// import { TouchableOpacity } from 'react-native-gesture-handler';
 
 
 function ProfileScreen({navigation}) {
@@ -18,24 +23,39 @@ function ProfileScreen({navigation}) {
     return <View></View>
   }
 
-  const [image, setImage] = React.useState(null);
+  const [image, setImage] = React.useState('');
   const [wallet, setWallet] = React.useState(0);
+  const [userInf, setUserInf] = React.useState({});
 
-  React.useEffect(() => {
+  const refresh = () => {
     useRequest('GET',`/users/${user.id}/balance`, user.token, {setState:setWallet})
-  }, []);
+    useRequest('GET',`/users/id/${user.id}`, user.token, {setState:setUserInf})
+  }
 
   React.useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
+    refresh()
   }, []);
 
+  const getMultipartImage = (uri) => {
+    const subdir = '/ImagePicker/' 
+    const name = uri.substring(uri.indexOf(subdir) + subdir.length)
+    let ext = undefined
+    if(name.substr(-3) == 'jpg' || name.substr(-3) == 'png'){
+        ext = name.substr(-3)
+    }
+    else if(name.substr(-4) == 'jpeg'){
+        ext = name.substr(-4)
+    }
+    else{
+        console.log('invalid extension type for image')
+    }
+    var img = {
+        uri: uri,
+        name: name,
+        type: 'image/' + ext
+    }
+    return img
+  }
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -49,45 +69,58 @@ function ProfileScreen({navigation}) {
     console.log(result);
 
     if (!result.cancelled) {
-      setImage(result.uri);
+
+      if(result.uri != null && result.uri != undefined && result.uri != ''){
+        setImage(result.uri);
+        const data = new FormData()
+        const img = getMultipartImage(result.uri)
+        data.append('multipartImage',  img);
+        useRequest('POST', `/users/id/${user.id}/image`, user.token, {body:data})
+      }
     }
   };
+
 
   return (
     <View style={styles.container}>
 
-    <View style={styles.userInfoSection}>
-      <View style={{flexDirection: 'row', marginTop: 15}}>
-        <Avatar.Image 
+      <TextButton
+          title={'Yenile'}
+          onPress={refresh}
+      />
+      <TouchableOpacity onPress={pickImage} >
+        {image != '' ? <Avatar.Image 
           source={{
-            uri: 'https://api.adorable.io/avatars/80/abott@adorable.png',
+            uri: image,
           }}
-          size={80}
-        />
-        <View style={{marginLeft: 20}}>
-          <Title style={[styles.title, {
-            marginTop:15,
-            marginBottom: 5,
-          }]}>John Doe</Title>
-          <Caption style={styles.caption}>@j_doe</Caption>
+          size={150}
+        /> : 
+        <Avatar.Image 
+        source={require('../../assets/no_image.png')}
+        size={150}
+      />}
+        
+      </TouchableOpacity>        
+      
+     
+      <View style={styles.userInfoSection}>
+        <View style={{alignSelf:'center'}}>
+            <Title style={[styles.title, {
+              marginTop:15,
+              marginBottom: 5,
+              color: '#343a40'
+            }]}>{userInf.firstname} {userInf.lastname}</Title>
+
+        </View>
+        <View style={styles.row}>
+          <Icon name="phone" color={shade5} size={20}/>
+          <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.contactNumber}</Text>
+        </View>
+        <View style={styles.row}>
+          <Icon name="email" color={shade5} size={20}/>
+          <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.email}</Text>
         </View>
       </View>
-    </View>
-
-    <View style={styles.userInfoSection}>
-      <View style={styles.row}>
-        <Icon name="map-marker-radius" color="#777777" size={20}/>
-        <Text style={{color:"#777777", marginLeft: 20}}>Ankara, Turkey</Text>
-      </View>
-      <View style={styles.row}>
-        <Icon name="phone" color="#777777" size={20}/>
-        <Text style={{color:"#777777", marginLeft: 20}}>+90 543 323 32 19</Text>
-      </View>
-      <View style={styles.row}>
-        <Icon name="email" color="#777777" size={20}/>
-        <Text style={{color:"#777777", marginLeft: 20}}>john_doe@email.com</Text>
-      </View>
-    </View>
 
     <View style={styles.infoBoxWrapper}>
         <View style={[styles.infoBox, {
@@ -95,28 +128,22 @@ function ProfileScreen({navigation}) {
           borderRightWidth: 1
         }]}>
           <Title>{wallet}₺</Title>
-          <Caption>Wallet</Caption>
+          <Text style={{
+            fontWeight: '100',
+            fontSize: 13,
+            color: 'black'
+          }}>Cüzdan</Text>
         </View>
         <View style={styles.infoBox}>
-          <Title>12</Title>
-          <Caption>Orders</Caption>
+          <Title>{userInf.ratingCount}</Title>
+          <TextButton
+                    title={'Yorumlar'}
+                    onPress={() => {navigation.navigate("User", {seller: userInf})}}
+          />
         </View>
     </View>
-
     <View style={styles.menuWrapper}>
       
-      <TouchableRipple onPress={() => {}}>
-        <View style={styles.menuItem}>
-          <Icon name="credit-card" color="#FF6347" size={25}/>
-          <Text style={styles.menuItemText}>Payment</Text>
-        </View>
-      </TouchableRipple>
-      <TouchableRipple onPress={() => {}}>
-        <View style={styles.menuItem}>
-          <Icon name="account-check-outline" color="#FF6347" size={25}/>
-          <Text style={styles.menuItemText}>Support</Text>
-        </View>
-      </TouchableRipple>
       <TouchableRipple onPress={
           async () => {
           try {
@@ -127,13 +154,11 @@ function ProfileScreen({navigation}) {
         }
       }>
         <View style={styles.menuItem}>
-          <Icon name="settings-outline" color="#FF6347" size={25}/>
-          <Text style={styles.menuItemText}>Sign Out</Text>
+          <FontAwesome name="sign-out" color={shade5} size={25}/>
+          <Text style={styles.menuItemText}>Çıkış Yap</Text>
         </View>
       </TouchableRipple>
 
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
-      {/* {image && <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />} */}
     </View>
   </View>
   );
@@ -148,7 +173,6 @@ const styles = StyleSheet.create({
     backgroundColor: shade1
   },
   userInfoSection: {
-    paddingHorizontal: 30,
     marginBottom: 25,
   },
   title: {

@@ -7,3 +7,5 @@ export const shade3 = '#CCE3DE';
 export const shade4 = '#A4C3B2';
 export const shade5 = '#6B9080';
 export const shadeTrans = 'rgba(204, 227, 222, 0.3)';
+export const shadeNotTrans = '#EDF6F1';
+export const textColor = '#424242'

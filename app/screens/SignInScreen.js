@@ -8,13 +8,13 @@ import { Loading } from '../components/Loading';
 import { TextButton } from '../components/TextButton';
 import { AuthContext } from '../context/AuthContext';
 import { showMessage, hideMessage } from "react-native-flash-message";
-import {shade1, shade2, shade3, shade4, shade5} from "../config/color"
+import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/color"
 
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState('rumeysa');
-    const [password, setPassword] = React.useState('ali');
+    const [username, setUsername] = React.useState('Rumeysa');
+    const [password, setPassword] = React.useState('a');
     const [loading, setLoading] = React.useState(false);
     
 
@@ -23,22 +23,22 @@ const SignInScreen = (props) => {
     return (  
         
         <ScreenContainer style={styles.container}>
-            <Heading style={styles.title}>Sign In</Heading>
+            <Heading style={styles.title}>Giriş Yap</Heading>
             <Input
                 style={styles.input}
-                placeholder={'Username'}
+                placeholder={'Email'}
                 value={username}
                 onChangeText={setUsername}
             />
             <Input
                 style={styles.input}
-                placeholder={'Password'}
+                placeholder={'Şifre'}
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
             />
             <FilledButton
-                title={'Sign In'}
+                title={'Giriş Yap'}
                 style={styles.loginButton}
                 onPress={async () => {
                     try {
@@ -55,7 +55,7 @@ const SignInScreen = (props) => {
                 }}
             />
             <TextButton
-                title={'You Don\'t Have an account? Create one'}
+                title={'Üyeliğin yok mu? Üye ol!'}
                 onPress={() => {
                     props.navigation.navigate("SignUp")
                 }}
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         padding: 16,
-        paddingTop: 120,
+        paddingTop: 60,
         alignItems: 'center',
         backgroundColor: shade1
     },
@@ -78,6 +78,8 @@ const styles = StyleSheet.create({
     },
     input: {
         marginVertical: 8,
+        backgroundColor: shadeTrans,
+        color: shade5
     },
     loginButton: {
         marginVertical: 32,
