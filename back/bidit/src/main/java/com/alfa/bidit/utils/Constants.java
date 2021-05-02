@@ -5,7 +5,7 @@ import org.springframework.data.domain.Sort;
 public class Constants {
 
     public enum AuctionStatus {
-        ACTIVE, EXPIRED_SOLD, EXPIRED_UNSOLD, CANCELED
+        ACTIVE, EXPIRED_SOLD, EXPIRED_UNSOLD, CANCELED, DELIVERED
     }
     public enum AuctionCategory{
         ELECTRONIC,GAME,HOME,CAR,VEHICLES,SPORTOUTDOOR,FASHION,BABY,FILMBOOKMUSIC,WORKS,SERVICE,ESTATE,OTHERS
