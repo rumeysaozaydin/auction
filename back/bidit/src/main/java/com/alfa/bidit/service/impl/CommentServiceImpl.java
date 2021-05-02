@@ -6,6 +6,7 @@ import com.alfa.bidit.exception.UserNotExistException;
 import com.alfa.bidit.model.Comment;
 import com.alfa.bidit.repository.CommentRepository;
 import com.alfa.bidit.service.CommentService;
+import com.alfa.bidit.service.NotificationService;
 import com.alfa.bidit.service.UserService;
 import com.alfa.bidit.utils.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,11 +21,13 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     @Autowired
-    public CommentServiceImpl(CommentRepository commentRepository, UserService userService) {
+    public CommentServiceImpl(CommentRepository commentRepository, UserService userService, NotificationService notificationService) {
         this.commentRepository = commentRepository;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     @Override
@@ -49,6 +52,10 @@ public class CommentServiceImpl implements CommentService {
         userService.rateUser(comment.getSellerID(), comment.getRating());
 
         commentRepository.save(comment);
+
+        notificationService.sendPushNotification(comment.getSellerID(), "Bir kullanıcı size yorum yaptı!", comment.getContent());
+        notificationService.saveInAppNotification(comment.getSellerID(), "Bir kullanıcı size yorum yaptı!", comment.getContent());
+
         return comment;
     }
 }
