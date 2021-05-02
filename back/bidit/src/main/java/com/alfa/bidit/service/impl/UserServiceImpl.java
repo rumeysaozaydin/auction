@@ -36,7 +36,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public Long register(User user) {
-        if(existsByEmail(user.getEmail()))  throw new UserAlreadyExistsException("Bu Email kullaniliyor. ");
+        if(existsByEmail(user.getEmail()))  throw new UserAlreadyExistsException("Bu kullanıcı adı kullanılıyor. ");
 
         user.setRatingCount(0L);
         user.setRatingSum(0L);
@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
     public User getById(Long id) {
         Optional<User> optionalStudent = userRepository.findUserById(id);
 
-        if(optionalStudent.isEmpty()) throw new UserNotExistException("with id: " + id);
+        if(optionalStudent.isEmpty()) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         return optionalStudent.get();
     }
@@ -59,7 +59,7 @@ public class UserServiceImpl implements UserService {
     public User getByEmail(String email) {
         Optional<User> optionalStudent = userRepository.findUserByEmail(email);
 
-        if(optionalStudent.isEmpty()) throw new UserNotExistException("Bu mail ile bir kulanıcı bulunamadı : " + email);
+        if(optionalStudent.isEmpty()) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         return optionalStudent.get();
     }

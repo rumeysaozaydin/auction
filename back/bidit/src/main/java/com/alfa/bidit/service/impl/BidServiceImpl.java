@@ -48,17 +48,20 @@ public class BidServiceImpl implements BidService {
 
     @Override
     public Long bid(Bid bid) throws PushClientException, InterruptedException {
-        if (!auctionService.existsById(bid.getAuctionID())) throw new AuctionNotExistException();
 
-        if (!userService.existsById(bid.getUserID())) throw new UserNotExistException();
+        if (bid.getPrice() == null) throw new BidPriceNotValidException("Lütfen geçerli bir değer giriniz.");
 
-        if (auctionService.getSellerIDByAuctionID(bid.getAuctionID()).equals(bid.getUserID())) throw new BidOwnerNotValidException();
+        if (!auctionService.existsById(bid.getAuctionID())) throw new AuctionNotExistException("İlan mevcut değil.");
+
+        if (!userService.existsById(bid.getUserID())) throw new UserNotExistException("Kullanıcı mevcut değil.");
+
+        if (auctionService.getSellerIDByAuctionID(bid.getAuctionID()).equals(bid.getUserID())) throw new BidOwnerNotValidException("Kendinize teklif veremezsiniz.");
 
         if (!isBidPriceValid(bid)) throw new BidPriceNotValidException("Verilen teklif güncel tekliften az olamaz!");
 
         if (!auctionService.isActiveById(bid.getAuctionID())) throw new AuctionNotActiveException("İlanın süresi doldu!");;
 
-        if (walletService.getBalance(bid.getUserID()) < bid.getPrice()) throw new InsufficientBalanceException();
+        if (walletService.getBalance(bid.getUserID()) < bid.getPrice()) throw new InsufficientBalanceException("Bu teklif için bakiyeniz yetersiz.");
 
         auctionService.updateHighestBid(bid.getAuctionID(), bid.getPrice(), bid.getUserID());
 
@@ -95,7 +98,7 @@ public class BidServiceImpl implements BidService {
     public Bid getWinnerBid(Long auctionID) {
         Bid bid =  bidRepository.findFirstByAuctionIDOrderByPriceDesc(auctionID);
 
-        if (bid == null) throw new AuctionWinnerNotExistException("İlana kimse teklif vermedi!");;
+        if (bid == null) throw new AuctionWinnerNotExistException("İlanınıza kimse teklif vermedi.");;
 
         return bid;
     }

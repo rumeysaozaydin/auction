@@ -51,7 +51,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public Auction create(Auction auction, Long duration) {
-        if(!userService.existsById(auction.getSellerID())) throw new UserNotExistException();
+        if(!userService.existsById(auction.getSellerID())) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         setStartingAndExpirationTime(auction, duration);
         auction.setHighestBid(auction.getInitialPrice());
@@ -66,14 +66,14 @@ public class AuctionServiceImpl implements AuctionService {
     public Auction getById(Long id) {
         Optional<Auction> auction = auctionRepository.findAuctionById(id);
 
-        if (auction.isEmpty()) throw new AuctionNotExistException(" Aradiginiz ilana ulasilamadi ! ");;
+        if (auction.isEmpty()) throw new AuctionNotExistException("İlan mevcut değil.");;
 
         return auction.get();
     }
 
     @Override
     public List<Auction> getBySellerId(Long sellerID, Constants.AuctionSorting sort) {
-        if(!userService.existsById(sellerID)) throw new UserNotExistException();
+        if(!userService.existsById(sellerID)) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         Optional<List<Auction>> auctions = auctionRepository.findAllBySellerID(sellerID, getSort(sort));
 
@@ -82,7 +82,7 @@ public class AuctionServiceImpl implements AuctionService {
 
     @Override
     public List<Auction> getBySellerIdAndStatus(Long sellerID, List<AuctionStatus> statusList, Constants.AuctionSorting sort) {
-        if(!userService.existsById(sellerID)) throw new UserNotExistException();
+        if(!userService.existsById(sellerID)) throw new UserNotExistException("Kullanıcı mevcut değil.");
 
         return auctionRepository.findAllBySellerIDAndStatusIn(sellerID, statusList, getSort(sort));
     }
