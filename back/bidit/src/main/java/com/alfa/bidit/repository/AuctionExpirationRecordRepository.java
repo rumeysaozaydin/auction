@@ -10,4 +10,6 @@ import java.util.List;
 @Repository
 public interface AuctionExpirationRecordRepository extends JpaRepository<AuctionExpirationRecord, Long> {
     List<AuctionExpirationRecord> findAuctionExpirationRecordsByExpirationTimeBefore(Date date);
+
+    AuctionExpirationRecord findAuctionExpirationRecordsByAuctionID(Long auctionID);
 }
