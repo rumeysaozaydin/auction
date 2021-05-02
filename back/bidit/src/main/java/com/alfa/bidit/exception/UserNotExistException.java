@@ -3,10 +3,10 @@ package com.alfa.bidit.exception;
 public class UserNotExistException extends RuntimeException{
 
     public UserNotExistException(){
-        super("User does not exist.");
+        super("Kullanıcı mevcut değil.");
     }
 
-    public UserNotExistException(String withParams){
-        super("User " + withParams + " does not exist.");
+    public UserNotExistException(String s){
+        super(s);
     }
 }
