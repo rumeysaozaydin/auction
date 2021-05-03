@@ -18,6 +18,7 @@ import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/colo
 //         BY_PRICE_DESC
 //         ?sort=UNSORTED vs
 // color pallete : https://coolors.co/6b9080-a4c3b2-cce3de-eaf4f4-f6fff8
+const screenWidth = Math.round(Dimensions.get('window').width)
 
 const HomeScreen = ({navigation}) => {
   const {
@@ -203,7 +204,7 @@ const styles = StyleSheet.create({
     flex: 1,
     //alignSelf: 'center',
     height: 50,
-    width: 70,
+    width: screenWidth * 0.2,
     //marginRight:5,
   },
   categoryIcon: {

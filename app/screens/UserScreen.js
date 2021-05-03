@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Button , Image } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Button , Image, Dimensions } from 'react-native';
 import {Avatar,Caption, Title,TouchableRipple} from 'react-native-paper';
 import { AuthContext } from '../context/AuthContext';
 import CommentList from "../components/CommentList";
@@ -10,10 +10,11 @@ import { TextButton } from '../components/TextButton';
 import { Input } from '../components/Input';
 import { showMessage, hideMessage } from "react-native-flash-message";
 import AuctionList from "../components/AuctionList";
-import {shade1, shade2 , shade3, shade4, shade5, shadeTrans} from "../config/color"
+import {shade1, shade2 , shade3, shade4, shade5, shadeTrans, textColor} from "../config/color"
 import {BASE_URL} from '../config/index';
+import Star from 'react-native-star-view';
 
-
+let date = new Date()
 
 function UserScreen({navigation, route}) {
     const {
@@ -24,22 +25,25 @@ function UserScreen({navigation, route}) {
         return <View></View>
     }
 
+    const { seller } = route.params;
+
     const [comments, setComments] = React.useState([]);
     const [auctionList, setAuctionList] = React.useState([]);
     const [favorites, setFavorites] = React.useState([]);
     const [refreshing, setRefreshing] = React.useState(false);
     const [comment, setComment] = React.useState('');
     const [rating, setRating] = React.useState(3);
+    const [ratingSum, setRatingSum] = React.useState(seller.ratingSum);
+    const [ratingCount, setRatingCount] = React.useState(seller.ratingCount);
     const [image, setImage] = React.useState(null);
     const [visibleAuctions, setVisibleAuctions] = React.useState(false)
 
-    const { seller } = route.params;
 
     const refresh = () => {
         console.log('refresh')
         setRefreshing(true);
         useRequest('GET',`/comments/seller/${seller.id}`, user.token,{setState:setComments});
-        setImage(`${BASE_URL}/users/id/${seller.id}/image`)
+        setImage(`${BASE_URL}/users/${seller.id}/image`)
         setRefreshing(false);
     }
     console.log('IMAGE', image)
@@ -86,41 +90,52 @@ function UserScreen({navigation, route}) {
         <View style={styles.container}>
             
             <View style={styles.userInfoSection}>
+
+                <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems: 'center', marginVertical: 10, marginHorizontal: 10}}> 
+                    {seller.imageID == null ? 
+                        <Avatar.Image 
+                        source={require('../../assets/no_image.png')}
+                        size={100}
+                        /> :   
+                        <Avatar.Image 
+                                    source={{
+                                        uri:`${BASE_URL}/users/${seller.id}/image?date=` + date,
+                                    }}
+                                    size={100}
+                        /> 
+                    }
+                        
+                    <View> 
+                        <Text style={{marginLeft: 10, fontWeight:'bold', color: shade5,fontSize: 22}}>
+                            {seller.firstname == null ? '' : seller.firstname + ' '}
+                            
+                            {seller.lastname == null ? '' : seller.lastname}
+                        </Text>
+
+                        <Star style={styles.starStyle} score={ratingSum / ratingCount}/>
+                        <Text style={{marginLeft: 12, color: shade5}}>{ratingCount} Yorum</Text>
+
+                    </View>
+                    
+                </View>
                 
-                {image != ''  && image!= null && image !=undefined? <Avatar.Image 
-                    source={{
-                        uri: image,
-                    }}
-                    size={150}
-                    /> : 
-                    <Avatar.Image 
-                    source={require('../../assets/no_image.png')}
-                    size={150}
-                />}
-                <Title 
-                    style={[styles.title, {
-                        marginTop:15,
-                        marginBottom: 5,
-                        color: '#343a40'
-                    }]}>
-                    {seller.firstname} {seller.lastname}
-                </Title>
             </View>
             
             {!visibleAuctions ? 
             (<View>
                 <TextButton
                 title={ 'Ilanları Gör' }
+                textStyle={{fontSize:16, color: textColor}}
                 onPress={() => {
                     setVisibleAuctions(true);
                     showAuctions();
                 }}
                 />
                 <Input
-                style={styles.input}
-                placeholder={'Yorum Yaz'}
-                value={comment}
-                onChangeText={setComment}
+                    style={styles.input}
+                    placeholder={'Yorum Yaz'}
+                    value={comment}
+                    onChangeText={setComment}
                 />
                 <Rating
                     type='custom'
@@ -153,6 +168,8 @@ function UserScreen({navigation, route}) {
                             });
                             const newComments = [ data,...comments]
                             setComments(newComments)
+                            setRatingCount(seller.ratingCount + 1)
+                            setRatingSum(seller.ratingSum + rating)
                             reset()
                         }     
                         });
@@ -171,6 +188,8 @@ function UserScreen({navigation, route}) {
             (<View>
                 <TextButton
                     title={'Yorumları Gör'}
+                    style={{paddingBottom:10}}
+                    textStyle={{fontSize:16, color: textColor}}
                     onPress={() => {
                         setVisibleAuctions(false);
                     }}
@@ -195,11 +214,16 @@ function UserScreen({navigation, route}) {
 
 const styles = StyleSheet.create({
     container: {
-      paddingTop: 60,
+      paddingTop: 40,
       flexDirection: "column",
-      paddingBottom: 60,
+      paddingBottom: 90,
       flex: 1,
       backgroundColor: shade1
+    },
+    starStyle: {
+        width: 100,
+        height: 20,
+        marginLeft: 10,
     },
     input: {
         marginVertical: 8,
@@ -207,13 +231,12 @@ const styles = StyleSheet.create({
         backgroundColor: shadeTrans
     },
     loginButton: {
-        marginVertical: 32,
         marginHorizontal: 100
     },
     userInfoSection: {
         alignItems: 'center',
         paddingHorizontal: 30,
-        marginBottom: 25,
+        marginBottom: 10,
     },
 });
 

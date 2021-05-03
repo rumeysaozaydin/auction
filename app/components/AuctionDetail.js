@@ -12,7 +12,8 @@ import { CountdownCircleTimer } from 'react-native-countdown-circle-timer'
 
 import { TextButton } from './TextButton'
 
-const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => {
+let date = new Date()
+const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation,refresh}) => {
     
     const {
         user,
@@ -52,6 +53,10 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => 
 
     const UrgeWithPleasureComponent = () => (
         <CountdownCircleTimer
+          onComplete={() => {
+            // do your stuff here
+            setTimeout(() => {  console.log("settimeout"); refresh() }, 5000);
+          }}
           size={70}
           strokeWidth={5}
           trailColor={'rgba(0,0,0,0.2)'}
@@ -59,8 +64,8 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => 
           duration={dur > 0 ? dur : 0}
           initialRemainingTime={init > 0 ? init : 0}
           colors={[
-            ['rgba(0,0,0,0.5)', 0.9],
-            ['rgba(0,0,0,0.5)', 0.11],
+            [shade4, 0.9],
+            [shade3, 0.11],
             ['#A30000', 0.1],
           ]}
         >
@@ -134,19 +139,24 @@ const AuctionDetail = ({auction,seller,initIsFavorite,imageUris,navigation}) => 
             </View>
             
             <View style={{flexDirection:'row', justifyContent:'flex-start', alignItems: 'center', marginVertical: 10, marginHorizontal: 10}}> 
-                    
+                {seller.imageID == null ? 
                     <Avatar.Image 
-                            source={{
-                                uri:`${BASE_URL}/users/id/${seller.id}/image`,
-                            }}
-                            size={50}
-                    />
-                    <TextButton
-                        style={{marginLeft:10}}
-                        textStyle={{fontWeight:'bold', color: shade5,fontSize: 22}}
-                        title={seller.email == null ? '' : seller.email}
-                        onPress={() => {navigation.navigate("User", {seller: seller})}}
-                    />
+                    source={require('../../assets/no_image.png')}
+                    size={50}
+                    /> :   
+                    <Avatar.Image 
+                                source={{
+                                    uri:`${BASE_URL}/users/${seller.id}/image?date=` + date,
+                                }}
+                                size={50}
+                    /> 
+                }
+                <TextButton
+                    style={{marginLeft:10}}
+                    textStyle={{fontWeight:'bold', color: shade5,fontSize: 22}}
+                    title={seller.firstname == null ? '' : (seller.firstname + ' ' + (seller.lastname ==null ? '' : ((seller.lastname).charAt(0).toUpperCase() + '.')))}
+                    onPress={() => {navigation.navigate("User", {seller: seller})}}
+                />
             </View>
             
             <View style={styles.card}>

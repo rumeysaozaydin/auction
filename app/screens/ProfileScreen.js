@@ -1,5 +1,5 @@
 import React from 'react';
-import { SafeAreaView, StyleSheet, Text, View, Button , Image, TouchableOpacity} from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Button , Image, TouchableOpacity, RefreshControl, ScrollView} from 'react-native';
 import {Avatar,Caption, Title,TouchableRipple} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
@@ -26,11 +26,27 @@ function ProfileScreen({navigation}) {
   const [image, setImage] = React.useState('');
   const [wallet, setWallet] = React.useState(0);
   const [userInf, setUserInf] = React.useState({});
+  const [refreshing, setRefreshing] = React.useState(false);
+
 
   const refresh = () => {
+    setRefreshing(true)
     useRequest('GET',`/users/${user.id}/balance`, user.token, {setState:setWallet})
-    useRequest('GET',`/users/id/${user.id}`, user.token, {setState:setUserInf})
+    useRequest('GET',`/users/${user.id}`, user.token, {setState:setUserInf})
+    setRefreshing(false)
   }
+
+  React.useEffect(() => {
+    if(userInf.imageID == null){
+      setImage('')
+      console.log('inseide')
+    }
+    else{
+      axios.get(`${BASE_URL}/users/${user.id}/image`).then((res) => {
+        setImage(res.config.url)
+      })
+    }
+  }, [userInf])
 
   React.useEffect(() => {
     refresh()
@@ -75,7 +91,7 @@ function ProfileScreen({navigation}) {
         const data = new FormData()
         const img = getMultipartImage(result.uri)
         data.append('multipartImage',  img);
-        useRequest('POST', `/users/id/${user.id}/image`, user.token, {body:data})
+        useRequest('POST', `/users/${user.id}/image`, user.token, {body:data})
       }
     }
   };
@@ -83,83 +99,92 @@ function ProfileScreen({navigation}) {
 
   return (
     <View style={styles.container}>
-
-      <TextButton
-          title={'Yenile'}
-          onPress={refresh}
-      />
-      <TouchableOpacity onPress={pickImage} >
-        {image != '' ? <Avatar.Image 
-          source={{
-            uri: image,
-          }}
-          size={150}
-        /> : 
-        <Avatar.Image 
-        source={require('../../assets/no_image.png')}
-        size={150}
-      />}
-        
-      </TouchableOpacity>        
-      
-     
-      <View style={styles.userInfoSection}>
-        <View style={{alignSelf:'center'}}>
-            <Title style={[styles.title, {
-              marginTop:15,
-              marginBottom: 5,
-              color: '#343a40'
-            }]}>{userInf.firstname} {userInf.lastname}</Title>
-
-        </View>
-        <View style={styles.row}>
-          <Icon name="phone" color={shade5} size={20}/>
-          <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.contactNumber}</Text>
-        </View>
-        <View style={styles.row}>
-          <Icon name="email" color={shade5} size={20}/>
-          <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.email}</Text>
-        </View>
-      </View>
-
-    <View style={styles.infoBoxWrapper}>
-        <View style={[styles.infoBox, {
-          borderRightColor: '#dddddd',
-          borderRightWidth: 1
-        }]}>
-          <Title>{wallet}₺</Title>
-          <Text style={{
-            fontWeight: '100',
-            fontSize: 13,
-            color: 'black'
-          }}>Cüzdan</Text>
-        </View>
-        <View style={styles.infoBox}>
-          <Title>{userInf.ratingCount}</Title>
-          <TextButton
-                    title={'Yorumlar'}
-                    onPress={() => {navigation.navigate("User", {seller: userInf})}}
+      <ScrollView 
+        contentContainerStyle={{alignItems: 'center'}}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={refresh}
           />
-        </View>
-    </View>
-    <View style={styles.menuWrapper}>
-      
-      <TouchableRipple onPress={
-          async () => {
-          try {
-            await signOut();
-          } catch (e) {
-              console.log(e)
-          }
-        }
       }>
-        <View style={styles.menuItem}>
-          <FontAwesome name="sign-out" color={shade5} size={25}/>
-          <Text style={styles.menuItemText}>Çıkış Yap</Text>
-        </View>
-      </TouchableRipple>
+      {/* <TouchableOpacity
+        style={{alignSelf:'flex-start'}}
+        onPress={refresh}
+        >
+          <Icon name={'refresh'} size={30} color={shade5} />
+        </TouchableOpacity> */}
+        <TouchableOpacity onPress={pickImage} >
+          {image != '' ? <Avatar.Image 
+              source={{
+                uri: image,
+              }}
+              size={150}
+            /> : 
+            <Avatar.Image 
+            source={require('../../assets/no_image.png')}
+            size={150}
+          />}
+        </TouchableOpacity>        
+        
+      
+        <View style={styles.userInfoSection}>
+          <View style={{alignSelf:'center'}}>
+              <Title style={[styles.title, {
+                marginTop:15,
+                marginBottom: 5,
+                color: '#343a40'
+              }]}>{userInf.firstname} {userInf.lastname}</Title>
 
-    </View>
+          </View>
+          <View style={styles.row}>
+            <Icon name="phone" color={shade5} size={20}/>
+            <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.contactNumber}</Text>
+          </View>
+          <View style={styles.row}>
+            <Icon name="email" color={shade5} size={20}/>
+            <Text style={{color:'#343a40', marginLeft: 20}}>{userInf.email}</Text>
+          </View>
+        </View>
+
+      <View style={styles.infoBoxWrapper}>
+          <View style={[styles.infoBox, {
+            borderRightColor: '#dddddd',
+            borderRightWidth: 1
+          }]}>
+            <Title>{wallet}₺</Title>
+            <Text style={{
+              fontWeight: '100',
+              fontSize: 13,
+              color: 'black'
+            }}>Cüzdan</Text>
+          </View>
+          <View style={styles.infoBox}>
+            <Title>{userInf.ratingCount}</Title>
+            <TextButton
+                      title={'Yorumlar'}
+                      onPress={() => {navigation.navigate("User", {seller: userInf})}}
+            />
+          </View>
+      </View>
+      <View style={styles.menuWrapper}>
+        
+        <TouchableRipple onPress={
+            async () => {
+            try {
+              await signOut();
+            } catch (e) {
+                console.log(e)
+            }
+          }
+        }>
+          <View style={styles.menuItem}>
+            <FontAwesome name="sign-out" color={shade5} size={25}/>
+            <Text style={styles.menuItemText}>Çıkış Yap</Text>
+          </View>
+        </TouchableRipple>
+
+      </View>
+    </ScrollView>
   </View>
   );
 };

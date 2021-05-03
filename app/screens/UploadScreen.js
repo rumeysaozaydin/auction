@@ -1,7 +1,7 @@
 
 import axios from 'axios';
 import React from 'react';
-import { StyleSheet, View, Button, Image, Text} from 'react-native';
+import { StyleSheet, View, Button, Image, Text, Dimensions, TouchableOpacity} from 'react-native';
 import { ScreenContainer } from 'react-native-screens';
 import { FilledButton } from '../components/FilledButton';
 import { Heading } from '../components/Heading';
@@ -14,7 +14,10 @@ import { useRequest } from '../hooks/useRequest';
 //import {Picker} from '@react-native-picker/picker';
 import {shade1, shade2, shade3, shade4, shade5, shadeTrans, shadeNotTrans} from "../config/color"
 import DropDownPicker from 'react-native-dropdown-picker';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+
+const screenWidth =Math.round(Dimensions.get('window').width) 
 
 
 const UploadScreen = ({navigation}) => {
@@ -128,6 +131,7 @@ const UploadScreen = ({navigation}) => {
     
     return (
         <View style={styles.container}>
+           
             <Input
                 style={styles.input}
                 placeholder={'Ürün İsmi'}
@@ -147,7 +151,6 @@ const UploadScreen = ({navigation}) => {
                 onChangeText={setInitialPrice}
             />
 
-            
             <DropDownPicker
                 items={[
                     {label: 'Elektronik', value: 'ELECTRONIC'},
@@ -162,7 +165,7 @@ const UploadScreen = ({navigation}) => {
                 ]}
                 placeholder="Kategori"
                 defaultIndex={0}
-                placeholderStyle={{color: shade5}}
+                placeholderStyle={{color: shade4}}
                 style={styles.input}
                 labelStyle={{color: shade5}}
                 containerStyle={{height: 80, width: '90%'}}
@@ -170,13 +173,13 @@ const UploadScreen = ({navigation}) => {
                 onChangeItem={item => setCategory(item.value)}
             />
 
-            <View style={{flexDirection:'row'}}>
+            <View style={{flexDirection:'row', width:'90%', justifyContent:'space-between'}}>
                 
                 <DropDownPicker
                     items={daysItem}
                     placeholder="Gün"
                     defaultIndex={0}
-                    placeholderStyle={{color: shade5}}
+                    placeholderStyle={{color: shade4}}
                     style={styles.input}
                     labelStyle={{color: shade5}}
                     containerStyle={{height: 80, width: '30%'}}
@@ -188,8 +191,8 @@ const UploadScreen = ({navigation}) => {
                     items={hoursItem}
                     placeholder="Saat"
                     defaultIndex={0}
-                    placeholderStyle={{color: shade5}}
-                    style={styles.input}
+                    placeholderStyle={{color: shade4}}
+                    style={[styles.input] }
                     labelStyle={{color: shade5}}
                     containerStyle={{height: 80, width: '30%'}}
                     dropDownStyle={{backgroundColor: shadeNotTrans, color:shade1}}
@@ -200,7 +203,7 @@ const UploadScreen = ({navigation}) => {
                     items={minutesItem}
                     placeholder="Dakika"
                     defaultIndex={0}
-                    placeholderStyle={{color: shade5}}
+                    placeholderStyle={{color: shade4}}
                     style={styles.input}
                     labelStyle={{color: shade5}}
                     containerStyle={{height: 80, width: '30%'}}
@@ -209,24 +212,34 @@ const UploadScreen = ({navigation}) => {
                 />
             </View>
 
-            <FlatList 
-                horizontal= {true}
-                showsHorizontalScrollIndicator= {false}
-                style={{height: 60, marginLeft: 10, marginTop: 5}}
-                data={imageUris}
-                keyExtractor={(data) => data}
-                renderItem={({item}) => {
-                    return (
-                        <Image 
-                            source={{ uri: item }} 
-                            style={{ width: 40, height: 40, marginRight: 10 }}
-                        />
-                    )
-                }}
-            />
+            <View style={{marginLeft: 20,flexDirection:'row', alignItems:'center'}}>
+                <TouchableOpacity onPress={pickImage}>
+                    <Icon name={'add-photo-alternate'} size={45} color={shade5} />
+                </TouchableOpacity>
 
-            <Button style={{marginTop: 5}}color={shade5} title="Fotoğraf Yükle" onPress={pickImage} />
+                <FlatList 
+                    horizontal= {true}
+                    showsHorizontalScrollIndicator= {false}
+                    contentContainerStyle={{alignItems: 'center'}}
+                    style={{ height: 60, marginLeft: 10}}
+                    data={imageUris}
+                    keyExtractor={(data) => data}
+                    renderItem={({item}) => {
+                        return (
+                            <Image 
+                                source={{ uri: item }} 
+                                style={{ width: 50, height: 50, marginRight: 10 }}
+                            />
+                        )
+                    }}
+                />
+            </View>
+           
+
+            {/* <Button style={{marginTop: 5}}color={shade5} title="Fotoğraf Yükle" onPress={pickImage} /> */}
             
+           
+
             <FilledButton
                 title={'Yükle'}
                 style={styles.loginButton}
@@ -240,7 +253,7 @@ const UploadScreen = ({navigation}) => {
                         "auctionCategory": category
 
                     }
-                    useRequest('POST', `/auctions?duration=${(parseInt(days) * 86400) + (parseInt(hours) * 3600) + (parseInt(minutes) * 60) }`, user.token, 
+                    useRequest('POST', `/auctions?duration=${(parseInt(days) * 86400) + (parseInt(hours) * 3600) + (parseInt(minutes) * 60)}`, user.token, 
                         {body:newAuction, callback:(response => {
                             console.log('Auction ID', response.id)
                             uploadImages(response.id)
@@ -270,7 +283,7 @@ const styles = StyleSheet.create({
         color: shade5
     },
     loginButton: {
-        marginVertical: 10,
+        marginVertical: 30,
     },
 });
 

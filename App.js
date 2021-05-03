@@ -47,7 +47,6 @@ const HomeStackScreen = () => (
     <HomeStack.Screen name="Home" component={HomeScreen}/>
     <HomeStack.Screen name="Auction" component={AuctionScreen}/>
     <HomeStack.Screen name="User" component={UserScreen}/>
-    <HomeStack.Screen name="Pay" component={PayScreen}/>
   </HomeStack.Navigator>
 )
 
@@ -60,6 +59,8 @@ const NotificationStackScreen = () => (
 const ProfileStackScreen = () => (
   <ProfileStack.Navigator headerMode="none">
     <ProfileStack.Screen name="Profile" component={ProfileScreen}/>
+    <ProfileStack.Screen name="User" component={UserScreen}/>
+    <ProfileStack.Screen name="Auction" component={AuctionScreen}/>
   </ProfileStack.Navigator>
 )
 
@@ -68,7 +69,6 @@ const UploadStackScreen = () => (
     <UploadStack.Screen name="Upload" component={UploadScreen}/>
     <UploadStack.Screen name="Auction" component={AuctionScreen}/>
     <UploadStack.Screen name="User" component={UserScreen}/>
-    <UploadStack.Screen name="Pay" component={PayScreen}/>
   </UploadStack.Navigator>
 )
 
@@ -77,7 +77,6 @@ const FavoritesStackScreen = () => (
     <FavoritesStack.Screen name="Favorites" component={FavoritesScreen}/>
     <FavoritesStack.Screen name="Auction" component={AuctionScreen}/>
     <FavoritesStack.Screen name="User" component={UserScreen}/>
-    <FavoritesStack.Screen name="Pay" component={PayScreen}/>
   </FavoritesStack.Navigator>
 )
 
@@ -109,7 +108,7 @@ const TabsScreen = () => (
     name="Upload"
     component={UploadStackScreen}
     options={{
-      tabBarLabel: 'Ürün Yükleme',
+      tabBarLabel: 'İlan Ver',
       tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
         <Icon name="add-outline" color={shade3} size={26} />
@@ -120,7 +119,7 @@ const TabsScreen = () => (
     name="Favorites" 
     component={FavoritesStackScreen}
     options={{
-      tabBarLabel: 'Listelerim',
+      tabBarLabel: 'Listeler',
       tabBarColor: shade5,
       tabBarIcon: ({ color }) => (
         <Icon name="heart-outline" color={shade3} size={26} />
