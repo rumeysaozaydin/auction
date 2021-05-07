@@ -73,10 +73,10 @@ const UploadScreen = ({navigation}) => {
     const [ minutes, setMinutes] = React.useState('0');
 
     const reset = () => {
-        setTitle("v60");
-        setDescription('kahve');
-        setInitialPrice('90');
-        setDuration('60000');
+        setTitle("");
+        setDescription('');
+        setInitialPrice('');
+        setDuration('');
         setImageUris([]);
     }
 
@@ -212,7 +212,7 @@ const UploadScreen = ({navigation}) => {
                 />
             </View>
 
-            <View style={{marginLeft: 20,flexDirection:'row', alignItems:'center'}}>
+            <View style={{marginLeft: 20, marginTop: 30,flexDirection:'row', alignItems:'center'}}>
                 <TouchableOpacity onPress={pickImage}>
                     <Icon name={'add-photo-alternate'} size={45} color={shade5} />
                 </TouchableOpacity>

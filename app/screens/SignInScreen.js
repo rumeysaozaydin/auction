@@ -13,8 +13,8 @@ import {shade1, shade2, shade3, shade4, shade5, shadeTrans} from "../config/colo
 
 const SignInScreen = (props) => {
     
-    const [username, setUsername] = React.useState('Rumeysa');
-    const [password, setPassword] = React.useState('a');
+    const [username, setUsername] = React.useState('');
+    const [password, setPassword] = React.useState('');
     const [loading, setLoading] = React.useState(false);
     
 
